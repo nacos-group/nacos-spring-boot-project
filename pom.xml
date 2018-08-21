@@ -1,0 +1,89 @@
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.sonatype.oss</groupId>
+        <artifactId>oss-parent</artifactId>
+        <version>7</version>
+    </parent>
+    <properties>
+        <maven_javadoc_version>3.0.1</maven_javadoc_version>
+        <maven_surefire_version>2.19.1</maven_surefire_version>
+    </properties>
+    <groupId>com.alibaba.boot</groupId>
+    <artifactId>nacos-spring-boot-project</artifactId>
+    <version>0.1.0-SNAPSHOT</version>
+
+    <packaging>pom</packaging>
+
+    <name>Nacos Spring Boot Project</name>
+    <description>Nacos Spring Boot Project</description>
+    <url>https://github.com/nacos-group/nacos-spring-project</url>
+
+    <modules>
+        <module>nacos-spring-boot-parent</module>
+        <module>nacos-spring-boot-autoconfigure</module>
+        <module>nacos-spring-boot-starter</module>
+        <module>nacos-spring-boot-samples</module>
+        <module>nacos-spring-boot-actuator</module>
+    </modules>
+
+    <organization>
+
+    </organization>
+
+    <scm>
+        <url>https://github.com/nacos-group/nacos-spring-boot-project</url>
+        <connection>scm:git:git:////github.com/nacos-group/nacos-spring-boot-project.git</connection>
+        <developerConnection>scm:git:ssh://git@//github.com/nacos-group/nacos-spring-boot-project.git
+        </developerConnection>
+    </scm>
+
+    <issueManagement>
+        <system>Github</system>
+        <url>https://github.com/nacos-group/nacos-spring-boot-project/issues</url>
+    </issueManagement>
+
+    <mailingLists>
+
+    </mailingLists>
+    <developers>
+
+    </developers>
+
+    <profiles>
+        <profile>
+            <id>release</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+</project>

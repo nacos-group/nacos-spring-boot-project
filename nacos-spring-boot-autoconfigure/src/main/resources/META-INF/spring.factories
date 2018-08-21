@@ -1,0 +1,6 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+com.alibaba.boot.nacos.autoconfigure.NacosAutoConfiguration
+
+
+org.springframework.context.ApplicationListener=\
+com.alibaba.boot.nacos.context.event.NacosEventApplicationListener
