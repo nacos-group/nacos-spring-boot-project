@@ -1,3 +1,0 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.alibaba.boot.nacos.actuate.autoconfigure.NacosEndpointsAutoConfiguration,\
-com.alibaba.boot.nacos.actuate.autoconfigure.NacosHealthIndicatorAutoConfiguration
