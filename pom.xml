@@ -23,10 +23,14 @@
 
     <modules>
         <module>nacos-spring-boot-parent</module>
-        <module>nacos-spring-boot-autoconfigure</module>
-        <module>nacos-spring-boot-starter</module>
+        <module>nacos-spring-boot-base</module>
+        <module>nacos-config-spring-boot-autoconfigure</module>
+        <module>nacos-config-spring-boot-starter</module>
+        <module>nacos-config-spring-boot-actuator</module>
+        <module>nacos-discovery-spring-boot-autoconfigure</module>
+        <module>nacos-discovery-spring-boot-starter</module>
+        <module>nacos-discovery-spring-boot-actuator</module>
         <module>nacos-spring-boot-samples</module>
-        <module>nacos-spring-boot-actuator</module>
     </modules>
 
     <organization>
