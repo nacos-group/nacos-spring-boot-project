@@ -29,49 +29,20 @@
     <packaging>pom</packaging>
     <name>Nacos Spring Boot Samples</name>
     <description>Nacos Spring Boot Samples</description>
+
     <modules>
-
+        <module>nacos-config-sample</module>
+        <module>nacos-discovery-sample</module>
     </modules>
-    <dependencies>
-
-        <!-- Spring Boot dependencies -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-actuator</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>nacos-spring-boot-starter</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.alibaba.boot</groupId>
-            <artifactId>nacos-spring-boot-actuator</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
-    </dependencies>
 
     <build>
         <plugins>
             <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>${spring-boot.version}</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>repackage</goal>
-                        </goals>
-                    </execution>
-                </executions>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
             </plugin>
         </plugins>
     </build>
