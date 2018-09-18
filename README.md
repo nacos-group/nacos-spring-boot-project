@@ -199,6 +199,77 @@ try {
 
 For more information about Nacos Spring, see [Nacos Spring Project](https://github.com/nacos-group/nacos-spring-project).
 
+## Endpoint
+
+Nacos config starter and Nacos discovery starter also support the implementation of Spring Boot actuator endpoints.
+
+**Prerequisite:**
+
+Add dependency spring-boot-starter-actuator to your pom.xml file, and configure your endpoint security strategy.
+
+* Spring Boot1.x: Add configuration management.security.enabled=false
+* Spring Boot2.x: Add configuration management.endpoints.web.exposure.include=*
+
+To view the endpoint information, visit the following URLS:
+
+Nacos Config:
+
+* Spring Boot1.x: Sentinel Endpoint URL is http://127.0.0.1:10011/nacos-config.
+* Spring Boot2.x: Sentinel Endpoint URL is http://127.0.0.1:10011/actuator/nacos-config.
+
+Nacos Discovery:
+
+* Spring Boot1.x: Sentinel Endpoint URL is http://127.0.0.1:10012/nacos-discovery.
+* Spring Boot2.x: Sentinel Endpoint URL is http://127.0.0.1:10012/actuator/nacos-discovery.
+
+## Health Checks
+
+`nacos-config-spring-boot-actuator` and `nacos-discovery-spring-boot-actuator` support the standard Spring Boot `HealthIndicator` as a production-ready feature , which will be aggregated into Spring Boot's `Health` and exported on `HealthEndpoint` that works MVC (Spring Web MVC) and JMX (Java Management Extensions) both if they are available.
+
+Suppose a Spring Boot Web application did not specify `management.server.port`, you can access http://localhost:{port}/actuator/health via Web Client and will get a response with JSON format is like below : 
+
+Nacos Config:
+
+```json
+   {
+   	status: "UP",
+   	details: {
+   		nacosConfig: {
+   			status: "UP"
+   		},
+   		diskSpace: {
+   			status: "UP",
+   			details: {
+   				total: 250140434432,
+   				free: 52323512320,
+   				threshold: 10485760
+   			}
+   		}
+   	}
+   }
+```
+
+Nacos Discovery:
+
+```json
+{
+	status: "UP",
+	details: {
+		nacosDiscovery: {
+			status: "UP"
+		},
+		diskSpace: {
+			status: "UP",
+			details: {
+				total: 250140434432,
+				free: 52323680256,
+				threshold: 10485760
+			}
+		}
+	}
+}
+```
+
 ## Relative Projects
 
 * [Alibaba Nacos](https://github.com/alibaba/nacos)
