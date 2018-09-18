@@ -231,39 +231,39 @@ Suppose a Spring Boot Web application did not specify `management.server.port`, 
 Nacos Config:
 
 ```json
-   {
-   	status: "UP",
-   	details: {
-   		nacosConfig: {
-   			status: "UP"
-   		},
-   		diskSpace: {
-   			status: "UP",
-   			details: {
-   				total: 250140434432,
-   				free: 52323512320,
-   				threshold: 10485760
-   			}
-   		}
-   	}
-   }
+{
+"status": "UP",
+"details": {
+    "nacosConfig": {
+        "status": "UP"
+    },
+    "diskSpace": {
+        "status": "UP",
+        "details": {
+            "total": 250140434432,
+            "free": 52323512320,
+            "threshold": 10485760
+        }
+    }
+}
+}
 ```
 
 Nacos Discovery:
 
 ```json
 {
-	status: "UP",
-	details: {
-		nacosDiscovery: {
-			status: "UP"
+	"status": "UP",
+	"details": {
+		"nacosDiscovery": {
+			"status": "UP"
 		},
-		diskSpace: {
-			status: "UP",
-			details: {
-				total: 250140434432,
-				free: 52323680256,
-				threshold: 10485760
+		"diskSpace": {
+			"status": "UP",
+			"details": {
+				"total": 250140434432,
+				"free": 52323680256,
+				"threshold": 10485760
 			}
 		}
 	}
