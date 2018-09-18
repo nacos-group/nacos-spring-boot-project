@@ -30,12 +30,12 @@
     <description>Nacos Spring Boot Parent</description>
 
     <properties>
-        <java.version>1.8</java.version>
-        <java.source.version>1.8</java.source.version>
-        <java.target.version>1.8</java.target.version>
+        <java.version>1.7</java.version>
+        <java.source.version>1.7</java.source.version>
+        <java.target.version>1.7</java.target.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <spring-boot.version>2.0.3.RELEASE</spring-boot.version>
+        <spring-boot.version>1.4.1.RELEASE</spring-boot.version>
         <nacos.version>0.1.0</nacos.version>
         <nacos-spring-context.version>0.1.0-SNAPSHOT</nacos-spring-context.version>
         <!-- Build args -->
@@ -253,7 +253,7 @@
                         <configuration>
                             <rules>
                                 <requireJavaVersion>
-                                    <version>[1.8,)</version>
+                                    <version>[1.7,)</version>
                                 </requireJavaVersion>
                                 <requireProperty>
                                     <property>project.name</property>

@@ -16,16 +16,24 @@
  */
 package com.alibaba.boot.nacos.discovery.actuate.autoconfigure;
 
+import com.alibaba.boot.nacos.discovery.NacosDiscoveryConstants;
+import org.springframework.boot.actuate.autoconfigure.ConditionalOnEnabledHealthIndicator;
+import org.springframework.boot.actuate.health.HealthIndicator;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 
 import com.alibaba.boot.nacos.discovery.actuate.health.NacosDiscoveryHealthIndicator;
+import org.springframework.context.annotation.Configuration;
 
 /**
  * Nacos {@link NacosDiscoveryHealthIndicator} Auto Configuration
  *
  * @author <a href="mailto:fangjian0423@gmail.com">Jim</a>
  */
+@Configuration
+@ConditionalOnClass({HealthIndicator.class})
+@ConditionalOnEnabledHealthIndicator(NacosDiscoveryConstants.ENDPOINT_PREFIX)
 public class NacosDiscoveryHealthIndicatorAutoConfiguration {
 
 	@Bean
