@@ -39,7 +39,13 @@ import com.alibaba.nacos.spring.context.annotation.config.NacosPropertySource;
  * @author <a href="mailto:fangjian0423@gmail.com">Jim</a>
  */
 @SpringBootApplication
-@NacosPropertySource(name = "custom", dataId = ConfigApplication.DATA_ID, first = true, before = SYSTEM_PROPERTIES_PROPERTY_SOURCE_NAME, after = SYSTEM_ENVIRONMENT_PROPERTY_SOURCE_NAME)
+@NacosPropertySource(
+    name = "custom",
+    dataId = ConfigApplication.DATA_ID,
+    first = true,
+    before = SYSTEM_PROPERTIES_PROPERTY_SOURCE_NAME,
+    after = SYSTEM_ENVIRONMENT_PROPERTY_SOURCE_NAME
+)
 @ImportResource("classpath:nacos-property-source.xml")
 public class ConfigApplication {
 
@@ -68,7 +74,10 @@ public class ConfigApplication {
 		return new Foo();
 	}
 
-	@NacosConfigListener(dataId = DATA_ID, timeout = 500)
+	@NacosConfigListener(
+	    dataId = DATA_ID,
+        timeout = 500
+    )
 	public void onChange(String newContent) throws Exception {
 		Thread.sleep(100);
 		System.out.println("onChange : " + newContent);
