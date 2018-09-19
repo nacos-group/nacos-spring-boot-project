@@ -14,9 +14,9 @@ including:
 
 Nacos Spring Boot Project consist of two parts: `nacos-config-spring-boot` and `nacos-discovery-spring-boot`.
 
-`nacos-config-spring-boot` is using for Dynamic Configuration Management and Service and MetaData Management. 
+`nacos-config-spring-boot` module is using for Dynamic Configuration Management and Service and MetaData Management. 
 
-`nacos-discovery-spring-boot` is using for Service Discovery, Service Health Check and Dynamic DNS Service.
+`nacos-discovery-spring-boot` module is using for Service Discovery, Service Health Check and Dynamic DNS Service.
 
 ## Demos
 
@@ -31,15 +31,15 @@ Nacos Spring Boot Project consist of two parts: `nacos-config-spring-boot` and `
 
 | Dependencies   | Compatibility |
 | -------------- | ------------- |
-| Java           | 1.7+         |
-| Spring Boot | 1.4.1.RELEASE         |
+| Java           | 1.8+         |
+| Spring Boot | 2.0.3.RELEASE         |
 
 **1.x branch**
 
 | Dependencies   | Compatibility |
 | -------------- | ------------- |
-| Java           | 1.8+         |
-| Spring Boot | 2.0.3.RELEASE         |
+| Java           | 1.7+         |
+| Spring Boot | 1.4.1.RELEASE         |
 
 
 ## Quick Start
@@ -72,12 +72,14 @@ nacos.config.server-addr=localhost
 
 > `nacos.config.server-addr` attribute configures "\${host}:${port}" of your Nacos Server
 
-Then you could using `@SpringBootApplication` to annotate main class like normal SpringBoot Application :
+Then you could using `@SpringBootApplication` to annotate main class like normal SpringBoot Application and startup:
 
 ```java
 @SpringBootApplication
 public class ConfigApplication {
-    ...
+    public static void main(String[] args) {
+        SpringApplication.run(ConfigApplication.class, args);
+    }
 }
 ```
 
@@ -109,15 +111,15 @@ above code equals below one:
 ```java
 try {
     // Initialize the configuration service, and the console automatically obtains the following parameters through the sample code.
-	String serverAddr = "{serverAddr}";
-	String dataId = "{dataId}";
-	String group = "{group}";
-	Properties properties = new Properties();
-	properties.put("serverAddr", serverAddr);
-	ConfigService configService = NacosFactory.createConfigService(properties);
+    String serverAddr = "{serverAddr}";
+    String dataId = "{dataId}";
+    String group = "{group}";
+    Properties properties = new Properties();
+    properties.put("serverAddr", serverAddr);
+    ConfigService configService = NacosFactory.createConfigService(properties);
     // Actively get the configuration.
-	String content = configService.getConfig(dataId, group, 5000);
-	System.out.println(content);
+    String content = configService.getConfig(dataId, group, 5000);
+    System.out.println(content);
 } catch (NacosException e) {
     // TODO Auto-generated catch block
     e.printStackTrace();
@@ -152,12 +154,14 @@ nacos.discovery.server-addr=localhost
 
 > `nacos.discovery.server-addr` attribute configures "\${host}:${port}" of your Nacos Server
 
-Then you could using `@SpringBootApplication` to annotate main class like normal SpringBoot Application :
+Then you could using `@SpringBootApplication` to annotate main class like normal SpringBoot Application and startup:
 
 ```java
 @SpringBootApplication
-public class ConfigApplication {
-    ...
+public class DiscoveryApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(DiscoveryApplication.class, args);
+    }
 }
 ```
 
@@ -186,11 +190,11 @@ above code equals below one:
 ```java
 try {
     // Initialize the naming service, and the console automatically obtains the following parameters through the sample code.
-	String serverAddr = "{serverAddr}";
-	Properties properties = new Properties();
-	properties.put("serverAddr", serverAddr);
-	NamingService naming = NamingFactory.createNamingService(properties);
-	namingService.registerInstance("test-service", "1.1.1.1", 8080);
+    String serverAddr = "{serverAddr}";
+    Properties properties = new Properties();
+    properties.put("serverAddr", serverAddr);
+    NamingService naming = NamingFactory.createNamingService(properties);
+    namingService.registerInstance("test-service", "1.1.1.1", 8080);
 } catch (NacosException e) {
     // TODO Auto-generated catch block
     e.printStackTrace();
@@ -207,8 +211,17 @@ Nacos config starter and Nacos discovery starter also support the implementation
 
 Add dependency spring-boot-starter-actuator to your pom.xml file, and configure your endpoint security strategy.
 
-* Spring Boot1.x: Add configuration management.security.enabled=false
-* Spring Boot2.x: Add configuration management.endpoints.web.exposure.include=*
+* Spring Boot1.x: Add configuration 
+
+```properties
+management.security.enabled=false
+```
+
+* Spring Boot2.x: Add configuration
+
+```properties
+management.endpoints.web.exposure.include=*
+```
 
 To view the endpoint information, visit the following URLS:
 
@@ -253,25 +266,28 @@ Nacos Discovery:
 
 ```json
 {
-	"status": "UP",
-	"details": {
-		"nacosDiscovery": {
-			"status": "UP"
-		},
-		"diskSpace": {
-			"status": "UP",
-			"details": {
-				"total": 250140434432,
-				"free": 52323680256,
-				"threshold": 10485760
-			}
-		}
-	}
+"status": "UP",
+"details": {
+    "nacosDiscovery": {
+        "status": "UP"
+    },
+    "diskSpace": {
+        "status": "UP",
+        "details": {
+            "total": 250140434432,
+            "free": 52323680256,
+            "threshold": 10485760
+        }
+    }
+}
 }
 ```
+
+For more information about Nacos Spring, see [Nacos Spring Project](https://github.com/nacos-group/nacos-spring-project).
 
 ## Relative Projects
 
 * [Alibaba Nacos](https://github.com/alibaba/nacos)
 * [Alibaba Spring Context Support](https://github.com/alibaba/spring-context-support)
 * [Nacos Spring Project](https://github.com/nacos-group/nacos-spring-project)
+* [Nacos Spring Cloud Project](https://github.com/spring-cloud-incubator/spring-cloud-alibaba)
