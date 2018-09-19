@@ -27,7 +27,6 @@ import org.springframework.boot.actuate.endpoint.annotation.ReadOperation;
 import org.springframework.context.ApplicationContext;
 
 import com.alibaba.boot.nacos.discovery.NacosDiscoveryConstants;
-import com.alibaba.boot.nacos.discovery.properties.NacosDiscoveryProperties;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.nacos.api.exception.NacosException;
@@ -48,9 +47,6 @@ public class NacosDiscoveryEndpoint {
 	@Autowired
 	private ApplicationContext applicationContext;
 
-	@Autowired(required = false)
-	private NacosDiscoveryProperties nacosDiscoveryProperties;
-
 	private static final Integer PAGE_SIZE = 100;
 
 	@ReadOperation
@@ -59,8 +55,6 @@ public class NacosDiscoveryEndpoint {
 
 		result.put("nacosDiscoveryGlobalProperties",
 				applicationContext.getBean(DISCOVERY_GLOBAL_NACOS_PROPERTIES_BEAN_NAME));
-
-		result.put("nacosDiscoveryProperties", nacosDiscoveryProperties);
 
 		NacosServiceFactory nacosServiceFactory = applicationContext.getBean(
 				CacheableEventPublishingNacosServiceFactory.BEAN_NAME,

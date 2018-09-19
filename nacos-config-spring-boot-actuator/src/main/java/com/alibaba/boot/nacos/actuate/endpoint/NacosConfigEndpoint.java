@@ -34,7 +34,6 @@ import org.springframework.core.type.AnnotationMetadata;
 import org.w3c.dom.Element;
 
 import com.alibaba.boot.nacos.config.NacosConfigConstants;
-import com.alibaba.boot.nacos.config.properties.NacosConfigProperties;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.nacos.api.config.annotation.NacosConfigListener;
 import com.alibaba.nacos.api.config.annotation.NacosConfigurationProperties;
@@ -54,9 +53,6 @@ public class NacosConfigEndpoint
 	@Autowired
 	private ApplicationContext applicationContext;
 
-	@Autowired(required = false)
-	private NacosConfigProperties nacosConfigProperties;
-
 	private Map<String, JSONObject> nacosConfigMetadataMap = new HashMap<>();
 
 	@ReadOperation
@@ -74,7 +70,6 @@ public class NacosConfigEndpoint
 
 			result.put("nacosConfigGlobalProperties",
 					applicationContext.getBean(CONFIG_GLOBAL_NACOS_PROPERTIES_BEAN_NAME));
-			result.put("nacosConfigProperties", nacosConfigProperties);
 		}
 
 		return result;
