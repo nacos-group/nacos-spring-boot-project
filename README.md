@@ -18,12 +18,11 @@ Nacos Spring Boot Project consist of two parts: `nacos-config-spring-boot` and `
 
 `nacos-discovery-spring-boot` module is using for Service Discovery, Service Health Check and Dynamic DNS Service.
 
-## Demos
+## Samples
 
-- [Nacos Config Simple Demo](https://github.com/nacos-group/nacos-spring-boot-project/tree/master/nacos-spring-boot-samples/nacos-config-sample)
+- [Nacos Config Sample](https://github.com/nacos-group/nacos-spring-boot-project/tree/master/nacos-spring-boot-samples/nacos-config-sample)
 
-- [Nacos Discovery Simple Demo](https://github.com/nacos-group/nacos-spring-boot-project/tree/master/nacos-spring-boot-samples/nacos-discovery-sample)
-
+- [Nacos Discovery Sample](https://github.com/nacos-group/nacos-spring-boot-project/tree/master/nacos-spring-boot-samples/nacos-discovery-sample)
 
 ## Dependencies & Compatibility
 
@@ -194,7 +193,7 @@ try {
     Properties properties = new Properties();
     properties.put("serverAddr", serverAddr);
     NamingService naming = NamingFactory.createNamingService(properties);
-    namingService.registerInstance("test-service", "1.1.1.1", 8080);
+namingService.registerInstance("test-service", "1.1.1.1", 8080);
 } catch (NacosException e) {
     // TODO Auto-generated catch block
     e.printStackTrace();
@@ -209,15 +208,19 @@ Nacos config starter and Nacos discovery starter also support the implementation
 
 **Prerequisite:**
 
-Add dependency spring-boot-starter-actuator to your pom.xml file, and configure your endpoint security strategy.
+Adding `nacos-config-spring-boot-actuator` to your pom.xml in Nacos Config Project.
 
-* Spring Boot1.x: Add configuration 
+Adding `nacos-discovery-spring-boot-actuator` to your pom.xml in Nacos Discovery Project.
+
+Then Configure your endpoint security strategy.
+
+* Spring Boot1.x 
 
 ```properties
 management.security.enabled=false
 ```
 
-* Spring Boot2.x: Add configuration
+* Spring Boot2.x
 
 ```properties
 management.endpoints.web.exposure.include=*
@@ -225,23 +228,23 @@ management.endpoints.web.exposure.include=*
 
 To view the endpoint information, visit the following URLS:
 
-Nacos Config:
+Nacos Config Project :
 
-* Spring Boot1.x: Sentinel Endpoint URL is http://127.0.0.1:10011/nacos-config.
-* Spring Boot2.x: Sentinel Endpoint URL is http://127.0.0.1:10011/actuator/nacos-config.
+* Spring Boot1.x: Nacos Config Endpoint URL is http://127.0.0.1:10011/nacos-config.
+* Spring Boot2.x: Nacos Config Endpoint URL is http://127.0.0.1:10011/actuator/nacos-config.
 
-Nacos Discovery:
+Nacos Discovery Project:
 
-* Spring Boot1.x: Sentinel Endpoint URL is http://127.0.0.1:10012/nacos-discovery.
-* Spring Boot2.x: Sentinel Endpoint URL is http://127.0.0.1:10012/actuator/nacos-discovery.
+* Spring Boot1.x: Nacos Discovery Endpoint URL is http://127.0.0.1:10012/nacos-discovery.
+* Spring Boot2.x: Nacos Discovery Endpoint URL is http://127.0.0.1:10012/actuator/nacos-discovery.
 
 ## Health Checks
 
-`nacos-config-spring-boot-actuator` and `nacos-discovery-spring-boot-actuator` support the standard Spring Boot `HealthIndicator` as a production-ready feature , which will be aggregated into Spring Boot's `Health` and exported on `HealthEndpoint` that works MVC (Spring Web MVC) and JMX (Java Management Extensions) both if they are available.
+`nacos-config-spring-boot-actuator` and `nacos-discovery-spring-boot-actuator` support the standard Spring Boot `HealthIndicator` as a production-ready feature , which will be aggregated into Spring Boot's `Health` and exported on `HealthEndpoint` that works MVC (Spring Web MVC) if it is available.
 
-Suppose a Spring Boot Web application did not specify `management.server.port`, you can access http://localhost:{port}/actuator/health via Web Client and will get a response with JSON format is like below : 
+Suppose a Spring Boot Web application did not specify `management.server.port`(SpringBoot1.x using `management.port`), you can access http://localhost:{port}/actuator/health(SpringBoot1.x visit http://localhost:{port}/health) via Web Client and will get a response with JSON format is like below : 
 
-Nacos Config:
+Nacos Config Project:
 
 ```json
 {
@@ -262,7 +265,7 @@ Nacos Config:
 }
 ```
 
-Nacos Discovery:
+Nacos Discovery Project:
 
 ```json
 {
