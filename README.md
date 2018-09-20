@@ -230,13 +230,13 @@ To view the endpoint information, visit the following URLS:
 
 Nacos Config Project :
 
-* Spring Boot1.x: Sentinel Endpoint URL is http://127.0.0.1:10011/nacos-config.
-* Spring Boot2.x: Sentinel Endpoint URL is http://127.0.0.1:10011/actuator/nacos-config.
+* Spring Boot1.x: Nacos Config Endpoint URL is http://127.0.0.1:10011/nacos-config.
+* Spring Boot2.x: Nacos Config Endpoint URL is http://127.0.0.1:10011/actuator/nacos-config.
 
 Nacos Discovery Project:
 
-* Spring Boot1.x: Sentinel Endpoint URL is http://127.0.0.1:10012/nacos-discovery.
-* Spring Boot2.x: Sentinel Endpoint URL is http://127.0.0.1:10012/actuator/nacos-discovery.
+* Spring Boot1.x: Nacos Discovery Endpoint URL is http://127.0.0.1:10012/nacos-discovery.
+* Spring Boot2.x: Nacos Discovery Endpoint URL is http://127.0.0.1:10012/actuator/nacos-discovery.
 
 ## Health Checks
 
