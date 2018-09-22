@@ -29,7 +29,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.alibaba.boot.nacos.discovery.actuate.endpoint.NacosDiscoveryEndpoint;
 import com.alibaba.boot.nacos.discovery.autoconfigure.NacosDiscoveryAutoConfiguration;
-import com.alibaba.boot.nacos.discovery.properties.NacosDiscoveryProperties;
 import com.alibaba.nacos.api.PropertyKeyConst;
 
 /**
@@ -51,12 +50,9 @@ public class NacosDiscoveryEndpointTest {
 	public void testInvoke() {
 		Map<String, Object> metadata = nacosDiscoveryEndpoint.invoke();
 
-		NacosDiscoveryProperties nacosDiscoveryProperties = (NacosDiscoveryProperties) metadata
-				.get("nacosDiscoveryProperties");
 		Properties nacosDiscoveryGlobalProperties = (Properties) metadata
 				.get("nacosDiscoveryGlobalProperties");
 
-		Assert.assertEquals("localhost", nacosDiscoveryProperties.getServerAddr());
 		Assert.assertEquals("localhost",
 				nacosDiscoveryGlobalProperties.getProperty(PropertyKeyConst.SERVER_ADDR));
 	}
