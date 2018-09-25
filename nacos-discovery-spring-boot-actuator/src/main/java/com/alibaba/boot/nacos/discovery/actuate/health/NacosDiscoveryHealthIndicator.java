@@ -16,13 +16,18 @@
  */
 package com.alibaba.boot.nacos.discovery.actuate.health;
 
-import com.alibaba.nacos.api.naming.NamingService;
-import com.alibaba.nacos.spring.factory.CacheableEventPublishingNacosServiceFactory;
+import java.util.Properties;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.health.AbstractHealthIndicator;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.HealthIndicator;
 import org.springframework.context.ApplicationContext;
+
+import com.alibaba.fastjson.JSON;
+import com.alibaba.nacos.api.naming.NamingService;
+import com.alibaba.nacos.spring.factory.CacheableEventPublishingNacosServiceFactory;
+import com.alibaba.nacos.spring.metadata.NacosServiceMetaData;
 
 /**
  * Nacos Discovery {@link HealthIndicator}
@@ -32,21 +37,28 @@ import org.springframework.context.ApplicationContext;
  */
 public class NacosDiscoveryHealthIndicator extends AbstractHealthIndicator {
 
-    @Autowired
-    private ApplicationContext applicationContext;
+	@Autowired
+	private ApplicationContext applicationContext;
 
-    private static final String UP_STATUS = "up";
+	private static final String UP_STATUS = "up";
 
 	@Override
 	protected void doHealthCheck(Health.Builder builder) throws Exception {
 		builder.up();
-        CacheableEventPublishingNacosServiceFactory cacheableEventPublishingNacosServiceFactory =
-                applicationContext.getBean(CacheableEventPublishingNacosServiceFactory.BEAN_NAME,
-                        CacheableEventPublishingNacosServiceFactory.class);
-        for(NamingService namingService : cacheableEventPublishingNacosServiceFactory.getNamingServices()) {
-            if(!namingService.getServerStatus().toLowerCase().equals(UP_STATUS)) {
-                builder.down();
-            }
-        }
+		CacheableEventPublishingNacosServiceFactory cacheableEventPublishingNacosServiceFactory = applicationContext
+				.getBean(CacheableEventPublishingNacosServiceFactory.BEAN_NAME,
+						CacheableEventPublishingNacosServiceFactory.class);
+		for (NamingService namingService : cacheableEventPublishingNacosServiceFactory
+				.getNamingServices()) {
+			if (namingService instanceof NacosServiceMetaData) {
+				NacosServiceMetaData nacosServiceMetaData = (NacosServiceMetaData) namingService;
+				Properties properties = nacosServiceMetaData.getProperties();
+				builder.withDetail(JSON.toJSONString(properties),
+						namingService.getServerStatus());
+			}
+			if (!namingService.getServerStatus().toLowerCase().equals(UP_STATUS)) {
+				builder.down();
+			}
+		}
 	}
 }
