@@ -1,6 +1,6 @@
 # Nacos Spring Boot Project
 
-[![Build Status](https://travis-ci.org/nacos-group/nacos-spring-project.svg?branch=master)](https://travis-ci.org/nacos-group/nacos-spring-project)
+[![Build Status](https://travis-ci.org/nacos-group/nacos-spring-boot-project.svg?branch=master)](https://travis-ci.org/nacos-group/nacos-spring-boot-project)
 
 [Alibaba Nacos](https://github.com/alibaba/nacos) ships main core features of Cloud-Native application, 
 including:
