@@ -16,14 +16,19 @@
  */
 package com.alibaba.boot.nacos.actuate.autoconfigure;
 
-import com.alibaba.boot.nacos.actuate.health.NacosConfigHealthIndicator;
-import com.alibaba.boot.nacos.config.NacosConfigConstants;
 import org.springframework.boot.actuate.autoconfigure.ConditionalOnEnabledHealthIndicator;
+import org.springframework.boot.actuate.autoconfigure.EndpointAutoConfiguration;
 import org.springframework.boot.actuate.health.HealthIndicator;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
+import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import com.alibaba.boot.nacos.actuate.health.NacosConfigHealthIndicator;
+import com.alibaba.boot.nacos.config.NacosConfigConstants;
+import com.alibaba.boot.nacos.config.autoconfigure.NacosConfigAutoConfiguration;
 
 /**
  * Nacos {@link NacosConfigHealthIndicator} Auto Configuration
@@ -31,14 +36,16 @@ import org.springframework.context.annotation.Configuration;
  * @author <a href="mailto:fangjian0423@gmail.com">Jim</a>
  */
 @Configuration
-@ConditionalOnClass({HealthIndicator.class})
+@ConditionalOnClass({ HealthIndicator.class })
+@AutoConfigureBefore({ EndpointAutoConfiguration.class })
+@AutoConfigureAfter(NacosConfigAutoConfiguration.class)
 @ConditionalOnEnabledHealthIndicator(NacosConfigConstants.ENDPOINT_PREFIX)
 public class NacosConfigHealthIndicatorAutoConfiguration {
 
-    @Bean
-    @ConditionalOnMissingBean
-    public NacosConfigHealthIndicator nacosConfigHealthIndicator() {
-        return new NacosConfigHealthIndicator();
-    }
+	@Bean
+	@ConditionalOnMissingBean
+	public NacosConfigHealthIndicator nacosConfigHealthIndicator() {
+		return new NacosConfigHealthIndicator();
+	}
 
 }
