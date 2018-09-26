@@ -9,8 +9,6 @@ notifications:
 language: java
 
 jdk:
-  - oraclejdk10
-  - oraclejdk9
   - oraclejdk8
   - oraclejdk7
 
