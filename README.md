@@ -242,7 +242,7 @@ Nacos Discovery Project:
 
 `nacos-config-spring-boot-actuator` and `nacos-discovery-spring-boot-actuator` support the standard Spring Boot `HealthIndicator` as a production-ready feature , which will be aggregated into Spring Boot's `Health` and exported on `HealthEndpoint` that works MVC (Spring Web MVC) if it is available.
 
-Suppose a Spring Boot Web application did not specify `management.server.port`(SpringBoot1.x using `management.port`), you can access http://localhost:{port}/actuator/health(SpringBoot1.x visit http://localhost:{port}/health) via Web Client and will get a response with JSON format is like below : 
+Suppose a Spring Boot Web application did not specify `management.server.port`(SpringBoot1.x using `management.port`), you can access http://localhost:{port}/actuator/health (SpringBoot1.x visit http://localhost:{port}/health) via Web Client and will get a response with JSON format is like below : 
 
 Nacos Config Project:
 
