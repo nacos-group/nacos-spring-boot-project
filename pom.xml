@@ -53,7 +53,15 @@
 
     </mailingLists>
     <developers>
-
+        <developer>
+            <id>Jim</id>
+            <name>Jim Fang</name>
+            <email>fangjian0423@gmail.com</email>
+            <url>https://github.com/fangjian0423</url>
+            <roles>
+                <role>Developer</role>
+            </roles>
+        </developer>
     </developers>
 
     <profiles>
