@@ -23,7 +23,7 @@ Note: Version [0.2.x.RELEASE](https://mvnrepository.com/artifact/com.alibaba.boo
 After that, you could define some configurations in `application.properties`:
  
 ```properties
-nacos.discovery.server-addr=localhost
+nacos.discovery.server-addr=localhost:8848
 ```
 
 > `nacos.discovery.server-addr` attribute configures "\${host}:${port}" of your Nacos Server
