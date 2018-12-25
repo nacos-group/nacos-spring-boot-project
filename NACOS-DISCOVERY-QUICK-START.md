@@ -18,7 +18,7 @@ Suppose your Nacos Server is startup, you would add [`nacos-discovery-spring-boo
     </dependencies>
 ```
 
-注意：版本 [0.2.x.RELEASE](https://mvnrepository.com/artifact/com.alibaba.boot/nacos-config-spring-boot-starter) 对应的是 Spring Boot 2.x 版本，版本 [0.1.x.RELEASE]((https://mvnrepository.com/artifact/com.alibaba.boot/nacos-config-spring-boot-starter)) 对应的是 Spring Boot 1.x 版本。
+Note: Version [0.2.x.RELEASE](https://mvnrepository.com/artifact/com.alibaba.boot/nacos-config-spring-boot-starter) is compatible with the Spring Boot 2.x. Version [0.1.x.RELEASE](https://mvnrepository.com/artifact/com.alibaba.boot/nacos-config-spring-boot-starter) is compatible with the Spring Boot 1.x. 
 
 After that, you could define some configurations in `application.properties`:
  
