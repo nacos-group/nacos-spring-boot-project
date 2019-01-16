@@ -16,8 +16,6 @@
  */
 package com.alibaba.boot.nacos.actuate.health;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Properties;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,8 +24,8 @@ import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.HealthIndicator;
 import org.springframework.context.ApplicationContext;
 
+import com.alibaba.boot.nacos.common.PropertiesUtils;
 import com.alibaba.fastjson.JSON;
-import com.alibaba.nacos.api.PropertyKeyConst;
 import com.alibaba.nacos.api.config.ConfigService;
 import com.alibaba.nacos.spring.factory.CacheableEventPublishingNacosServiceFactory;
 import com.alibaba.nacos.spring.factory.NacosServiceFactory;
@@ -55,13 +53,9 @@ public class NacosConfigHealthIndicator extends AbstractHealthIndicator {
 			if (configService instanceof NacosServiceMetaData) {
 				NacosServiceMetaData nacosServiceMetaData = (NacosServiceMetaData) configService;
 				Properties properties = nacosServiceMetaData.getProperties();
-				Map<Object, Object> configKey = new HashMap<>();
-				properties.forEach((key, val) -> {
-					if (!PropertyKeyConst.SECRET_KEY.equals(key)) {
-						configKey.put(key, val);
-					}
-				});
-				builder.withDetail(JSON.toJSONString(configKey),
+				builder.withDetail(
+						JSON.toJSONString(
+								PropertiesUtils.extractSafeProperties(properties)),
 						configService.getServerStatus());
 			}
 			if (!configService.getServerStatus().toLowerCase().equals(UP_STATUS)) {

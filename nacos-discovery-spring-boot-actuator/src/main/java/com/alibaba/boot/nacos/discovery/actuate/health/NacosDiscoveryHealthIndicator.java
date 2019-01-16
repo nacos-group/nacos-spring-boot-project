@@ -16,8 +16,6 @@
  */
 package com.alibaba.boot.nacos.discovery.actuate.health;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Properties;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,8 +24,8 @@ import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.HealthIndicator;
 import org.springframework.context.ApplicationContext;
 
+import com.alibaba.boot.nacos.common.PropertiesUtils;
 import com.alibaba.fastjson.JSON;
-import com.alibaba.nacos.api.PropertyKeyConst;
 import com.alibaba.nacos.api.naming.NamingService;
 import com.alibaba.nacos.spring.factory.CacheableEventPublishingNacosServiceFactory;
 import com.alibaba.nacos.spring.metadata.NacosServiceMetaData;
@@ -56,13 +54,9 @@ public class NacosDiscoveryHealthIndicator extends AbstractHealthIndicator {
 			if (namingService instanceof NacosServiceMetaData) {
 				NacosServiceMetaData nacosServiceMetaData = (NacosServiceMetaData) namingService;
 				Properties properties = nacosServiceMetaData.getProperties();
-				Map<Object, Object> namingConfigKey = new HashMap<>();
-				properties.forEach((key, val) -> {
-					if (!PropertyKeyConst.SECRET_KEY.equals(key)) {
-						namingConfigKey.put(key, val);
-					}
-				});
-				builder.withDetail(JSON.toJSONString(namingConfigKey),
+				builder.withDetail(
+						JSON.toJSONString(
+								PropertiesUtils.extractSafeProperties(properties)),
 						namingService.getServerStatus());
 			}
 			if (!namingService.getServerStatus().toLowerCase().equals(UP_STATUS)) {

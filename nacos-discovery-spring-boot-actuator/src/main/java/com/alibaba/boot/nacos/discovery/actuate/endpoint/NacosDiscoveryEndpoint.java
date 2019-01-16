@@ -20,12 +20,14 @@ import static com.alibaba.nacos.spring.util.NacosBeanUtils.DISCOVERY_GLOBAL_NACO
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.endpoint.annotation.Endpoint;
 import org.springframework.boot.actuate.endpoint.annotation.ReadOperation;
 import org.springframework.context.ApplicationContext;
 
+import com.alibaba.boot.nacos.common.PropertiesUtils;
 import com.alibaba.boot.nacos.discovery.NacosDiscoveryConstants;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -54,7 +56,8 @@ public class NacosDiscoveryEndpoint {
 		Map<String, Object> result = new HashMap<>();
 
 		result.put("nacosDiscoveryGlobalProperties",
-				applicationContext.getBean(DISCOVERY_GLOBAL_NACOS_PROPERTIES_BEAN_NAME));
+				PropertiesUtils.extractSafeProperties(applicationContext.getBean(
+						DISCOVERY_GLOBAL_NACOS_PROPERTIES_BEAN_NAME, Properties.class)));
 
 		NacosServiceFactory nacosServiceFactory = applicationContext.getBean(
 				CacheableEventPublishingNacosServiceFactory.BEAN_NAME,
