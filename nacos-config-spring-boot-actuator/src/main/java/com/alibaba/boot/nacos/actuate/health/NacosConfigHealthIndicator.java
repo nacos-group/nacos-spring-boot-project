@@ -24,6 +24,7 @@ import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.HealthIndicator;
 import org.springframework.context.ApplicationContext;
 
+import com.alibaba.boot.nacos.common.PropertiesUtils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.nacos.api.config.ConfigService;
 import com.alibaba.nacos.spring.factory.CacheableEventPublishingNacosServiceFactory;
@@ -52,7 +53,9 @@ public class NacosConfigHealthIndicator extends AbstractHealthIndicator {
 			if (configService instanceof NacosServiceMetaData) {
 				NacosServiceMetaData nacosServiceMetaData = (NacosServiceMetaData) configService;
 				Properties properties = nacosServiceMetaData.getProperties();
-				builder.withDetail(JSON.toJSONString(properties),
+				builder.withDetail(
+						JSON.toJSONString(
+								PropertiesUtils.extractSafeProperties(properties)),
 						configService.getServerStatus());
 			}
 			if (!configService.getServerStatus().toLowerCase().equals(UP_STATUS)) {

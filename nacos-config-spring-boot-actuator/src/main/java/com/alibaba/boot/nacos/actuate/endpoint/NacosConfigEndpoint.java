@@ -21,6 +21,7 @@ import static com.alibaba.nacos.spring.util.NacosBeanUtils.CONFIG_GLOBAL_NACOS_P
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 
 import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -33,6 +34,7 @@ import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.type.AnnotationMetadata;
 import org.w3c.dom.Element;
 
+import com.alibaba.boot.nacos.common.PropertiesUtils;
 import com.alibaba.boot.nacos.config.NacosConfigConstants;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.nacos.api.config.annotation.NacosConfigListener;
@@ -54,11 +56,11 @@ public class NacosConfigEndpoint extends AbstractEndpoint<Map<String, Object>>
 
 	private Map<String, JSONObject> nacosConfigMetadataMap = new HashMap<>();
 
-    public NacosConfigEndpoint() {
-        super(NacosConfigConstants.ENDPOINT_PREFIX);
-    }
+	public NacosConfigEndpoint() {
+		super(NacosConfigConstants.ENDPOINT_PREFIX);
+	}
 
-    @Override
+	@Override
 	public Map<String, Object> invoke() {
 		Map<String, Object> result = new HashMap<>();
 
@@ -72,7 +74,8 @@ public class NacosConfigEndpoint extends AbstractEndpoint<Map<String, Object>>
 			result.put("nacosConfigMetadata", nacosConfigMetadataMap.values());
 
 			result.put("nacosConfigGlobalProperties",
-					applicationContext.getBean(CONFIG_GLOBAL_NACOS_PROPERTIES_BEAN_NAME));
+					PropertiesUtils.extractSafeProperties(applicationContext.getBean(
+							CONFIG_GLOBAL_NACOS_PROPERTIES_BEAN_NAME, Properties.class)));
 		}
 
 		return result;
