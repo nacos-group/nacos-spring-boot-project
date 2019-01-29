@@ -16,8 +16,8 @@
  */
 package com.alibaba.boot.nacos.actuate.endpoint;
 
+import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -50,11 +50,11 @@ public class NacosDiscoveryEndpointTest {
 	public void testInvoke() {
 		Map<String, Object> metadata = nacosDiscoveryEndpoint.invoke();
 
-		Properties nacosDiscoveryGlobalProperties = (Properties) metadata
+		HashMap nacosDiscoveryGlobalProperties = (HashMap) metadata
 				.get("nacosDiscoveryGlobalProperties");
 
 		Assert.assertEquals("localhost",
-				nacosDiscoveryGlobalProperties.getProperty(PropertyKeyConst.SERVER_ADDR));
+				nacosDiscoveryGlobalProperties.get(PropertyKeyConst.SERVER_ADDR));
 	}
 
 }
