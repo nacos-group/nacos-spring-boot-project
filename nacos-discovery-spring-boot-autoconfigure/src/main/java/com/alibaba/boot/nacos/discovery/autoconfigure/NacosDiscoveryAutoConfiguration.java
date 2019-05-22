@@ -16,17 +16,18 @@
  */
 package com.alibaba.boot.nacos.discovery.autoconfigure;
 
-import static com.alibaba.nacos.spring.util.NacosBeanUtils.DISCOVERY_GLOBAL_NACOS_PROPERTIES_BEAN_NAME;
-
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import com.alibaba.boot.nacos.discovery.registry.NacosDiscoveryAutoRegistry;
+import com.alibaba.nacos.spring.context.annotation.discovery.EnableNacosDiscovery;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.alibaba.boot.nacos.discovery.NacosDiscoveryConstants;
 import com.alibaba.boot.nacos.discovery.properties.NacosDiscoveryProperties;
-import com.alibaba.nacos.spring.context.annotation.discovery.EnableNacosDiscovery;
+
+import static com.alibaba.nacos.spring.util.NacosBeanUtils.DISCOVERY_GLOBAL_NACOS_PROPERTIES_BEAN_NAME;
 
 /**
  * Nacos Discovery Auto {@link Configuration}
@@ -36,8 +37,12 @@ import com.alibaba.nacos.spring.context.annotation.discovery.EnableNacosDiscover
 @ConditionalOnProperty(name = NacosDiscoveryConstants.ENABLED, matchIfMissing = true)
 @ConditionalOnMissingBean(name = DISCOVERY_GLOBAL_NACOS_PROPERTIES_BEAN_NAME)
 @EnableNacosDiscovery
-@EnableConfigurationProperties(value = NacosDiscoveryProperties.class)
-@ConditionalOnClass(name = "org.springframework.boot.context.properties.bind.Binder")
+@EnableConfigurationProperties(value = {NacosDiscoveryProperties.class})
 public class NacosDiscoveryAutoConfiguration {
+
+    @Bean
+    public NacosDiscoveryAutoRegistry nacosDiscoveryAutoRegistry() {
+        return new NacosDiscoveryAutoRegistry();
+    }
 
 }

@@ -27,8 +27,18 @@ public interface NacosConfigConstants {
 
 	String ENDPOINT_PREFIX = "nacos-config";
 
-	String ENABLED = EnableNacosConfig.CONFIG_PREFIX + "enabled";
+    String ENABLED = EnableNacosConfig.CONFIG_PREFIX + "enabled";
 
     String PREFIX = "nacos.config";
+
+    String NACOS_BOOTSTRAP = PREFIX + ".bootstrap.enable";
+
+    String NACOS_CONFIG_DATA_ID = "nacos.config.data-id";
+
+    String NACOS_CONFIG_GROUP_ID = "nacos.config.group-id";
+
+    String NACOS_PROPERTY_APPLICATION = "nacos.property.application";
+
+    String NACOS_BOOTSTRAP_PROPERTY_APPLICATION = "nacos.bootstrap.property.application";
 
 }

@@ -33,6 +33,7 @@
     <modules>
         <module>nacos-config-sample</module>
         <module>nacos-discovery-sample</module>
+        <module>config-new-sample</module>
     </modules>
 
     <build>

@@ -17,8 +17,14 @@
 package com.alibaba.boot.nacos.config.properties;
 
 import com.alibaba.boot.nacos.config.NacosConfigConstants;
+import com.alibaba.nacos.api.common.Constants;
+import com.alibaba.nacos.spring.context.constants.NacosConstants;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.util.Assert;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * {@link ConfigurationProperties} for configuring Nacos Config.
@@ -28,19 +34,29 @@ import org.springframework.util.Assert;
 @ConfigurationProperties(NacosConfigConstants.PREFIX)
 public class NacosConfigProperties {
 
-	private String serverAddr;
+	private String serverAddr = "127.0.0.1:8848";
 
-    private String contextPath;
+    private String contextPath = "";
 
-	private String encode;
+	private String encode = "";
 
-	private String endpoint;
+	private String endpoint = "";
 
-	private String namespace;
+	private String namespace = "";
 
-	private String accessKey;
+	private String accessKey = "";
 
-	private String secretKey;
+	private String secretKey = "";
+
+	private boolean autoRefresh = false;
+
+	private String clusterName = "";
+
+	private String dataId = "";
+
+	private String group = Constants.DEFAULT_GROUP;
+
+	private List<Config> extConfig = new ArrayList<>();
 
     public String getServerAddr() {
         return serverAddr;
@@ -98,4 +114,138 @@ public class NacosConfigProperties {
     public void setSecretKey(String secretKey) {
         this.secretKey = secretKey;
     }
+
+    public boolean isAutoRefresh() {
+        return autoRefresh;
+    }
+
+    public void setAutoRefresh(boolean autoRefresh) {
+        this.autoRefresh = autoRefresh;
+    }
+
+    public String getDataId() {
+        return dataId;
+    }
+
+    public void setDataId(String dataId) {
+        this.dataId = dataId;
+    }
+
+    public String getGroup() {
+        return group;
+    }
+
+    public void setGroup(String group) {
+        this.group = group;
+    }
+
+    public String getClusterName() {
+        return clusterName;
+    }
+
+    public void setClusterName(String clusterName) {
+        this.clusterName = clusterName;
+    }
+
+    public List<Config> getExtConfig() {
+        return extConfig;
+    }
+
+    public void setExtConfig(List<Config> extConfig) {
+        this.extConfig = extConfig;
+    }
+
+    public static class Config {
+
+        private String serverAddr = "127.0.0.1:8848";
+
+        private String endpoint = "";
+
+        private String namespace = "";
+
+        private String clusterName = "";
+
+        private String accessKey = "";
+
+        private String secretKey = "";
+
+        private String dataId = "";
+
+        private String group = Constants.DEFAULT_GROUP;
+
+        private boolean autoRefresh = false;
+
+        public String getServerAddr() {
+            return serverAddr;
+        }
+
+        public void setServerAddr(String serverAddr) {
+            this.serverAddr = serverAddr;
+        }
+
+        public String getEndpoint() {
+            return endpoint;
+        }
+
+        public void setEndpoint(String endpoint) {
+            this.endpoint = endpoint;
+        }
+
+        public String getNamespace() {
+            return namespace;
+        }
+
+        public void setNamespace(String namespace) {
+            this.namespace = namespace;
+        }
+
+        public String getAccessKey() {
+            return accessKey;
+        }
+
+        public void setAccessKey(String accessKey) {
+            this.accessKey = accessKey;
+        }
+
+        public String getSecretKey() {
+            return secretKey;
+        }
+
+        public void setSecretKey(String secretKey) {
+            this.secretKey = secretKey;
+        }
+
+        public String getDataId() {
+            return dataId;
+        }
+
+        public void setDataId(String dataId) {
+            this.dataId = dataId;
+        }
+
+        public String getGroup() {
+            return group;
+        }
+
+        public void setGroup(String group) {
+            this.group = group;
+        }
+
+        public boolean isAutoRefresh() {
+            return autoRefresh;
+        }
+
+        public void setAutoRefresh(boolean autoRefresh) {
+            this.autoRefresh = autoRefresh;
+        }
+
+        public String getClusterName() {
+            return clusterName;
+        }
+
+        public void setClusterName(String clusterName) {
+            this.clusterName = clusterName;
+        }
+    }
+
 }

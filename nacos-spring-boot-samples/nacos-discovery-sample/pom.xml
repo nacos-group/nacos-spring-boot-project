@@ -29,9 +29,6 @@
     <packaging>pom</packaging>
     <name>Nacos Spring Boot Discovery Sample</name>
     <description>Nacos Spring Boot Discovery Sample</description>
-    <modules>
-
-    </modules>
     <dependencies>
 
         <!-- Spring Boot dependencies -->

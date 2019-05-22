@@ -17,30 +17,110 @@
 package com.alibaba.boot.nacos.discovery.properties;
 
 import com.alibaba.boot.nacos.discovery.NacosDiscoveryConstants;
+import com.alibaba.nacos.api.naming.PreservedMetadataKeys;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.util.Assert;
+
+import javax.annotation.PostConstruct;
+import java.net.SocketException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * {@link ConfigurationProperties} for configuring Nacos Discovery.
  *
  * @author <a href="mailto:fangjian0423@gmail.com">Jim</a>
+ * @author <a href="mailto:liaochunyhm@live.com">liaochuntao</a>
  */
 @ConfigurationProperties(NacosDiscoveryConstants.PREFIX)
 public class NacosDiscoveryProperties {
 
-	private String serverAddr;
+    private String name = "application";
 
     private String contextPath;
 
-	private String clusterName;
+    /**
+     * nacos discovery server address
+     */
+    private String serverAddr;
 
-	private String endpoint;
+    /**
+     * the domain name of a service, through which the server address can be dynamically
+     * obtained.
+     */
+    private String endpoint;
 
-	private String namespace;
+    /**
+     * namespace, separation registry of different environments.
+     */
+    private String namespace;
 
-	private String accessKey;
+    /**
+     * weight for service instance, the larger the value, the larger the weight.
+     */
+    private float weight = 1;
 
-	private String secretKey;
+    /**
+     * cluster name for nacos server.
+     */
+    private String clusterName = "DEFAULT";
+
+    /**
+     * extra metadata to register.
+     */
+    private Map<String, String> metadata = new HashMap<>();
+
+    /**
+     * The ip address your want to register for your service instance, needn't to set it
+     * if the auto detect ip works well.
+     */
+    private String ip;
+
+    /**
+     * which network interface's ip you want to register
+     */
+    private String networkInterface = "";
+
+    /**
+     * The port your want to register for your service instance, needn't to set it if the
+     * auto detect port works well
+     */
+    private int port = -1;
+
+    /**
+     * whether your service is a https service
+     */
+    private boolean secure = false;
+
+    /**
+     * access key for namespace.
+     */
+    private String accessKey;
+
+    /**
+     * secret key for namespace.
+     */
+    private String secretKey;
+
+    /**
+     * auto registry service
+     */
+    private boolean autoRegistry = true;
+
+    @PostConstruct
+    private void init() throws SocketException {
+
+        metadata.put(PreservedMetadataKeys.REGISTER_SOURCE, "SPRING_BOOT");
+
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public String getServerAddr() {
         return serverAddr;
@@ -97,5 +177,61 @@ public class NacosDiscoveryProperties {
 
     public void setSecretKey(String secretKey) {
         this.secretKey = secretKey;
+    }
+
+    public String getIp() {
+        return ip;
+    }
+
+    public void setIp(String ip) {
+        this.ip = ip;
+    }
+
+    public float getWeight() {
+        return weight;
+    }
+
+    public void setWeight(float weight) {
+        this.weight = weight;
+    }
+
+    public Map<String, String> getMetadata() {
+        return metadata;
+    }
+
+    public void setMetadata(Map<String, String> metadata) {
+        this.metadata = metadata;
+    }
+
+    public String getNetworkInterface() {
+        return networkInterface;
+    }
+
+    public void setNetworkInterface(String networkInterface) {
+        this.networkInterface = networkInterface;
+    }
+
+    public int getPort() {
+        return port;
+    }
+
+    public void setPort(int port) {
+        this.port = port;
+    }
+
+    public boolean isSecure() {
+        return secure;
+    }
+
+    public void setSecure(boolean secure) {
+        this.secure = secure;
+    }
+
+    public boolean isAutoRegistry() {
+        return autoRegistry;
+    }
+
+    public void setAutoRegistry(boolean autoRegistry) {
+        this.autoRegistry = autoRegistry;
     }
 }
