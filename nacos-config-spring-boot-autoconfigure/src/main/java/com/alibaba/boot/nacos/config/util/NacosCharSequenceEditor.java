@@ -27,6 +27,9 @@ public class NacosCharSequenceEditor extends PropertyEditorSupport {
 
     @Override
     public void setValue(Object value) {
+        if (value == null) {
+            super.setValue("");
+        }
         if (value instanceof CharSequence) {
             CharSequence sequence = (CharSequence) value;
             super.setValue(sequence.toString());

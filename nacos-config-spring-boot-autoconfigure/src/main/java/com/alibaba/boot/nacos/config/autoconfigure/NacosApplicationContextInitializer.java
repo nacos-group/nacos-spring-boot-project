@@ -92,6 +92,7 @@ public class NacosApplicationContextInitializer implements ApplicationContextIni
         properties.put(PropertyKeyConst.CLUSTER_NAME, nacosConfigProperties.getClusterName());
         properties.put(PropertyKeyConst.SECRET_KEY, nacosConfigProperties.getSecretKey());
         properties.put(PropertyKeyConst.ACCESS_KEY, nacosConfigProperties.getAccessKey());
+        properties.put(PropertyKeyConst.RAM_ROLE_NAME, nacosConfigProperties.getRamRoleName());
         return properties;
     }
 
@@ -106,6 +107,7 @@ public class NacosApplicationContextInitializer implements ApplicationContextIni
         properties.put(PropertyKeyConst.CLUSTER_NAME, config.getClusterName());
         properties.put(PropertyKeyConst.SECRET_KEY, config.getSecretKey());
         properties.put(PropertyKeyConst.ACCESS_KEY, config.getAccessKey());
+        properties.put(PropertyKeyConst.RAM_ROLE_NAME, config.getRamRoleName());
         return properties;
     }
 

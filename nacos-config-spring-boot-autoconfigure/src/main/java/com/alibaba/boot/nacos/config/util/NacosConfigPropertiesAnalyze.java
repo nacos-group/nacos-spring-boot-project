@@ -23,6 +23,8 @@ package com.alibaba.boot.nacos.config.util;
 
 import com.alibaba.boot.nacos.config.NacosConfigConstants;
 import com.alibaba.boot.nacos.config.properties.NacosConfigProperties;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.beans.propertyeditors.CustomCollectionEditor;
@@ -30,6 +32,7 @@ import org.springframework.boot.env.OriginTrackedMapPropertySource;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.MutablePropertySources;
 import org.springframework.core.env.PropertySource;
+import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -41,6 +44,8 @@ import java.util.Map;
  */
 public class NacosConfigPropertiesAnalyze {
 
+    private static final Logger logger = LoggerFactory.getLogger(NacosConfigPropertiesAnalyze.class);
+
     public static NacosConfigProperties buildNacosConfigProperties(ConfigurableEnvironment environment) {
         BeanWrapper wrapper = new BeanWrapperImpl(new NacosConfigProperties());
         wrapper.setAutoGrowNestedPaths(true);
@@ -50,13 +55,22 @@ public class NacosConfigPropertiesAnalyze {
         wrapper.registerCustomEditor(boolean.class, new NacosCustomBooleanEditor(true));
         PropertySource target = findApplicationConfig(environment);
         wrapper.setPropertyValues(dataSource((Map<String, String>) target.getSource()));
-        return (NacosConfigProperties) wrapper.getWrappedInstance();
+        NacosConfigProperties nacosConfigProperties = (NacosConfigProperties) wrapper.getWrappedInstance();
+        String globalServerAddr = nacosConfigProperties.getServerAddr();
+        for (NacosConfigProperties.Config config : nacosConfigProperties.getExtConfig()) {
+            if (StringUtils.isEmpty(globalServerAddr)) {
+                config.setServerAddr(globalServerAddr);
+            }
+        }
+        logger.info("nacosConfigProperties : {}", nacosConfigProperties);
+        return nacosConfigProperties;
     }
 
     private static PropertySource<Map<String, String>> findApplicationConfig(ConfigurableEnvironment environment) {
         PropertySource<Map<String, String>> target = null;
         MutablePropertySources mutablePropertySources = environment.getPropertySources();
         for (PropertySource tmp : mutablePropertySources) {
+            // Spring puts the information of the application.properties file into class{OriginTrackedMapPropertySource}.
             if (tmp instanceof OriginTrackedMapPropertySource) {
                 target = tmp;
             }

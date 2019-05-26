@@ -56,6 +56,8 @@ public class NacosConfigProperties {
 
 	private String group = Constants.DEFAULT_GROUP;
 
+	private String ramRoleName = "";
+
 	private List<Config> extConfig = new ArrayList<>();
 
     public String getServerAddr() {
@@ -147,6 +149,14 @@ public class NacosConfigProperties {
         this.clusterName = clusterName;
     }
 
+    public String getRamRoleName() {
+        return ramRoleName;
+    }
+
+    public void setRamRoleName(String ramRoleName) {
+        this.ramRoleName = ramRoleName;
+    }
+
     public List<Config> getExtConfig() {
         return extConfig;
     }
@@ -157,7 +167,7 @@ public class NacosConfigProperties {
 
     public static class Config {
 
-        private String serverAddr = "127.0.0.1:8848";
+        private String serverAddr;
 
         private String endpoint = "";
 
@@ -172,6 +182,8 @@ public class NacosConfigProperties {
         private String dataId = "";
 
         private String group = Constants.DEFAULT_GROUP;
+
+        private String ramRoleName = "";
 
         private boolean autoRefresh = false;
 
@@ -246,6 +258,46 @@ public class NacosConfigProperties {
         public void setClusterName(String clusterName) {
             this.clusterName = clusterName;
         }
+
+        public String getRamRoleName() {
+            return ramRoleName;
+        }
+
+        public void setRamRoleName(String ramRoleName) {
+            this.ramRoleName = ramRoleName;
+        }
+
+        @Override
+        public String toString() {
+            return "Config{" +
+                    "serverAddr='" + serverAddr + '\'' +
+                    ", endpoint='" + endpoint + '\'' +
+                    ", namespace='" + namespace + '\'' +
+                    ", clusterName='" + clusterName + '\'' +
+                    ", accessKey='" + accessKey + '\'' +
+                    ", secretKey='" + secretKey + '\'' +
+                    ", dataId='" + dataId + '\'' +
+                    ", group='" + group + '\'' +
+                    ", autoRefresh=" + autoRefresh +
+                    '}';
+        }
     }
 
+    @Override
+    public String toString() {
+        return "NacosConfigProperties{" +
+                "serverAddr='" + serverAddr + '\'' +
+                ", contextPath='" + contextPath + '\'' +
+                ", encode='" + encode + '\'' +
+                ", endpoint='" + endpoint + '\'' +
+                ", namespace='" + namespace + '\'' +
+                ", accessKey='" + accessKey + '\'' +
+                ", secretKey='" + secretKey + '\'' +
+                ", autoRefresh=" + autoRefresh +
+                ", clusterName='" + clusterName + '\'' +
+                ", dataId='" + dataId + '\'' +
+                ", group='" + group + '\'' +
+                ", extConfig=" + extConfig +
+                '}';
+    }
 }
