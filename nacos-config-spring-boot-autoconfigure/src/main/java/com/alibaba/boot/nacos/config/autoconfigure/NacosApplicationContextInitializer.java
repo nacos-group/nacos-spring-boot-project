@@ -72,9 +72,9 @@ public class NacosApplicationContextInitializer implements ApplicationContextIni
             nacosConfigProperties = buildNacosConfigProperties(environment);
             Properties globalProperties = buildGlobalNacosProperties();
             MutablePropertySources mutablePropertySources = environment.getPropertySources();
-            mutablePropertySources.addLast(reqGlobalNacosConfig(globalProperties));
+            mutablePropertySources.addLast(reqGlobalNacosConfig(globalProperties, nacosConfigProperties.isYaml()));
             for (NacosConfigProperties.Config config : nacosConfigProperties.getExtConfig()) {
-                mutablePropertySources.addLast(reqSubNacosConfig(config, globalProperties));
+                mutablePropertySources.addLast(reqSubNacosConfig(config, globalProperties, config.isYaml()));
             }
         }
     }
@@ -111,25 +111,25 @@ public class NacosApplicationContextInitializer implements ApplicationContextIni
         return properties;
     }
 
-    private NacosPropertySource reqGlobalNacosConfig(Properties globalProperties) {
-        NacosPropertySource propertySource = reqNacosConfig(globalProperties, nacosConfigProperties.getDataId(), nacosConfigProperties.getGroup());
+    private NacosPropertySource reqGlobalNacosConfig(Properties globalProperties, boolean isYaml) {
+        NacosPropertySource propertySource = reqNacosConfig(globalProperties, nacosConfigProperties.getDataId(), nacosConfigProperties.getGroup(), isYaml);
         propertySource.setAutoRefreshed(nacosConfigProperties.isAutoRefresh());
         NacosPropertySourcePostProcessor.addListenerIfAutoRefreshed(propertySource, globalProperties, environment);
         return propertySource;
     }
 
-    private NacosPropertySource reqSubNacosConfig(NacosConfigProperties.Config config, Properties globalProperties) {
+    private NacosPropertySource reqSubNacosConfig(NacosConfigProperties.Config config, Properties globalProperties, boolean isYaml) {
         Properties subConfigProperties = buildSubNacosProperties(globalProperties, config);
-        NacosPropertySource nacosPropertySource = reqNacosConfig(subConfigProperties, config.getDataId(), config.getGroup());
+        NacosPropertySource nacosPropertySource = reqNacosConfig(subConfigProperties, config.getDataId(), config.getGroup(), isYaml);
         nacosPropertySource.setAutoRefreshed(config.isAutoRefresh());
         NacosPropertySourcePostProcessor.addListenerIfAutoRefreshed(nacosPropertySource, subConfigProperties, environment);
         return nacosPropertySource;
     }
 
-    private NacosPropertySource reqNacosConfig(Properties configProperties, String dataId, String groupId) {
+    private NacosPropertySource reqNacosConfig(Properties configProperties, String dataId, String groupId, boolean isYaml) {
         NacosPropertySource nacosPropertySource;
         String config = nacosConfigLoader.load(dataId, groupId, configProperties);
-        nacosPropertySource = new NacosPropertySource(buildDefaultPropertySourceName(dataId, groupId, configProperties), config);
+        nacosPropertySource = new NacosPropertySource(buildDefaultPropertySourceName(dataId, groupId, configProperties), config, isYaml);
         nacosPropertySource.setDataId(dataId);
         nacosPropertySource.setGroupId(groupId);
         return nacosPropertySource;

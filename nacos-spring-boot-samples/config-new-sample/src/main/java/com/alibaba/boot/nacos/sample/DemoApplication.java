@@ -21,14 +21,21 @@
  */
 package com.alibaba.boot.nacos.sample;
 
+import com.alibaba.nacos.api.config.annotation.NacosConfigurationProperties;
 import com.alibaba.nacos.api.config.annotation.NacosValue;
+import com.alibaba.nacos.spring.context.annotation.config.NacosPropertySource;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Map;
 
 @SpringBootApplication
 public class DemoApplication {
@@ -40,12 +47,15 @@ public class DemoApplication {
     @RestController
     protected static class MyController {
 
+        @Autowired
+        private My my;
+
         @NacosValue(value = "${people.have}", autoRefreshed = true)
         private String enable;
 
         @GetMapping
         public String isEnable() {
-            return enable;
+            return my.toString();
         }
 
     }
@@ -62,5 +72,44 @@ public class DemoApplication {
 
     }
 
+    @Component
+    @ConfigurationProperties(prefix = "people")
+    protected static class My {
+        private String name;
+        private Map<String, String> map;
+
+        public My() {
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public Map<String, String> getMap() {
+            return map;
+        }
+
+        public void setMap(Map<String, String> map) {
+            this.map = map;
+        }
+
+        @Override
+        public String toString() {
+            return "My{" +
+                    "name='" + name + '\'' +
+                    ", map=" + map +
+                    '}';
+        }
+    }
+
+    @Component
+    @NacosPropertySource(dataId = "test-1", yaml = true, autoRefreshed = true)
+    public static class Properties{
+
+    }
 
 }

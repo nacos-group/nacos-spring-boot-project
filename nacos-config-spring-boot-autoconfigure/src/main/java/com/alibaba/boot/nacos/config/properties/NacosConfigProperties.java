@@ -30,6 +30,7 @@ import java.util.List;
  * {@link ConfigurationProperties} for configuring Nacos Config.
  *
  * @author <a href="mailto:fangjian0423@gmail.com">Jim</a>
+ * @author <a href="mailto:liaochunyhm@live.com">liaochuntao</a>
  */
 @ConfigurationProperties(NacosConfigConstants.PREFIX)
 public class NacosConfigProperties {
@@ -49,6 +50,8 @@ public class NacosConfigProperties {
 	private String secretKey = "";
 
 	private boolean autoRefresh = false;
+
+	private boolean yaml = false;
 
 	private String clusterName = "";
 
@@ -125,6 +128,14 @@ public class NacosConfigProperties {
         this.autoRefresh = autoRefresh;
     }
 
+    public boolean isYaml() {
+        return yaml;
+    }
+
+    public void setYaml(boolean yaml) {
+        this.yaml = yaml;
+    }
+
     public String getDataId() {
         return dataId;
     }
@@ -186,6 +197,8 @@ public class NacosConfigProperties {
         private String ramRoleName = "";
 
         private boolean autoRefresh = false;
+
+        private boolean yaml = false;
 
         public String getServerAddr() {
             return serverAddr;
@@ -251,6 +264,14 @@ public class NacosConfigProperties {
             this.autoRefresh = autoRefresh;
         }
 
+        public boolean isYaml() {
+            return yaml;
+        }
+
+        public void setYaml(boolean yaml) {
+            yaml = yaml;
+        }
+
         public String getClusterName() {
             return clusterName;
         }
@@ -278,7 +299,9 @@ public class NacosConfigProperties {
                     ", secretKey='" + secretKey + '\'' +
                     ", dataId='" + dataId + '\'' +
                     ", group='" + group + '\'' +
+                    ", ramRoleName='" + ramRoleName + '\'' +
                     ", autoRefresh=" + autoRefresh +
+                    ", isYaml=" + yaml +
                     '}';
         }
     }
