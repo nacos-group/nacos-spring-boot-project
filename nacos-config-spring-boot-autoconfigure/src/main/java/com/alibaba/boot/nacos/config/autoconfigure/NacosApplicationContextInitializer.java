@@ -131,6 +131,7 @@ public class NacosApplicationContextInitializer implements ApplicationContextIni
         String config = nacosConfigLoader.load(dataId, groupId, configProperties);
         nacosPropertySource = new NacosPropertySource(buildDefaultPropertySourceName(dataId, groupId, configProperties), config, isYaml);
         nacosPropertySource.setDataId(dataId);
+        nacosPropertySource.setYaml(isYaml);
         nacosPropertySource.setGroupId(groupId);
         return nacosPropertySource;
     }

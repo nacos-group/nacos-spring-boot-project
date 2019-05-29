@@ -49,6 +49,16 @@
       name: "nacos.discovery.secret-key",
       description: "the secretkey of Alibaba Cloud Account",
       type: "java.lang.String"
+    },
+    {
+      "sourceType": "com.alibaba.boot.nacos.discovery.properties.NacosDiscoveryProperties",
+      "name": "nacos.discovery.auto-registry",
+      "type": "java.lang.Boolean"
+    },
+    {
+      sourceType: "com.alibaba.boot.nacos.discovery.properties.NacosDiscoveryProperties.InstanceInfo",
+      name: "nacos.discovery.instance-info",
+      type: "com.alibaba.boot.nacos.discovery.properties.NacosDiscoveryProperties.InstanceInfo"
     }
   ]
 }

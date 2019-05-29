@@ -17,10 +17,11 @@
 package com.alibaba.boot.nacos.discovery.properties;
 
 import com.alibaba.boot.nacos.discovery.NacosDiscoveryConstants;
-import org.springframework.beans.factory.annotation.Value;
+import com.alibaba.nacos.api.naming.PreservedMetadataKeys;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.util.Assert;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -32,10 +33,7 @@ import java.util.Map;
 @ConfigurationProperties(NacosDiscoveryConstants.PREFIX)
 public class NacosDiscoveryProperties {
 
-    @Value("spring.application.name")
-    private String applicationName;
-
-    private String name = applicationName;
+    private String name;
 
     private String serverAddr;
 
@@ -55,7 +53,7 @@ public class NacosDiscoveryProperties {
 
     private boolean autoRegistry;
 
-    private InstanceInfo instanceInfo;
+    private InstanceInfo instanceInfo = new InstanceInfo();
 
     public String getName() {
         return name;
@@ -146,14 +144,23 @@ public class NacosDiscoveryProperties {
         this.instanceInfo = instanceInfo;
     }
 
-    public class InstanceInfo {
+    public static class InstanceInfo {
 
         private String ip = "127.0.0.1";
+
         private int port = -1;
+
         private String group;
-        private Map<String, String> metadata;
-        private double weight;
-        private boolean ephemeral;
+
+        private Map<String, String> metadata = new HashMap<>();
+
+        private double weight = 1.0D;
+
+        private boolean ephemeral = true;
+
+        public InstanceInfo() {
+            metadata.put(PreservedMetadataKeys.REGISTER_SOURCE, "SPRING_BOOT");
+        }
 
         public String getIp() {
             return ip;

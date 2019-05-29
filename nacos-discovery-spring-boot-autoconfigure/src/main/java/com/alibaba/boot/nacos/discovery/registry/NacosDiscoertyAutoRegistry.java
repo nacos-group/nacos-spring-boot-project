@@ -8,9 +8,11 @@ import com.alibaba.nacos.api.naming.pojo.Instance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.context.WebServerInitializedEvent;
 import org.springframework.boot.web.server.WebServer;
 import org.springframework.context.ApplicationListener;
+import org.springframework.util.StringUtils;
 
 /**
  * Auto registry SpringBoot Application to nacos server
@@ -24,6 +26,9 @@ public class NacosDiscoertyAutoRegistry implements ApplicationListener<WebServer
 
     public static final String BEAN_NAME = "nacosDiscoertyAutoRegistry";
 
+    @Value("spring.application.name")
+    private String applicationName;
+
     @Autowired
     private NacosDiscoveryProperties discoveryProperties;
 
@@ -35,7 +40,7 @@ public class NacosDiscoertyAutoRegistry implements ApplicationListener<WebServer
         if (discoveryProperties.isAutoRegistry()) {
             logger.info("[nacos-boot] auto registry application");
             WebServer webServer = event.getWebServer();
-            String serviceName = discoveryProperties.getName();
+            String serviceName = StringUtils.isEmpty(discoveryProperties.getName()) ? applicationName : discoveryProperties.getName();
             Instance instance = buildInstance(webServer);
             instance.setServiceName(serviceName);
             try {
