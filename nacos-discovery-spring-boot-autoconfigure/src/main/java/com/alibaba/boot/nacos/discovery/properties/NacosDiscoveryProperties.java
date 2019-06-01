@@ -18,6 +18,7 @@ package com.alibaba.boot.nacos.discovery.properties;
 
 import com.alibaba.boot.nacos.discovery.NacosDiscoveryConstants;
 import com.alibaba.nacos.api.naming.PreservedMetadataKeys;
+import com.alibaba.nacos.client.naming.utils.NetUtils;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.util.Assert;
 
@@ -146,7 +147,7 @@ public class NacosDiscoveryProperties {
 
     public static class InstanceInfo {
 
-        private String ip = "127.0.0.1";
+        private String ip = NetUtils.localIP();
 
         private int port = -1;
 

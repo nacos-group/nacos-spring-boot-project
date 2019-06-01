@@ -21,25 +21,28 @@
  */
 package com.alibaba.boot.nacos.sample;
 
+import com.alibaba.boot.nacos.config.binder.NacosBootConfigurationPropertiesBinder;
 import com.alibaba.nacos.api.config.annotation.NacosConfigurationProperties;
 import com.alibaba.nacos.api.config.annotation.NacosValue;
 import com.alibaba.nacos.spring.context.annotation.config.NacosPropertySource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.config.YamlPropertiesFactoryBean;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Map;
 
+@NacosPropertySource(dataId = "test-2", autoRefreshed = true)
+@NacosPropertySource(dataId = "test-3", autoRefreshed = true)
+@NacosPropertySource(dataId = "test-4", autoRefreshed = true)
 @SpringBootApplication
 public class DemoApplication {
 
@@ -49,6 +52,9 @@ public class DemoApplication {
 
     @RestController
     protected static class MyController {
+
+        @Autowired
+        private ApplicationContext context;
 
         @Autowired
         private My my;
@@ -61,7 +67,7 @@ public class DemoApplication {
 
         @GetMapping
         public String isEnable() {
-            return my.toString() + "\n" + lc.toString();
+            return my.toString() + "\n" + lc.toString() + " / " + (context.getBean(NacosBootConfigurationPropertiesBinder.BEAN_NAME) == null);
         }
 
     }
@@ -83,6 +89,7 @@ public class DemoApplication {
     protected static class Lc {
 
         private String name;
+        private List<Map<String, String>> list;
         private Map<String, String> map;
 
         public Lc() {
@@ -94,6 +101,14 @@ public class DemoApplication {
 
         public void setName(String name) {
             this.name = name;
+        }
+
+        public List<Map<String, String>> getList() {
+            return list;
+        }
+
+        public void setList(List<Map<String, String>> list) {
+            this.list = list;
         }
 
         public Map<String, String> getMap() {
@@ -108,16 +123,19 @@ public class DemoApplication {
         public String toString() {
             return "Lc{" +
                     "name='" + name + '\'' +
+                    ", list=" + list +
                     ", map=" + map +
                     '}';
         }
-
     }
 
     @Component
     @NacosConfigurationProperties(dataId = "test-1", yaml = true, autoRefreshed = true, ignoreNestedProperties = true)
     protected static class My {
         private String name;
+
+        private List<Map<String, String>> list;
+
         private Map<String, String> map;
 
         public My() {
@@ -129,6 +147,14 @@ public class DemoApplication {
 
         public void setName(String name) {
             this.name = name;
+        }
+
+        public List<Map<String, String>> getList() {
+            return list;
+        }
+
+        public void setList(List<Map<String, String>> list) {
+            this.list = list;
         }
 
         public Map<String, String> getMap() {
@@ -143,6 +169,7 @@ public class DemoApplication {
         public String toString() {
             return "My{" +
                     "name='" + name + '\'' +
+                    ", list=" + list +
                     ", map=" + map +
                     '}';
         }

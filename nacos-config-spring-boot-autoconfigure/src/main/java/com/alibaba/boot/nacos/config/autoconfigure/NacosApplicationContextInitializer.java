@@ -22,6 +22,7 @@
 package com.alibaba.boot.nacos.config.autoconfigure;
 
 import com.alibaba.boot.nacos.config.NacosConfigConstants;
+import com.alibaba.boot.nacos.config.binder.NacosBootConfigurationPropertiesBinder;
 import com.alibaba.boot.nacos.config.properties.NacosConfigProperties;
 import com.alibaba.nacos.api.PropertyKeyConst;
 import com.alibaba.nacos.spring.core.env.NacosPropertySource;
