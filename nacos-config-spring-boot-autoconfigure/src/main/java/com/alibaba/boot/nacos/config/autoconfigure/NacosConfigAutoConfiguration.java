@@ -19,6 +19,7 @@ package com.alibaba.boot.nacos.config.autoconfigure;
 import static com.alibaba.nacos.spring.util.NacosBeanUtils.CONFIG_GLOBAL_NACOS_PROPERTIES_BEAN_NAME;
 
 import com.alibaba.boot.nacos.config.binder.NacosBootConfigurationPropertiesBinder;
+import com.alibaba.nacos.spring.factory.ApplicationContextHolder;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;

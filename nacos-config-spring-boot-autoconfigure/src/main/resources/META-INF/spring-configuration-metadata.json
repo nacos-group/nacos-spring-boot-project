@@ -79,6 +79,21 @@
       "name": "nacos.config.bootstrap.enable",
       "description": "the bootstrap enable of nacos supprot @ConditionalOnProperty",
       "type": "java.lang.Boolean"
+    },
+    {
+      "sourceType": "com.alibaba.boot.nacos.config.properties.NacosConfigProperties",
+      "name": "nacos.config.config-long-poll-timeout",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.alibaba.boot.nacos.config.properties.NacosConfigProperties",
+      "name": "nacos.config.config-retry-time",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.alibaba.boot.nacos.config.properties.NacosConfigProperties",
+      "name": "nacos.config.max-retry",
+      "type": "java.lang.String"
     }
   ]
 }

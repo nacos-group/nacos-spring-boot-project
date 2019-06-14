@@ -19,6 +19,7 @@ package com.alibaba.boot.nacos.sample;
 import com.alibaba.nacos.api.annotation.NacosInjected;
 import com.alibaba.nacos.api.naming.NamingService;
 import com.alibaba.nacos.api.naming.pojo.Instance;
+import com.alibaba.nacos.spring.context.annotation.discovery.EnableNacosDiscovery;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -57,8 +58,7 @@ public class DiscoveryApplication {
 
         @Override
         public void run(String... args) throws Exception {
-            System.out.println("start to register");
-            namingService.registerInstance("test-service", "1.1.1.1", 8080);
+            namingService.registerInstance("test-service", "127.0.0.1", 8009);
         }
     }
 

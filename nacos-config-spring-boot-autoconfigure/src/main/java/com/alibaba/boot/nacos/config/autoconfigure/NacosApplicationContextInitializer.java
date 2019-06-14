@@ -24,6 +24,7 @@ package com.alibaba.boot.nacos.config.autoconfigure;
 import com.alibaba.boot.nacos.config.NacosConfigConstants;
 import com.alibaba.boot.nacos.config.binder.NacosBootConfigurationPropertiesBinder;
 import com.alibaba.boot.nacos.config.properties.NacosConfigProperties;
+import com.alibaba.fastjson.JSON;
 import com.alibaba.nacos.api.PropertyKeyConst;
 import com.alibaba.nacos.spring.core.env.NacosPropertySource;
 import com.alibaba.nacos.spring.core.env.NacosPropertySourcePostProcessor;
@@ -38,6 +39,8 @@ import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.MutablePropertySources;
 import org.springframework.util.StringUtils;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 import static com.alibaba.boot.nacos.config.util.NacosConfigPropertiesAnalyze.*;
@@ -86,6 +89,7 @@ public class NacosApplicationContextInitializer implements ApplicationContextIni
     }
 
     private Properties buildGlobalNacosProperties() {
+
         Properties properties = new Properties();
         properties.put(PropertyKeyConst.SERVER_ADDR, nacosConfigProperties.getServerAddr());
         properties.put(PropertyKeyConst.NAMESPACE, nacosConfigProperties.getNamespace());
@@ -94,6 +98,9 @@ public class NacosApplicationContextInitializer implements ApplicationContextIni
         properties.put(PropertyKeyConst.SECRET_KEY, nacosConfigProperties.getSecretKey());
         properties.put(PropertyKeyConst.ACCESS_KEY, nacosConfigProperties.getAccessKey());
         properties.put(PropertyKeyConst.RAM_ROLE_NAME, nacosConfigProperties.getRamRoleName());
+        properties.put(PropertyKeyConst.CONFIG_LONG_POLL_TIMEOUT, nacosConfigProperties.getConfigLongPollTimeout());
+        properties.put(PropertyKeyConst.CONFIG_RETRY_TIME, nacosConfigProperties.getConfigRetryTime());
+        properties.put(PropertyKeyConst.MAX_RETRY, nacosConfigProperties.getMaxRetry());
         return properties;
     }
 
@@ -109,6 +116,9 @@ public class NacosApplicationContextInitializer implements ApplicationContextIni
         properties.put(PropertyKeyConst.SECRET_KEY, config.getSecretKey());
         properties.put(PropertyKeyConst.ACCESS_KEY, config.getAccessKey());
         properties.put(PropertyKeyConst.RAM_ROLE_NAME, config.getRamRoleName());
+        properties.put(PropertyKeyConst.CONFIG_LONG_POLL_TIMEOUT, config.getConfigLongPollTimeout());
+        properties.put(PropertyKeyConst.CONFIG_RETRY_TIME, config.getConfigRetryTime());
+        properties.put(PropertyKeyConst.MAX_RETRY, config.getMaxRetry());
         return properties;
     }
 

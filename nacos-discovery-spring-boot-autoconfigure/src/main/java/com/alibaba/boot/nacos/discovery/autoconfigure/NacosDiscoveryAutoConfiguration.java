@@ -16,7 +16,7 @@
  */
 package com.alibaba.boot.nacos.discovery.autoconfigure;
 
-import com.alibaba.boot.nacos.discovery.registry.NacosDiscoertyAutoRegistry;
+import com.alibaba.boot.nacos.discovery.registry.NacosDiscoveryAutoRegistry;
 import com.alibaba.nacos.spring.context.annotation.discovery.EnableNacosDiscovery;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -40,9 +40,9 @@ import static com.alibaba.nacos.spring.util.NacosBeanUtils.DISCOVERY_GLOBAL_NACO
 @EnableConfigurationProperties(value = {NacosDiscoveryProperties.class})
 public class NacosDiscoveryAutoConfiguration {
 
-    @Bean(value = NacosDiscoertyAutoRegistry.BEAN_NAME)
-    public NacosDiscoertyAutoRegistry nacosDiscoertyAutoRegistry() {
-        return new NacosDiscoertyAutoRegistry();
+    @Bean(value = NacosDiscoveryAutoRegistry.BEAN_NAME)
+    public NacosDiscoveryAutoRegistry nacosDiscoveryAutoRegistry() {
+        return new NacosDiscoveryAutoRegistry();
     }
 
 }

@@ -56,9 +56,9 @@
       "type": "java.lang.Boolean"
     },
     {
-      sourceType: "com.alibaba.boot.nacos.discovery.properties.NacosDiscoveryProperties.InstanceInfo",
-      name: "nacos.discovery.instance-info",
-      type: "com.alibaba.boot.nacos.discovery.properties.NacosDiscoveryProperties.InstanceInfo"
+      "sourceType": "com.alibaba.boot.nacos.discovery.properties.NacosDiscoveryProperties.InstanceInfo",
+      "name": "nacos.discovery.instance-info",
+      "type": "com.alibaba.boot.nacos.discovery.properties.NacosDiscoveryProperties.InstanceInfo"
     }
   ]
 }

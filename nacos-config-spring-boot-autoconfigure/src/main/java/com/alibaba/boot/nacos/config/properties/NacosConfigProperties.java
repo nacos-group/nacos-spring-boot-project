@@ -17,6 +17,7 @@
 package com.alibaba.boot.nacos.config.properties;
 
 import com.alibaba.boot.nacos.config.NacosConfigConstants;
+import com.alibaba.fastjson.annotation.JSONField;
 import com.alibaba.nacos.api.common.Constants;
 import com.alibaba.nacos.spring.context.constants.NacosConstants;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -61,6 +62,13 @@ public class NacosConfigProperties {
 
 	private String ramRoleName = "";
 
+	private String maxRetry = "";
+
+	private String configLongPollTimeout = "";
+
+	private String configRetryTime = "";
+
+	@JSONField(serialize = false)
 	private List<Config> extConfig = new ArrayList<>();
 
     public String getServerAddr() {
@@ -168,6 +176,30 @@ public class NacosConfigProperties {
         this.ramRoleName = ramRoleName;
     }
 
+    public String getMaxRetry() {
+        return maxRetry;
+    }
+
+    public void setMaxRetry(String maxRetry) {
+        this.maxRetry = maxRetry;
+    }
+
+    public String getConfigLongPollTimeout() {
+        return configLongPollTimeout;
+    }
+
+    public void setConfigLongPollTimeout(String configLongPollTimeout) {
+        this.configLongPollTimeout = configLongPollTimeout;
+    }
+
+    public String getConfigRetryTime() {
+        return configRetryTime;
+    }
+
+    public void setConfigRetryTime(String configRetryTime) {
+        this.configRetryTime = configRetryTime;
+    }
+
     public List<Config> getExtConfig() {
         return extConfig;
     }
@@ -195,6 +227,12 @@ public class NacosConfigProperties {
         private String group = Constants.DEFAULT_GROUP;
 
         private String ramRoleName = "";
+
+        private String maxRetry = "";
+
+        private String configLongPollTimeout = "";
+
+        private String configRetryTime = "";
 
         private boolean autoRefresh = false;
 
@@ -256,6 +294,30 @@ public class NacosConfigProperties {
             this.group = group;
         }
 
+        public String getMaxRetry() {
+            return maxRetry;
+        }
+
+        public void setMaxRetry(String maxRetry) {
+            this.maxRetry = maxRetry;
+        }
+
+        public String getConfigLongPollTimeout() {
+            return configLongPollTimeout;
+        }
+
+        public void setConfigLongPollTimeout(String configLongPollTimeout) {
+            this.configLongPollTimeout = configLongPollTimeout;
+        }
+
+        public String getConfigRetryTime() {
+            return configRetryTime;
+        }
+
+        public void setConfigRetryTime(String configRetryTime) {
+            this.configRetryTime = configRetryTime;
+        }
+
         public boolean isAutoRefresh() {
             return autoRefresh;
         }
@@ -300,8 +362,11 @@ public class NacosConfigProperties {
                     ", dataId='" + dataId + '\'' +
                     ", group='" + group + '\'' +
                     ", ramRoleName='" + ramRoleName + '\'' +
+                    ", maxRetry='" + maxRetry + '\'' +
+                    ", configLongPollTimeout='" + configLongPollTimeout + '\'' +
+                    ", configRetryTime='" + configRetryTime + '\'' +
                     ", autoRefresh=" + autoRefresh +
-                    ", isYaml=" + yaml +
+                    ", yaml=" + yaml +
                     '}';
         }
     }
@@ -317,9 +382,14 @@ public class NacosConfigProperties {
                 ", accessKey='" + accessKey + '\'' +
                 ", secretKey='" + secretKey + '\'' +
                 ", autoRefresh=" + autoRefresh +
+                ", yaml=" + yaml +
                 ", clusterName='" + clusterName + '\'' +
                 ", dataId='" + dataId + '\'' +
                 ", group='" + group + '\'' +
+                ", ramRoleName='" + ramRoleName + '\'' +
+                ", maxRetry='" + maxRetry + '\'' +
+                ", configLongPollTimeout='" + configLongPollTimeout + '\'' +
+                ", configRetryTime='" + configRetryTime + '\'' +
                 ", extConfig=" + extConfig +
                 '}';
     }
