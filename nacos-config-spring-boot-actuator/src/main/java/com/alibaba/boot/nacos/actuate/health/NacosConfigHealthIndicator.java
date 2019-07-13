@@ -46,9 +46,7 @@ public class NacosConfigHealthIndicator extends AbstractHealthIndicator {
 	@Override
 	protected void doHealthCheck(Health.Builder builder) throws Exception {
 		builder.up();
-		NacosServiceFactory nacosServiceFactory = applicationContext.getBean(
-				CacheableEventPublishingNacosServiceFactory.BEAN_NAME,
-				NacosServiceFactory.class);
+		NacosServiceFactory nacosServiceFactory = CacheableEventPublishingNacosServiceFactory.getSingleton();
 		for (ConfigService configService : nacosServiceFactory.getConfigServices()) {
 			if (configService instanceof NacosServiceMetaData) {
 				NacosServiceMetaData nacosServiceMetaData = (NacosServiceMetaData) configService;

@@ -19,11 +19,16 @@ package com.alibaba.boot.nacos.sample;
 import static org.springframework.core.env.StandardEnvironment.SYSTEM_ENVIRONMENT_PROPERTY_SOURCE_NAME;
 import static org.springframework.core.env.StandardEnvironment.SYSTEM_PROPERTIES_PROPERTY_SOURCE_NAME;
 
+import com.alibaba.nacos.api.annotation.NacosProperties;
+import com.alibaba.nacos.spring.context.annotation.EnableNacos;
+import com.alibaba.nacos.spring.context.annotation.config.EnableNacosConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -46,7 +51,8 @@ import com.alibaba.nacos.spring.context.annotation.config.NacosPropertySource;
     before = SYSTEM_PROPERTIES_PROPERTY_SOURCE_NAME,
     after = SYSTEM_ENVIRONMENT_PROPERTY_SOURCE_NAME
 )
-@ImportResource("classpath:nacos-property-source.xml")
+@NacosPropertySource(dataId = "people", autoRefreshed = true)
+@EnableNacosConfig(globalProperties = @NacosProperties(serverAddr = "127.0.0.1:8848"))
 public class ConfigApplication {
 
 	public static final String content = "dept: Aliware\ngroup: Alibaba";
@@ -75,12 +81,24 @@ public class ConfigApplication {
 	}
 
 	@NacosConfigListener(
-	    dataId = DATA_ID,
+	    dataId = "people",
         timeout = 500
     )
 	public void onChange(String newContent) throws Exception {
-		Thread.sleep(100);
+//		Thread.sleep(100);
 		System.out.println("onChange : " + newContent);
+	}
+
+	@Configuration
+	@ConditionalOnProperty(prefix = "people", name = "enable", havingValue = "true")
+	protected static class People {
+
+		@Bean
+		public Object object() {
+			System.out.println("liaochuntao : " + this.getClass().getCanonicalName());
+			return new Object();
+		}
+
 	}
 
 	public static class FirstCommandLineRunner implements CommandLineRunner {
@@ -92,11 +110,10 @@ public class ConfigApplication {
 		public void run(String... args) throws Exception {
 			if (configService.publishConfig(DATA_ID, Constants.DEFAULT_GROUP, content)) {
 				Thread.sleep(200);
-				System.out.println("First runner success: " + configService
-						.getConfig(DATA_ID, Constants.DEFAULT_GROUP, 5000));
+//				System.out.println("First runner success: " + configService.getConfig(DATA_ID, Constants.DEFAULT_GROUP, 5000));
 			}
 			else {
-				System.out.println("First runner error: publish config error");
+//				System.out.println("First runner error: publish config error");
 			}
 		}
 	}
@@ -114,8 +131,8 @@ public class ConfigApplication {
 
 		@Override
 		public void run(String... args) throws Exception {
-			System.out.println("Second runner. dept: " + dept + ", group: " + group);
-			System.out.println("Second runner. foo: " + foo);
+//			System.out.println("Second runner. dept: " + dept + ", group: " + group);
+//			System.out.println("Second runner. foo: " + foo);
 		}
 	}
 

@@ -14,23 +14,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alibaba.boot.nacos.config;
+package com.alibaba.boot.nacos.sample;
 
-import com.alibaba.nacos.spring.context.annotation.config.EnableNacosConfig;
+import com.alibaba.nacos.api.config.annotation.NacosValue;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
- * Nacos Config Constants
- *
- * @author <a href="mailto:fangjian0423@gmail.com">Jim</a>
+ * @author <a href="mailto:liaochunyhm@live.com">liaochuntao</a>
+ * @since
  */
-public interface NacosConfigConstants {
+@Controller
+public class TestController {
 
-	String ENDPOINT_PREFIX = "nacos-config";
+    @NacosValue(value = "${people.enable:bbbbb}", autoRefreshed = true)
+    private String enable;
 
-	String ENABLED = EnableNacosConfig.CONFIG_PREFIX + "enabled";
-
-    String PREFIX = "nacos.config";
-
-	String NACOS_BOOTSTRAP = PREFIX + ".bootstrap.enable";
+    @RequestMapping()
+    @ResponseBody
+    public String testGet() {
+        return enable;
+    }
 
 }

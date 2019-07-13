@@ -14,23 +14,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alibaba.boot.nacos.config;
+package com.alibaba.boot.nacos.config.util.editor;
 
-import com.alibaba.nacos.spring.context.annotation.config.EnableNacosConfig;
+import java.beans.PropertyEditorSupport;
 
 /**
- * Nacos Config Constants
- *
- * @author <a href="mailto:fangjian0423@gmail.com">Jim</a>
+ * @author <a href="mailto:liaochunyhm@live.com">liaochuntao</a>
+ * @since
  */
-public interface NacosConfigConstants {
+public class NacosCharSequenceEditor extends PropertyEditorSupport {
 
-	String ENDPOINT_PREFIX = "nacos-config";
+    @Override
+    public void setValue(Object value) {
+        if (value == null) {
+            super.setValue("");
+        }
+        if (value instanceof CharSequence) {
+            CharSequence sequence = (CharSequence) value;
+            super.setValue(sequence.toString());
+        } else {
+            super.setValue(value);
+        }
+    }
 
-	String ENABLED = EnableNacosConfig.CONFIG_PREFIX + "enabled";
-
-    String PREFIX = "nacos.config";
-
-	String NACOS_BOOTSTRAP = PREFIX + ".bootstrap.enable";
-
+    @Override
+    public String getAsText() {
+        Object value = getValue();
+        return String.valueOf(value);
+    }
 }
