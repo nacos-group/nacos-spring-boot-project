@@ -18,6 +18,7 @@ package com.alibaba.boot.nacos.discovery.actuate.health;
 
 import java.util.Properties;
 
+import com.alibaba.nacos.spring.factory.NacosServiceFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.health.AbstractHealthIndicator;
 import org.springframework.boot.actuate.health.Health;
@@ -46,11 +47,8 @@ public class NacosDiscoveryHealthIndicator extends AbstractHealthIndicator {
 	@Override
 	protected void doHealthCheck(Health.Builder builder) throws Exception {
 		builder.up();
-		CacheableEventPublishingNacosServiceFactory cacheableEventPublishingNacosServiceFactory = applicationContext
-				.getBean(CacheableEventPublishingNacosServiceFactory.BEAN_NAME,
-						CacheableEventPublishingNacosServiceFactory.class);
-		for (NamingService namingService : cacheableEventPublishingNacosServiceFactory
-				.getNamingServices()) {
+		NacosServiceFactory nacosServiceFactory = CacheableEventPublishingNacosServiceFactory.getSingleton();
+		for (NamingService namingService : nacosServiceFactory.getNamingServices()) {
 			if (namingService instanceof NacosServiceMetaData) {
 				NacosServiceMetaData nacosServiceMetaData = (NacosServiceMetaData) namingService;
 				Properties properties = nacosServiceMetaData.getProperties();
