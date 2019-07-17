@@ -36,10 +36,10 @@ import org.springframework.context.annotation.Import;
  */
 @ConditionalOnProperty(name = NacosConfigConstants.ENABLED, matchIfMissing = true)
 @ConditionalOnMissingBean(name = CONFIG_GLOBAL_NACOS_PROPERTIES_BEAN_NAME)
-@EnableNacosConfig
 @EnableConfigurationProperties(value = NacosConfigProperties.class)
 @ConditionalOnClass(name = "org.springframework.boot.context.properties.bind.Binder")
 @Import(value = {NacosConfigBootBeanDefinitionRegistrar.class})
+@EnableNacosConfig
 public class NacosConfigAutoConfiguration {
 
 }

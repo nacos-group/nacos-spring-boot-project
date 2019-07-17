@@ -24,17 +24,11 @@ import com.alibaba.nacos.api.config.ConfigType;
 import com.alibaba.nacos.spring.core.env.NacosPropertySource;
 import com.alibaba.nacos.spring.core.env.NacosPropertySourcePostProcessor;
 import com.alibaba.nacos.spring.factory.CacheableEventPublishingNacosServiceFactory;
-import com.alibaba.nacos.spring.util.NacosBeanUtils;
-import com.alibaba.nacos.spring.util.NacosUtils;
 import com.alibaba.nacos.spring.util.config.NacosConfigLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.context.properties.ConfigurationBeanFactoryMetadata;
-import org.springframework.boot.context.properties.bind.Bindable;
-import org.springframework.boot.context.properties.bind.Binder;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.core.ResolvableType;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.MutablePropertySources;
 import org.springframework.util.StringUtils;
@@ -47,9 +41,9 @@ import static com.alibaba.nacos.spring.util.NacosUtils.buildDefaultPropertySourc
  * @author <a href="mailto:liaochunyhm@live.com">liaochuntao</a>
  * @since
  */
-public class NacosApplicationContextInitializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
+public class NacosConfigApplicationContextInitializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
 
-    private final Logger logger = LoggerFactory.getLogger(NacosApplicationContextInitializer.class);
+    private final Logger logger = LoggerFactory.getLogger(NacosConfigApplicationContextInitializer.class);
 
     private ConfigurableEnvironment environment;
 

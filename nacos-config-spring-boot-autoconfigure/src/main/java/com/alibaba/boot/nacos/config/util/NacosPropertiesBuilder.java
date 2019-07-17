@@ -17,6 +17,7 @@
 package com.alibaba.boot.nacos.config.util;
 
 import com.alibaba.nacos.api.PropertyKeyConst;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.CollectionUtils;
 
 import java.util.Map;
@@ -29,16 +30,33 @@ import java.util.Properties;
 public class NacosPropertiesBuilder {
 
     public static Properties buildNacosProperties(String serverAddr, String namespaceId, String endpoint, String secreyKey,
-                                            String accessKey, String configLongPollTimeout, String configRetryTimeout, String maxRetry, boolean enableRemoteSyncConfig) {
+                                                  String accessKey, String configLongPollTimeout, String configRetryTimeout, String maxRetry, boolean enableRemoteSyncConfig) {
+
         Properties properties = new Properties();
-        properties.put(PropertyKeyConst.SERVER_ADDR, serverAddr);
-        properties.put(PropertyKeyConst.NAMESPACE, namespaceId);
-        properties.put(PropertyKeyConst.ENDPOINT, endpoint);
-        properties.put(PropertyKeyConst.SECRET_KEY, secreyKey);
-        properties.put(PropertyKeyConst.ACCESS_KEY, accessKey);
-        properties.put(PropertyKeyConst.CONFIG_LONG_POLL_TIMEOUT, configLongPollTimeout);
-        properties.put(PropertyKeyConst.CONFIG_RETRY_TIME, configRetryTimeout);
-        properties.put(PropertyKeyConst.MAX_RETRY, maxRetry);
+        if (StringUtils.isNotEmpty(serverAddr)) {
+            properties.put(PropertyKeyConst.SERVER_ADDR, serverAddr);
+        }
+        if (StringUtils.isNotEmpty(namespaceId)) {
+            properties.put(PropertyKeyConst.NAMESPACE, namespaceId);
+        }
+        if (StringUtils.isNotEmpty(endpoint)) {
+            properties.put(PropertyKeyConst.ENDPOINT, endpoint);
+        }
+        if (StringUtils.isNotEmpty(secreyKey)) {
+            properties.put(PropertyKeyConst.SECRET_KEY, secreyKey);
+        }
+        if (StringUtils.isNotEmpty(accessKey)) {
+            properties.put(PropertyKeyConst.ACCESS_KEY, accessKey);
+        }
+        if (StringUtils.isNotEmpty(configLongPollTimeout)) {
+            properties.put(PropertyKeyConst.CONFIG_LONG_POLL_TIMEOUT, configLongPollTimeout);
+        }
+        if (StringUtils.isNotEmpty(configRetryTimeout)) {
+            properties.put(PropertyKeyConst.CONFIG_RETRY_TIME, configRetryTimeout);
+        }
+        if (StringUtils.isNotEmpty(maxRetry)) {
+            properties.put(PropertyKeyConst.MAX_RETRY, maxRetry);
+        }
         properties.put(PropertyKeyConst.ENABLE_REMOTE_SYNC_CONFIG, String.valueOf(enableRemoteSyncConfig));
         return properties;
     }

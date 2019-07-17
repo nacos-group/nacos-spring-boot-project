@@ -52,7 +52,7 @@ import com.alibaba.nacos.spring.context.annotation.config.NacosPropertySource;
     after = SYSTEM_ENVIRONMENT_PROPERTY_SOURCE_NAME
 )
 @NacosPropertySource(dataId = "people", autoRefreshed = true)
-@EnableNacosConfig(globalProperties = @NacosProperties(serverAddr = "127.0.0.1:8848"))
+@EnableNacosConfig(globalProperties = @NacosProperties(serverAddr = "192.168.16.104:8848"))
 public class ConfigApplication {
 
 	public static final String content = "dept: Aliware\ngroup: Alibaba";
@@ -80,12 +80,17 @@ public class ConfigApplication {
 		return new Foo();
 	}
 
+	@Bean
+	public Apple apple() {
+		return new Apple();
+	}
+
 	@NacosConfigListener(
 	    dataId = "people",
         timeout = 500
     )
 	public void onChange(String newContent) throws Exception {
-//		Thread.sleep(100);
+		Thread.sleep(100);
 		System.out.println("onChange : " + newContent);
 	}
 
@@ -95,7 +100,7 @@ public class ConfigApplication {
 
 		@Bean
 		public Object object() {
-			System.out.println("liaochuntao : " + this.getClass().getCanonicalName());
+			System.err.println("[liaochuntao] : " + this.getClass().getCanonicalName());
 			return new Object();
 		}
 
@@ -110,10 +115,10 @@ public class ConfigApplication {
 		public void run(String... args) throws Exception {
 			if (configService.publishConfig(DATA_ID, Constants.DEFAULT_GROUP, content)) {
 				Thread.sleep(200);
-//				System.out.println("First runner success: " + configService.getConfig(DATA_ID, Constants.DEFAULT_GROUP, 5000));
+				System.out.println("First runner success: " + configService.getConfig(DATA_ID, Constants.DEFAULT_GROUP, 5000));
 			}
 			else {
-//				System.out.println("First runner error: publish config error");
+				System.out.println("First runner error: publish config error");
 			}
 		}
 	}
@@ -131,8 +136,8 @@ public class ConfigApplication {
 
 		@Override
 		public void run(String... args) throws Exception {
-//			System.out.println("Second runner. dept: " + dept + ", group: " + group);
-//			System.out.println("Second runner. foo: " + foo);
+			System.out.println("Second runner. dept: " + dept + ", group: " + group);
+			System.out.println("Second runner. foo: " + foo);
 		}
 	}
 

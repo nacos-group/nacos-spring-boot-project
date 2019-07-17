@@ -16,35 +16,44 @@
  */
 package com.alibaba.boot.nacos.sample;
 
-import com.alibaba.nacos.api.config.annotation.NacosValue;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import com.alibaba.nacos.api.config.ConfigType;
+import com.alibaba.nacos.api.config.annotation.NacosConfigurationProperties;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author <a href="mailto:liaochunyhm@live.com">liaochuntao</a>
  * @since
  */
-@Controller
-public class TestController {
+@NacosConfigurationProperties(dataId = "apple", type = ConfigType.YAML)
+public class Apple {
 
-    @NacosValue(value = "${people.enable:bbbbb}", autoRefreshed = true)
-    private String enable;
+    private List<String> list;
 
-    @Autowired
-    private Apple apple;
+    private Map<String, List<String>> listMap;
 
-    @RequestMapping()
-    @ResponseBody
-    public String testGet() {
-        return enable;
+    public List<String> getList() {
+        return list;
     }
 
-    @GetMapping("/apple")
-    public Apple getApplr() {
-        return apple;
+    public void setList(List<String> list) {
+        this.list = list;
     }
 
+    public Map<String, List<String>> getListMap() {
+        return listMap;
+    }
+
+    public void setListMap(Map<String, List<String>> listMap) {
+        this.listMap = listMap;
+    }
+
+    @Override
+    public String toString() {
+        return "Apple{" +
+                "list=" + list +
+                ", listMap=" + listMap +
+                '}';
+    }
 }

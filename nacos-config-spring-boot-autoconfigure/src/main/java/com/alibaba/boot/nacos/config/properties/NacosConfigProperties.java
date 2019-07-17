@@ -34,33 +34,33 @@ import java.util.List;
 @ConfigurationProperties(NacosConfigConstants.PREFIX)
 public class NacosConfigProperties {
 
-    private String serverAddr = "";
+    private String serverAddr;
 
-    private String contextPath = "";
+    private String contextPath;
 
-    private String encode = "";
+    private String encode;
 
-    private String endpoint = "";
+    private String endpoint;
 
-    private String namespace = "";
+    private String namespace;
 
-    private String accessKey = "";
+    private String accessKey;
 
-    private String secretKey = "";
+    private String secretKey;
 
     private boolean autoRefresh = false;
 
-    private String dataId = "";
+    private String dataId;
 
     private String group = Constants.DEFAULT_GROUP;
 
     private ConfigType type;
 
-    private String maxRetry = "";
+    private String maxRetry;
 
-    private String configLongPollTimeout = "";
+    private String configLongPollTimeout;
 
-    private String configRetryTime = "";
+    private String configRetryTime;
 
     private boolean enableRemoteSyncConfig = false;
 
@@ -200,25 +200,25 @@ public class NacosConfigProperties {
 
         private String serverAddr;
 
-        private String endpoint = "";
+        private String endpoint;
 
-        private String namespace = "";
+        private String namespace;
 
-        private String accessKey = "";
+        private String accessKey;
 
-        private String secretKey = "";
+        private String secretKey;
 
-        private String dataId = "";
+        private String dataId;
 
         private String group = Constants.DEFAULT_GROUP;
 
         private ConfigType type;
 
-        private String maxRetry = "";
+        private String maxRetry;
 
-        private String configLongPollTimeout = "";
+        private String configLongPollTimeout;
 
-        private String configRetryTime = "";
+        private String configRetryTime;
 
         private boolean autoRefresh = false;
 
