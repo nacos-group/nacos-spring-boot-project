@@ -57,12 +57,6 @@ public class NacosConfigPropertiesUtils {
         PropertySource target = findApplicationConfig(environment);
         wrapper.setPropertyValues(dataSource((Map<String, Object>) target.getSource()));
         NacosConfigProperties nacosConfigProperties = (NacosConfigProperties) wrapper.getWrappedInstance();
-        String globalServerAddr = nacosConfigProperties.getServerAddr();
-        for (NacosConfigProperties.Config config : nacosConfigProperties.getExtConfig()) {
-            if (StringUtils.isEmpty(globalServerAddr)) {
-                config.setServerAddr(globalServerAddr);
-            }
-        }
         logger.info("nacosConfigProperties : {}", nacosConfigProperties);
         return nacosConfigProperties;
     }
