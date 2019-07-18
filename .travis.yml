@@ -8,8 +8,14 @@ notifications:
 
 language: java
 
+addons:
+  apt:
+    packages:
+      - openjdk-7-jdk
+      - openjdk-8-jdk
+
 jdk:
-  - openjdk8
   - openjdk7
+  - openjdk8
 
 script:
