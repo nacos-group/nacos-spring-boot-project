@@ -18,11 +18,10 @@ package com.alibaba.boot.nacos.config.util;
 
 import com.alibaba.boot.nacos.config.NacosConfigConstants;
 import com.alibaba.boot.nacos.config.properties.NacosConfigProperties;
+import com.alibaba.boot.nacos.config.util.editor.NacosBooleanEditor;
 import com.alibaba.boot.nacos.config.util.editor.NacosEnumEditor;
+import com.alibaba.boot.nacos.config.util.editor.NacosStringEditor;
 import com.alibaba.nacos.api.config.ConfigType;
-import com.sun.beans.editors.BooleanEditor;
-import com.sun.beans.editors.EnumEditor;
-import com.sun.beans.editors.StringEditor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanWrapper;
@@ -51,8 +50,8 @@ public class NacosConfigPropertiesUtils {
         BeanWrapper wrapper = new BeanWrapperImpl(new NacosConfigProperties());
         wrapper.setAutoGrowNestedPaths(true);
         wrapper.setExtractOldValueForEditor(true);
-        wrapper.registerCustomEditor(String.class, new StringEditor());
-        wrapper.registerCustomEditor(boolean.class, new BooleanEditor());
+        wrapper.registerCustomEditor(String.class, new NacosStringEditor());
+        wrapper.registerCustomEditor(boolean.class, new NacosBooleanEditor());
         wrapper.registerCustomEditor(ConfigType.class, new NacosEnumEditor(ConfigType.class));
         wrapper.registerCustomEditor(Collection.class, new CustomCollectionEditor(ArrayList.class));
         PropertySource target = findApplicationConfig(environment);

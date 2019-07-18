@@ -16,8 +16,6 @@
  */
 package com.alibaba.boot.nacos.config.util.editor;
 
-import com.alibaba.nacos.api.config.ConfigType;
-
 import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Rectangle;
