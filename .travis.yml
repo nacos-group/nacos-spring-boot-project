@@ -10,8 +10,6 @@ language: java
 
 jdk:
   - openjdk10
-  - oraclejdk9
-  - oraclejdk8
+  - openjdk8
 
 script:
-

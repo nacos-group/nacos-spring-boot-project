@@ -27,6 +27,7 @@ import org.springframework.context.annotation.Configuration;
 import com.alibaba.boot.nacos.config.NacosConfigConstants;
 import com.alibaba.boot.nacos.config.properties.NacosConfigProperties;
 import com.alibaba.nacos.spring.context.annotation.config.EnableNacosConfig;
+import org.springframework.context.annotation.Import;
 
 /**
  * Nacos Config Auto {@link Configuration}
@@ -35,9 +36,10 @@ import com.alibaba.nacos.spring.context.annotation.config.EnableNacosConfig;
  */
 @ConditionalOnProperty(name = NacosConfigConstants.ENABLED, matchIfMissing = true)
 @ConditionalOnMissingBean(name = CONFIG_GLOBAL_NACOS_PROPERTIES_BEAN_NAME)
-@EnableNacosConfig
 @EnableConfigurationProperties(value = NacosConfigProperties.class)
 @ConditionalOnClass(name = "org.springframework.boot.context.properties.bind.Binder")
+@Import(value = {NacosConfigBootBeanDefinitionRegistrar.class})
+@EnableNacosConfig
 public class NacosConfigAutoConfiguration {
 
 }

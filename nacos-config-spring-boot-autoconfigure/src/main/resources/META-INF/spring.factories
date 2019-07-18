@@ -1,2 +1,4 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.alibaba.boot.nacos.config.autoconfigure.NacosConfigAutoConfiguration
+  com.alibaba.boot.nacos.config.autoconfigure.NacosConfigAutoConfiguration
+org.springframework.context.ApplicationContextInitializer=\
+  com.alibaba.boot.nacos.config.autoconfigure.NacosConfigApplicationContextInitializer
