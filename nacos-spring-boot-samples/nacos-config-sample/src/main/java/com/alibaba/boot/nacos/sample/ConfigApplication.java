@@ -19,11 +19,16 @@ package com.alibaba.boot.nacos.sample;
 import static org.springframework.core.env.StandardEnvironment.SYSTEM_ENVIRONMENT_PROPERTY_SOURCE_NAME;
 import static org.springframework.core.env.StandardEnvironment.SYSTEM_PROPERTIES_PROPERTY_SOURCE_NAME;
 
+import com.alibaba.nacos.api.annotation.NacosProperties;
+import com.alibaba.nacos.spring.context.annotation.config.EnableNacosConfig;
+import com.alibaba.nacos.spring.context.annotation.config.NacosPropertySources;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -39,84 +44,104 @@ import com.alibaba.nacos.spring.context.annotation.config.NacosPropertySource;
  * @author <a href="mailto:fangjian0423@gmail.com">Jim</a>
  */
 @SpringBootApplication
-@NacosPropertySource(
-    name = "custom",
-    dataId = ConfigApplication.DATA_ID,
-    first = true,
-    before = SYSTEM_PROPERTIES_PROPERTY_SOURCE_NAME,
-    after = SYSTEM_ENVIRONMENT_PROPERTY_SOURCE_NAME
-)
-@ImportResource("classpath:nacos-property-source.xml")
+
+@NacosPropertySources(value = {
+        @NacosPropertySource(dataId = "people", autoRefreshed = true),
+        @NacosPropertySource(
+                name = "custom",
+                dataId = ConfigApplication.DATA_ID,
+                first = true,
+                before = SYSTEM_PROPERTIES_PROPERTY_SOURCE_NAME,
+                after = SYSTEM_ENVIRONMENT_PROPERTY_SOURCE_NAME
+        )
+})
+@EnableNacosConfig(globalProperties = @NacosProperties(serverAddr = "192.168.16.104:8848"))
 public class ConfigApplication {
 
-	public static final String content = "dept: Aliware\ngroup: Alibaba";
+    public static final String content = "dept: Aliware\ngroup: Alibaba";
 
-	public static final String DATA_ID = "test";
+    public static final String DATA_ID = "test";
 
-	public static void main(String[] args) {
-		SpringApplication.run(ConfigApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(ConfigApplication.class, args);
+    }
 
-	@Bean
-	@Order(Ordered.LOWEST_PRECEDENCE)
-	public CommandLineRunner firstCommandLineRunner() {
-		return new FirstCommandLineRunner();
-	}
+    @Bean
+    @Order(Ordered.LOWEST_PRECEDENCE)
+    public CommandLineRunner firstCommandLineRunner() {
+        return new FirstCommandLineRunner();
+    }
 
-	@Bean
-	@Order(Ordered.LOWEST_PRECEDENCE - 1)
-	public CommandLineRunner secondCommandLineRunner() {
-		return new SecondCommandLineRunner();
-	}
+    @Bean
+    @Order(Ordered.LOWEST_PRECEDENCE - 1)
+    public CommandLineRunner secondCommandLineRunner() {
+        return new SecondCommandLineRunner();
+    }
 
-	@Bean
-	public Foo foo() {
-		return new Foo();
-	}
+    @Bean
+    public Foo foo() {
+        return new Foo();
+    }
 
-	@NacosConfigListener(
-	    dataId = DATA_ID,
-        timeout = 500
+    @Bean
+    public Apple apple() {
+        return new Apple();
+    }
+
+    @NacosConfigListener(
+            dataId = DATA_ID,
+            timeout = 500
     )
-	public void onChange(String newContent) throws Exception {
-		Thread.sleep(100);
-		System.out.println("onChange : " + newContent);
-	}
+    public void onChange(String newContent) throws Exception {
+        Thread.sleep(100);
+        System.out.println("onChange : " + newContent);
+    }
 
-	public static class FirstCommandLineRunner implements CommandLineRunner {
+    @Configuration
+    @ConditionalOnProperty(prefix = "people", name = "enable", havingValue = "true")
+    protected static class People {
 
-		@NacosInjected
-		private ConfigService configService;
+        @Bean
+        public Object object() {
+            System.err.println("[liaochuntao] : " + this.getClass().getCanonicalName());
+            return new Object();
+        }
 
-		@Override
-		public void run(String... args) throws Exception {
-			if (configService.publishConfig(DATA_ID, Constants.DEFAULT_GROUP, content)) {
-				Thread.sleep(200);
-				System.out.println("First runner success: " + configService
-						.getConfig(DATA_ID, Constants.DEFAULT_GROUP, 5000));
-			}
-			else {
-				System.out.println("First runner error: publish config error");
-			}
-		}
-	}
+    }
 
-	public static class SecondCommandLineRunner implements CommandLineRunner {
+    public static class FirstCommandLineRunner implements CommandLineRunner {
 
-		@NacosValue("${dept:unknown}")
-		private String dept;
+        @NacosInjected
+        private ConfigService configService;
 
-		@NacosValue("${group:unknown}")
-		private String group;
+        @Override
+        public void run(String... args) throws Exception {
+            if (configService.publishConfig(DATA_ID, Constants.DEFAULT_GROUP, content)) {
+                Thread.sleep(200);
+                System.out.println("First runner success: " + configService
+                        .getConfig(DATA_ID, Constants.DEFAULT_GROUP, 5000));
+            } else {
+                System.out.println("First runner error: publish config error");
+            }
+        }
+    }
 
-		@Autowired
-		private Foo foo;
+    public static class SecondCommandLineRunner implements CommandLineRunner {
 
-		@Override
-		public void run(String... args) throws Exception {
-			System.out.println("Second runner. dept: " + dept + ", group: " + group);
-			System.out.println("Second runner. foo: " + foo);
-		}
-	}
+        @NacosValue("${dept:unknown}")
+        private String dept;
+
+        @NacosValue("${group:unknown}")
+        private String group;
+
+        @Autowired
+        private Foo foo;
+
+        @Override
+        public void run(String... args) throws Exception {
+            System.out.println("Second runner. dept: " + dept + ", group: " + group);
+            System.out.println("Second runner. foo: " + foo);
+        }
+    }
 
 }
