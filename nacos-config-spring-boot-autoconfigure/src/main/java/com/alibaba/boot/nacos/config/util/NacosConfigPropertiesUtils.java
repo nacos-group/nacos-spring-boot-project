@@ -18,15 +18,17 @@ package com.alibaba.boot.nacos.config.util;
 
 import com.alibaba.boot.nacos.config.NacosConfigConstants;
 import com.alibaba.boot.nacos.config.properties.NacosConfigProperties;
-import com.alibaba.boot.nacos.config.util.editor.NacosCharSequenceEditor;
-import com.alibaba.boot.nacos.config.util.editor.NacosCustomBooleanEditor;
 import com.alibaba.boot.nacos.config.util.editor.NacosEnumEditor;
 import com.alibaba.nacos.api.config.ConfigType;
+import com.sun.beans.editors.BooleanEditor;
+import com.sun.beans.editors.EnumEditor;
+import com.sun.beans.editors.StringEditor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.beans.propertyeditors.CustomCollectionEditor;
+import org.springframework.boot.env.EnumerableCompositePropertySource;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.MutablePropertySources;
 import org.springframework.core.env.PropertySource;
@@ -49,12 +51,12 @@ public class NacosConfigPropertiesUtils {
         BeanWrapper wrapper = new BeanWrapperImpl(new NacosConfigProperties());
         wrapper.setAutoGrowNestedPaths(true);
         wrapper.setExtractOldValueForEditor(true);
-        wrapper.registerCustomEditor(String.class, new NacosCharSequenceEditor());
-        wrapper.registerCustomEditor(boolean.class, new NacosCustomBooleanEditor(true));
+        wrapper.registerCustomEditor(String.class, new StringEditor());
+        wrapper.registerCustomEditor(boolean.class, new BooleanEditor());
         wrapper.registerCustomEditor(ConfigType.class, new NacosEnumEditor(ConfigType.class));
         wrapper.registerCustomEditor(Collection.class, new CustomCollectionEditor(ArrayList.class));
         PropertySource target = findApplicationConfig(environment);
-        wrapper.setPropertyValues(dataSource((Map<String, String>) target.getSource()));
+        wrapper.setPropertyValues(dataSource((Map<String, Object>) target.getSource()));
         NacosConfigProperties nacosConfigProperties = (NacosConfigProperties) wrapper.getWrappedInstance();
         String globalServerAddr = nacosConfigProperties.getServerAddr();
         for (NacosConfigProperties.Config config : nacosConfigProperties.getExtConfig()) {
@@ -70,17 +72,29 @@ public class NacosConfigPropertiesUtils {
         PropertySource<Map<String, String>> target = null;
         MutablePropertySources mutablePropertySources = environment.getPropertySources();
         for (PropertySource tmp : mutablePropertySources) {
-            // Spring puts the information of the application.properties file into class{OriginTrackedMapPropertySource}.
-            target = tmp;
+            // Spring puts the information of the application.properties file into applicationConfigurationProperties.
+            if ("applicationConfigurationProperties".equals(tmp.getName())) {
+                ArrayList<Object> list = (ArrayList) tmp.getSource();
+                for (Object obj : list) {
+                    if (obj instanceof EnumerableCompositePropertySource) {
+                        EnumerableCompositePropertySource propertySource = (EnumerableCompositePropertySource) obj;
+                        target = (PropertySource<Map<String, String>>) propertySource.getSource().iterator().next();
+                        break;
+                    }
+                }
+            }
+            if (target != null) {
+                break;
+            }
         }
         return target;
     }
 
-    private static Map<String, String> dataSource(Map<String, String> source) {
+    private static Map<String, Object> dataSource(Map<String, Object> source) {
         source.remove(NacosConfigConstants.NACOS_BOOTSTRAP);
         String prefix = NacosConfigConstants.PREFIX + ".";
-        HashMap<String, String> targetConfigInfo = new HashMap<>(source.size());
-        for (Map.Entry<String, String> entry : source.entrySet()) {
+        HashMap<String, Object> targetConfigInfo = new HashMap<>(source.size());
+        for (Map.Entry<String, Object> entry : source.entrySet()) {
             if (entry.getKey().startsWith(prefix)) {
                 String key = entry.getKey().replace(prefix, "");
                 if (key.contains("-")) {
