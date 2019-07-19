@@ -31,7 +31,6 @@ import org.springframework.boot.env.EnumerableCompositePropertySource;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.MutablePropertySources;
 import org.springframework.core.env.PropertySource;
-import sun.beans.editors.StringEditor;
 
 import java.util.ArrayList;
 import java.util.Collection;
