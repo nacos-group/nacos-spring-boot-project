@@ -50,7 +50,7 @@ public class NacosConfigPropertiesUtils {
         BeanWrapper wrapper = new BeanWrapperImpl(new NacosConfigProperties());
         wrapper.setAutoGrowNestedPaths(true);
         wrapper.setExtractOldValueForEditor(true);
-        wrapper.registerCustomEditor(String.class, new StringEditor());
+        wrapper.registerCustomEditor(String.class, new NacosStringEditor());
         wrapper.registerCustomEditor(boolean.class, new NacosBooleanEditor());
         wrapper.registerCustomEditor(ConfigType.class, new NacosEnumEditor(ConfigType.class));
         wrapper.registerCustomEditor(Collection.class, new CustomCollectionEditor(ArrayList.class));
