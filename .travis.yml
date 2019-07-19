@@ -6,6 +6,8 @@ notifications:
   on_success: change
   on_failure: always
 
+dist: trusty
+
 language: java
 
 jdk:
