@@ -6,9 +6,6 @@ notifications:
   on_success: change
   on_failure: always
 
-dist: xenial
-sudo: required
-
 language: java
 
 jdk:
