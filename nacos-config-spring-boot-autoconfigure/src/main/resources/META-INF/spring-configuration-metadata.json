@@ -1,54 +1,110 @@
 {
-  hints: [ ],
-  groups: [ ],
-  properties: [
+  "hints": [ ],
+  "groups": [ ],
+  "properties": [
     {
-      sourceType: "com.alibaba.boot.nacos.config.properties.NacosConfigProperties",
-      name: "nacos.config.enabled",
-      description: "enable or disable nacos config feature",
-      type: "java.lang.Boolean"
+      "sourceType": "com.alibaba.boot.nacos.config.properties.NacosConfigProperties",
+      "name": "nacos.config.enabled",
+      "description": "enable or disable nacos config feature",
+      "type": "java.lang.Boolean"
     },
     {
-      sourceType: "com.alibaba.boot.nacos.config.properties.NacosConfigProperties",
-      name: "nacos.config.server-addr",
-      description: "the server address of nacos",
-      type: "java.lang.String"
+      "sourceType": "com.alibaba.boot.nacos.config.properties.NacosConfigProperties",
+      "name": "nacos.config.server-addr",
+      "description": "the server address of nacos",
+      "type": "java.lang.String"
     },
     {
-      sourceType: "com.alibaba.boot.nacos.config.properties.NacosConfigProperties",
-      name: "nacos.config.context-path",
-      description: "the context path of nacos server",
-      type: "java.lang.String"
+      "sourceType": "com.alibaba.boot.nacos.config.properties.NacosConfigProperties",
+      "name": "nacos.config.context-path",
+      "description": "the context path of nacos server",
+      "type": "java.lang.String"
     },
     {
-      sourceType: "com.alibaba.boot.nacos.config.properties.NacosConfigProperties",
-      name: "nacos.config.encode",
-      description: "encode of reading nacos properties",
-      type: "java.lang.String"
+      "sourceType": "com.alibaba.boot.nacos.config.properties.NacosConfigProperties",
+      "name": "nacos.config.encode",
+      "description": "encode of reading nacos properties",
+      "type": "java.lang.String"
     },
     {
-      sourceType: "com.alibaba.boot.nacos.config.properties.NacosConfigProperties",
-      name: "nacos.config.endpoint",
-      description: "the entry domain name of a service in each region",
-      type: "java.lang.String"
+      "sourceType": "com.alibaba.boot.nacos.config.properties.NacosConfigProperties",
+      "name": "nacos.config.endpoint",
+      "description": "the entry domain name of a service in each region",
+      "type": "java.lang.String"
     },
     {
-      sourceType: "com.alibaba.boot.nacos.config.properties.NacosConfigProperties",
-      name: "nacos.config.namespace",
-      description: "for configuration isolation by tenants. Different namespaces may have configurations with the same Group or Data ID. ",
-      type: "java.lang.String"
+      "sourceType": "com.alibaba.boot.nacos.config.properties.NacosConfigProperties",
+      "name": "nacos.config.namespace",
+      "description": "for configuration isolation by tenants. Different namespaces may have configurations with the same Group or Data ID. ",
+      "type": "java.lang.String"
     },
     {
-      sourceType: "com.alibaba.boot.nacos.config.properties.NacosConfigProperties",
-      name: "nacos.config.access-key",
-      description: "the accesskey of Alibaba Cloud Account",
-      type: "java.lang.String"
+      "sourceType": "com.alibaba.boot.nacos.config.properties.NacosConfigProperties",
+      "name": "nacos.config.access-key",
+      "description": "the accesskey of Alibaba Cloud Account",
+      "type": "java.lang.String"
     },
     {
-      sourceType: "com.alibaba.boot.nacos.config.properties.NacosConfigProperties",
-      name: "nacos.config.secret-key",
-      description: "the secretkey of Alibaba Cloud Account",
-      type: "java.lang.String"
+      "sourceType": "com.alibaba.boot.nacos.config.properties.NacosConfigProperties",
+      "name": "nacos.config.secret-key",
+      "description": "the secretkey of Alibaba Cloud Account",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.alibaba.boot.nacos.config.properties.NacosConfigProperties",
+      "name": "nacos.config.data-id",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.alibaba.boot.nacos.config.properties.NacosConfigProperties",
+      "name": "nacos.config.group",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.alibaba.boot.nacos.config.properties.NacosConfigProperties",
+      "name": "nacos.config.auto-refresh",
+      "type": "java.lang.Boolean"
+    },
+    {
+      "sourceType": "com.alibaba.boot.nacos.config.properties.NacosConfigProperties",
+      "name": "nacos.config.max-retry",
+      "description": "the secretkey of Alibaba Cloud Account",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.alibaba.boot.nacos.config.properties.NacosConfigProperties",
+      "name": "nacos.config.config-long-poll-timeout",
+      "description": "the secretkey of Alibaba Cloud Account",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.alibaba.boot.nacos.config.properties.NacosConfigProperties",
+      "name": "nacos.config.config-retry-time",
+      "description": "the secretkey of Alibaba Cloud Account",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.alibaba.boot.nacos.config.properties.NacosConfigProperties",
+      "name": "nacos.config.type",
+      "description": "the secretkey of Alibaba Cloud Account",
+      "type": "com.alibaba.nacos.api.config.ConfigType"
+    },{
+      "sourceType": "com.alibaba.boot.nacos.config.properties.NacosConfigProperties",
+      "name": "nacos.config.enable-remote-sync-config",
+      "description": "the secretkey of Alibaba Cloud Account",
+      "type": "java.lang.Boolean"
+    },
+    {
+      "sourceType": "com.alibaba.boot.nacos.config.properties.NacosConfigProperties",
+      "name": "nacos.config.bootstrap.enable",
+      "description": "the secretkey of Alibaba Cloud Account",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.alibaba.boot.nacos.config.properties.NacosConfigProperties",
+      "name": "nacos.config.ext-config",
+      "description": "the secretkey of Alibaba Cloud Account",
+      "type": "java.util.List<com.alibaba.boot.nacos.config.properties.NacosConfigProperties.Config>"
     }
   ]
 }

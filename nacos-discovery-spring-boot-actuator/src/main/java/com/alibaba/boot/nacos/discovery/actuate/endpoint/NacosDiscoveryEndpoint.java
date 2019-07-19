@@ -62,9 +62,7 @@ public class NacosDiscoveryEndpoint extends AbstractEndpoint<Map<String, Object>
 				PropertiesUtils.extractSafeProperties(applicationContext.getBean(
 						DISCOVERY_GLOBAL_NACOS_PROPERTIES_BEAN_NAME, Properties.class)));
 
-		NacosServiceFactory nacosServiceFactory = applicationContext.getBean(
-				CacheableEventPublishingNacosServiceFactory.BEAN_NAME,
-				NacosServiceFactory.class);
+		NacosServiceFactory nacosServiceFactory =  CacheableEventPublishingNacosServiceFactory.getSingleton();;
 
 		JSONArray array = new JSONArray();
 		for (NamingService namingService : nacosServiceFactory.getNamingServices()) {
