@@ -65,8 +65,6 @@ public class NacosConfigApplicationInitializer implements ApplicationContextInit
             logger.info("[Nacos Config Boot] : The preload configuration is enabled");
             nacosConfigProperties = NacosConfigPropertiesUtils.buildNacosConfigProperties(environment);
             Properties globalProperties = buildGlobalNacosProperties();
-            context.getBeanFactory().registerSingleton(NacosBeanUtils.CONFIG_GLOBAL_NACOS_PROPERTIES_BEAN_NAME, globalProperties);
-            nacosConfigProperties = NacosConfigPropertiesUtils.buildNacosConfigProperties(environment);
             MutablePropertySources mutablePropertySources = environment.getPropertySources();
             mutablePropertySources.addLast(reqGlobalNacosConfig(globalProperties, nacosConfigProperties.getType()));
             for (NacosConfigProperties.Config config : nacosConfigProperties.getExtConfig()) {
