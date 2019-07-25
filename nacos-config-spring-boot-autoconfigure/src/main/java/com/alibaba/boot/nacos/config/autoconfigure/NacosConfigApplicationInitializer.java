@@ -24,6 +24,7 @@ import com.alibaba.nacos.api.config.ConfigType;
 import com.alibaba.nacos.spring.core.env.NacosPropertySource;
 import com.alibaba.nacos.spring.core.env.NacosPropertySourcePostProcessor;
 import com.alibaba.nacos.spring.factory.CacheableEventPublishingNacosServiceFactory;
+import com.alibaba.nacos.spring.util.NacosBeanUtils;
 import com.alibaba.nacos.spring.util.config.NacosConfigLoader;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -61,6 +62,7 @@ public class NacosConfigApplicationInitializer implements ApplicationContextInit
         if (!isEnable()) {
             logger.info("[Nacos Config Boot] : The preload configuration is not enabled");
         } else {
+            logger.info("[Nacos Config Boot] : The preload configuration is enabled");
             nacosConfigProperties = NacosConfigPropertiesUtils.buildNacosConfigProperties(environment);
             Properties globalProperties = buildGlobalNacosProperties();
             MutablePropertySources mutablePropertySources = environment.getPropertySources();
