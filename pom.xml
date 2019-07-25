@@ -14,7 +14,7 @@
     </properties>
     <groupId>com.alibaba.boot</groupId>
     <artifactId>nacos-spring-boot-project</artifactId>
-    <version>0.9.0</version>
+    <version>0.2.2</version>
 
     <packaging>pom</packaging>
 
