@@ -16,6 +16,7 @@
 
 package com.alibaba.boot.nacos.common;
 
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -29,11 +30,13 @@ public class PropertiesUtils {
 
 	public static Map<Object, Object> extractSafeProperties(Properties properties) {
 		Map<Object, Object> result = new HashMap<>();
-		properties.forEach((key, val) -> {
+		Enumeration enumeration = properties.propertyNames();
+		while (enumeration.hasMoreElements()) {
+			String key = enumeration.nextElement().toString();
 			if (!PropertyKeyConst.SECRET_KEY.equals(key)) {
-				result.put(key, val);
+				result.put(key, properties.get(key));
 			}
-		});
+		}
 		return result;
 	}
 

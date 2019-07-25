@@ -23,8 +23,8 @@ import java.util.Map;
 import java.util.Properties;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.actuate.endpoint.annotation.Endpoint;
-import org.springframework.boot.actuate.endpoint.annotation.ReadOperation;
+import org.springframework.boot.actuate.endpoint.AbstractEndpoint;
+import org.springframework.boot.actuate.endpoint.Endpoint;
 import org.springframework.context.ApplicationContext;
 
 import com.alibaba.boot.nacos.common.PropertiesUtils;
@@ -43,15 +43,18 @@ import com.alibaba.nacos.spring.util.NacosUtils;
  * @author <a href="mailto:fangjian0423@gmail.com">Jim</a>
  * @see Endpoint
  */
-@Endpoint(id = NacosDiscoveryConstants.ENDPOINT_PREFIX)
-public class NacosDiscoveryEndpoint {
+public class NacosDiscoveryEndpoint extends AbstractEndpoint<Map<String, Object>> {
 
 	@Autowired
 	private ApplicationContext applicationContext;
 
 	private static final Integer PAGE_SIZE = 100;
 
-	@ReadOperation
+	public NacosDiscoveryEndpoint() {
+		super(NacosDiscoveryConstants.ENDPOINT_PREFIX);
+	}
+
+	@Override
 	public Map<String, Object> invoke() {
 		Map<String, Object> result = new HashMap<>();
 
@@ -59,7 +62,7 @@ public class NacosDiscoveryEndpoint {
 				PropertiesUtils.extractSafeProperties(applicationContext.getBean(
 						DISCOVERY_GLOBAL_NACOS_PROPERTIES_BEAN_NAME, Properties.class)));
 
-		NacosServiceFactory nacosServiceFactory = CacheableEventPublishingNacosServiceFactory.getSingleton();
+		NacosServiceFactory nacosServiceFactory =  CacheableEventPublishingNacosServiceFactory.getSingleton();;
 
 		JSONArray array = new JSONArray();
 		for (NamingService namingService : nacosServiceFactory.getNamingServices()) {

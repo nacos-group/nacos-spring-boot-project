@@ -25,7 +25,7 @@ import com.alibaba.nacos.spring.context.annotation.config.EnableNacosConfig;
  */
 public interface NacosConfigConstants {
 
-	String ENDPOINT_PREFIX = "nacos-config";
+	String ENDPOINT_PREFIX = "nacos_config";
 
 	String ENABLED = EnableNacosConfig.CONFIG_PREFIX + "enabled";
 

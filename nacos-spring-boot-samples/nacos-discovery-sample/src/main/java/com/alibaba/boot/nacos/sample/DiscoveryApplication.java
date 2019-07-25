@@ -71,9 +71,9 @@ public class DiscoveryApplication {
         public void run(String... args) throws Exception {
             List<Instance> instanceList = namingService.getAllInstances("test-service");
             System.out.println("found instance: " + instanceList.size());
-            instanceList.forEach(instance -> {
+            for(Instance instance : instanceList) {
                 System.out.println(instance);
-            });
+            }
         }
     }
 

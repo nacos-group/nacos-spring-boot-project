@@ -18,6 +18,9 @@ package com.alibaba.boot.nacos.config.autoconfigure;
 
 import static com.alibaba.nacos.spring.util.NacosBeanUtils.CONFIG_GLOBAL_NACOS_PROPERTIES_BEAN_NAME;
 
+import com.alibaba.nacos.spring.context.annotation.config.EnableNacosConfig;
+import com.alibaba.nacos.spring.context.annotation.config.NacosConfigBeanDefinitionRegistrar;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -26,7 +29,6 @@ import org.springframework.context.annotation.Configuration;
 
 import com.alibaba.boot.nacos.config.NacosConfigConstants;
 import com.alibaba.boot.nacos.config.properties.NacosConfigProperties;
-import com.alibaba.nacos.spring.context.annotation.config.EnableNacosConfig;
 import org.springframework.context.annotation.Import;
 
 /**
@@ -35,11 +37,11 @@ import org.springframework.context.annotation.Import;
  * @author <a href="mailto:fangjian0423@gmail.com">Jim</a>
  */
 @ConditionalOnProperty(name = NacosConfigConstants.ENABLED, matchIfMissing = true)
-@ConditionalOnMissingBean(name = CONFIG_GLOBAL_NACOS_PROPERTIES_BEAN_NAME)
+@ConditionalOnBean(name = CONFIG_GLOBAL_NACOS_PROPERTIES_BEAN_NAME)
 @EnableConfigurationProperties(value = NacosConfigProperties.class)
-@ConditionalOnClass(name = "org.springframework.boot.context.properties.bind.Binder")
-@Import(value = {NacosConfigBootBeanDefinitionRegistrar.class})
+@ConditionalOnClass(name = "org.springframework.boot.bind.RelaxedDataBinder")
 @EnableNacosConfig
+@Import(value = {NacosConfigBootBeanDefinitionRegistrar.class})
 public class NacosConfigAutoConfiguration {
 
 }

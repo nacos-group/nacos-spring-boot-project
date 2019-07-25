@@ -47,7 +47,7 @@ public class NacosDiscoveryHealthIndicator extends AbstractHealthIndicator {
 	@Override
 	protected void doHealthCheck(Health.Builder builder) throws Exception {
 		builder.up();
-		NacosServiceFactory nacosServiceFactory = CacheableEventPublishingNacosServiceFactory.getSingleton();
+		NacosServiceFactory nacosServiceFactory =  CacheableEventPublishingNacosServiceFactory.getSingleton();
 		for (NamingService namingService : nacosServiceFactory.getNamingServices()) {
 			if (namingService instanceof NacosServiceMetaData) {
 				NacosServiceMetaData nacosServiceMetaData = (NacosServiceMetaData) namingService;

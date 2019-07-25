@@ -6,10 +6,12 @@ notifications:
   on_success: change
   on_failure: always
 
+dist: trusty
+
 language: java
 
 jdk:
-  - openjdk10
   - openjdk8
+  - openjdk7
 
 script:

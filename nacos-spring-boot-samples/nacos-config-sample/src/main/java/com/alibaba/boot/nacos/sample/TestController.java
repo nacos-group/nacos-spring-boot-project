@@ -22,12 +22,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @author <a href="mailto:liaochunyhm@live.com">liaochuntao</a>
  * @since
  */
-@Controller
+@RestController
 public class TestController {
 
     @NacosValue(value = "${people.enable:bbbbb}", autoRefreshed = true)
@@ -43,7 +44,7 @@ public class TestController {
     }
 
     @GetMapping("/apple")
-    public Apple getApplr() {
+    public Apple getApple() {
         return apple;
     }
 

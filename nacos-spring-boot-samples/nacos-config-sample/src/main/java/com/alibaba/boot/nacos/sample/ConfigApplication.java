@@ -20,8 +20,8 @@ import static org.springframework.core.env.StandardEnvironment.SYSTEM_ENVIRONMEN
 import static org.springframework.core.env.StandardEnvironment.SYSTEM_PROPERTIES_PROPERTY_SOURCE_NAME;
 
 import com.alibaba.nacos.api.annotation.NacosProperties;
-import com.alibaba.nacos.spring.context.annotation.EnableNacos;
 import com.alibaba.nacos.spring.context.annotation.config.EnableNacosConfig;
+import com.alibaba.nacos.spring.context.annotation.config.NacosPropertySources;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -44,15 +44,16 @@ import com.alibaba.nacos.spring.context.annotation.config.NacosPropertySource;
  * @author <a href="mailto:fangjian0423@gmail.com">Jim</a>
  */
 @SpringBootApplication
-@NacosPropertySource(
-    name = "custom",
-    dataId = ConfigApplication.DATA_ID,
-    first = true,
-    before = SYSTEM_PROPERTIES_PROPERTY_SOURCE_NAME,
-    after = SYSTEM_ENVIRONMENT_PROPERTY_SOURCE_NAME
-)
-@NacosPropertySource(dataId = "people", autoRefreshed = true)
-@EnableNacosConfig(globalProperties = @NacosProperties(serverAddr = "192.168.16.104:8848"))
+@NacosPropertySources(value = {
+		@NacosPropertySource(dataId = "people", autoRefreshed = true),
+		@NacosPropertySource(
+				name = "custom",
+				dataId = ConfigApplication.DATA_ID,
+				first = true,
+				before = SYSTEM_PROPERTIES_PROPERTY_SOURCE_NAME,
+				after = SYSTEM_ENVIRONMENT_PROPERTY_SOURCE_NAME
+		)
+})
 public class ConfigApplication {
 
 	public static final String content = "dept: Aliware\ngroup: Alibaba";
@@ -80,18 +81,36 @@ public class ConfigApplication {
 		return new Foo();
 	}
 
-	@Bean
-	public Apple apple() {
-		return new Apple();
-	}
-
 	@NacosConfigListener(
-	    dataId = "people",
+	    dataId = DATA_ID,
         timeout = 500
     )
 	public void onChange(String newContent) throws Exception {
 		Thread.sleep(100);
 		System.out.println("onChange : " + newContent);
+	}
+
+	public static class FirstCommandLineRunner implements CommandLineRunner {
+
+		@NacosInjected
+		private ConfigService configService;
+
+		@Override
+		public void run(String... args) throws Exception {
+			if (configService.publishConfig(DATA_ID, Constants.DEFAULT_GROUP, content)) {
+				Thread.sleep(200);
+				System.out.println("First runner success: " + configService
+						.getConfig(DATA_ID, Constants.DEFAULT_GROUP, 5000));
+			}
+			else {
+				System.out.println("First runner error: publish config error");
+			}
+		}
+	}
+
+	@Bean
+	public Apple apple() {
+		return new Apple();
 	}
 
 	@Configuration
@@ -104,23 +123,6 @@ public class ConfigApplication {
 			return new Object();
 		}
 
-	}
-
-	public static class FirstCommandLineRunner implements CommandLineRunner {
-
-		@NacosInjected
-		private ConfigService configService;
-
-		@Override
-		public void run(String... args) throws Exception {
-			if (configService.publishConfig(DATA_ID, Constants.DEFAULT_GROUP, content)) {
-				Thread.sleep(200);
-				System.out.println("First runner success: " + configService.getConfig(DATA_ID, Constants.DEFAULT_GROUP, 5000));
-			}
-			else {
-				System.out.println("First runner error: publish config error");
-			}
-		}
 	}
 
 	public static class SecondCommandLineRunner implements CommandLineRunner {

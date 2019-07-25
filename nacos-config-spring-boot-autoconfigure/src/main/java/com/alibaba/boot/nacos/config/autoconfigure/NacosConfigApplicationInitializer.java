@@ -24,14 +24,16 @@ import com.alibaba.nacos.api.config.ConfigType;
 import com.alibaba.nacos.spring.core.env.NacosPropertySource;
 import com.alibaba.nacos.spring.core.env.NacosPropertySourcePostProcessor;
 import com.alibaba.nacos.spring.factory.CacheableEventPublishingNacosServiceFactory;
+import com.alibaba.nacos.spring.util.NacosBeanUtils;
+import com.alibaba.nacos.spring.util.NacosUtils;
 import com.alibaba.nacos.spring.util.config.NacosConfigLoader;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.MutablePropertySources;
-import org.springframework.util.StringUtils;
 
 import java.util.Properties;
 
@@ -41,9 +43,9 @@ import static com.alibaba.nacos.spring.util.NacosUtils.buildDefaultPropertySourc
  * @author <a href="mailto:liaochunyhm@live.com">liaochuntao</a>
  * @since
  */
-public class NacosConfigApplicationContextInitializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
+public class NacosConfigApplicationInitializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
 
-    private final Logger logger = LoggerFactory.getLogger(NacosConfigApplicationContextInitializer.class);
+    private final Logger logger = LoggerFactory.getLogger(NacosConfigApplicationInitializer.class);
 
     private ConfigurableEnvironment environment;
 
@@ -61,8 +63,10 @@ public class NacosConfigApplicationContextInitializer implements ApplicationCont
         if (!isEnable()) {
             logger.info("[Nacos Config Boot] : The preload configuration is not enabled");
         } else {
+            logger.info("[Nacos Config Boot] : The preload configuration is enabled");
             nacosConfigProperties = NacosConfigPropertiesUtils.buildNacosConfigProperties(environment);
             Properties globalProperties = buildGlobalNacosProperties();
+            context.getBeanFactory().registerSingleton(NacosBeanUtils.CONFIG_GLOBAL_NACOS_PROPERTIES_BEAN_NAME, globalProperties);
             MutablePropertySources mutablePropertySources = environment.getPropertySources();
             mutablePropertySources.addLast(reqGlobalNacosConfig(globalProperties, nacosConfigProperties.getType()));
             for (NacosConfigProperties.Config config : nacosConfigProperties.getExtConfig()) {

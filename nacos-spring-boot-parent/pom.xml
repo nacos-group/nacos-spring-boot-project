@@ -18,7 +18,7 @@
     <parent>
         <groupId>com.alibaba.boot</groupId>
         <artifactId>nacos-spring-boot-project</artifactId>
-        <version>0.9.0</version>
+        <version>0.1.2</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -30,12 +30,13 @@
     <description>Nacos Spring Boot Parent</description>
 
     <properties>
-        <java.version>1.8</java.version>
-        <java.source.version>1.8</java.source.version>
-        <java.target.version>1.8</java.target.version>
+        <java.version>1.7</java.version>
+        <java.source.version>1.7</java.source.version>
+        <java.target.version>1.7</java.target.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <spring-boot.version>2.0.3.RELEASE</spring-boot.version>
+        <spring-boot.version>1.4.1.RELEASE</spring-boot.version>
+        <nacos.version>0.1.0</nacos.version>
         <nacos-spring-context.version>0.3.1</nacos-spring-context.version>
         <!-- Build args -->
         <argline>-server -Xms256m -Xmx512m -XX:PermSize=64m -XX:MaxPermSize=128m -Dfile.encoding=UTF-8
@@ -56,6 +57,12 @@
 
     <dependencyManagement>
         <dependencies>
+
+            <dependency>
+                <groupId>javax.annotation</groupId>
+                <artifactId>javax.annotation-api</artifactId>
+                <version>1.2</version>
+            </dependency>
 
             <!-- Spring Boot -->
             <dependency>
@@ -252,7 +259,7 @@
                         <configuration>
                             <rules>
                                 <requireJavaVersion>
-                                    <version>[1.8,)</version>
+                                    <version>[1.7,)</version>
                                 </requireJavaVersion>
                                 <requireProperty>
                                     <property>project.name</property>
