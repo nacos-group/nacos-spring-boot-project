@@ -25,7 +25,6 @@ import com.alibaba.nacos.spring.core.env.NacosPropertySource;
 import com.alibaba.nacos.spring.core.env.NacosPropertySourcePostProcessor;
 import com.alibaba.nacos.spring.factory.CacheableEventPublishingNacosServiceFactory;
 import com.alibaba.nacos.spring.util.NacosBeanUtils;
-import com.alibaba.nacos.spring.util.NacosUtils;
 import com.alibaba.nacos.spring.util.config.NacosConfigLoader;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -67,6 +66,7 @@ public class NacosConfigApplicationInitializer implements ApplicationContextInit
             nacosConfigProperties = NacosConfigPropertiesUtils.buildNacosConfigProperties(environment);
             Properties globalProperties = buildGlobalNacosProperties();
             context.getBeanFactory().registerSingleton(NacosBeanUtils.CONFIG_GLOBAL_NACOS_PROPERTIES_BEAN_NAME, globalProperties);
+            nacosConfigProperties = NacosConfigPropertiesUtils.buildNacosConfigProperties(environment);
             MutablePropertySources mutablePropertySources = environment.getPropertySources();
             mutablePropertySources.addLast(reqGlobalNacosConfig(globalProperties, nacosConfigProperties.getType()));
             for (NacosConfigProperties.Config config : nacosConfigProperties.getExtConfig()) {

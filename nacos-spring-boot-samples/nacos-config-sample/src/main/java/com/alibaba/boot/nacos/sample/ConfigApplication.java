@@ -54,6 +54,7 @@ import com.alibaba.nacos.spring.context.annotation.config.NacosPropertySource;
 				after = SYSTEM_ENVIRONMENT_PROPERTY_SOURCE_NAME
 		)
 })
+@EnableNacosConfig(globalProperties = @NacosProperties(serverAddr = "192.168.16.104:8848"))
 public class ConfigApplication {
 
 	public static final String content = "dept: Aliware\ngroup: Alibaba";

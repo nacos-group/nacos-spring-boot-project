@@ -18,7 +18,6 @@ package com.alibaba.boot.nacos.config.autoconfigure;
 
 import com.alibaba.boot.nacos.config.binder.NacosBootConfigurationPropertiesBinder;
 
-import com.alibaba.nacos.spring.util.NacosBeanUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
@@ -36,14 +35,8 @@ import org.springframework.core.type.AnnotationMetadata;
 @Configuration
 public class NacosConfigBootBeanDefinitionRegistrar implements ImportBeanDefinitionRegistrar, BeanFactoryAware {
 
-    boolean alreadyDoIt = false;
-
     @Override
     public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
-        if (alreadyDoIt) {
-            return;
-        }
-        alreadyDoIt = true;
         DefaultListableBeanFactory defaultListableBeanFactory = (DefaultListableBeanFactory) beanFactory;
         BeanDefinitionBuilder beanDefinitionBuilder = BeanDefinitionBuilder
                 .rootBeanDefinition(NacosBootConfigurationPropertiesBinder.class);
@@ -52,11 +45,7 @@ public class NacosConfigBootBeanDefinitionRegistrar implements ImportBeanDefinit
 
     @Override
     public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata, BeanDefinitionRegistry registry) {
-        if (alreadyDoIt) {
-            return;
-        }
-        alreadyDoIt = true;
-        NacosBeanUtils.registerInfrastructureBean(registry, NacosBootConfigurationPropertiesBinder.BEAN_NAME, NacosBootConfigurationPropertiesBinder.class);
+
     }
 }
 
