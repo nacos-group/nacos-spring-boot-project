@@ -54,23 +54,29 @@ public class NacosConfigPropertiesUtils {
         wrapper.registerCustomEditor(boolean.class, new NacosCustomBooleanEditor(true));
         wrapper.registerCustomEditor(ConfigType.class, new NacosEnumEditor(ConfigType.class));
         wrapper.registerCustomEditor(Collection.class, new CustomCollectionEditor(ArrayList.class));
-        PropertySource target = findApplicationConfig(environment);
-        wrapper.setPropertyValues(dataSource((Map<String, String>) target.getSource()));
+        wrapper.setPropertyValues(dataSource(findApplicationConfig(environment)));
         NacosConfigProperties nacosConfigProperties = (NacosConfigProperties) wrapper.getWrappedInstance();
         logger.debug("nacosConfigProperties : {}", nacosConfigProperties);
         return nacosConfigProperties;
     }
 
-    private static PropertySource<Map<String, String>> findApplicationConfig(ConfigurableEnvironment environment) {
-        PropertySource<Map<String, String>> target = null;
+    private static Map<String, String> findApplicationConfig(ConfigurableEnvironment environment) {
+        Map<String, String> result = new HashMap<>(8);
+        String[] activeProfile = environment.getActiveProfiles();
         MutablePropertySources mutablePropertySources = environment.getPropertySources();
         for (PropertySource tmp : mutablePropertySources) {
             // Spring puts the information of the application.properties file into class{OriginTrackedMapPropertySource}.
             if (tmp instanceof OriginTrackedMapPropertySource) {
-                target = tmp;
+                // find active profile application.properties
+                for (String profile : activeProfile) {
+                    if (tmp.getName().contains(profile)) {
+                        result.putAll((Map<String, String>) tmp.getSource());
+                        break;
+                    }
+                }
             }
         }
-        return target;
+        return result;
     }
 
     private static Map<String, String> dataSource(Map<String, String> source) {
