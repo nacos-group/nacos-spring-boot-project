@@ -26,7 +26,7 @@ import java.util.Map;
  * @author <a href="mailto:liaochunyhm@live.com">liaochuntao</a>
  * @since
  */
-@NacosConfigurationProperties(dataId = "apple", type = ConfigType.YAML)
+@NacosConfigurationProperties(dataId = "apple", type = ConfigType.YAML, autoRefreshed = true)
 public class Apple {
 
     private List<String> list;

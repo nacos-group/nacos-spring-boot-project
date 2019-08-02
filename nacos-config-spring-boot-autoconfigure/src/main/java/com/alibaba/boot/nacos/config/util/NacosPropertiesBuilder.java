@@ -30,7 +30,8 @@ import java.util.Properties;
 public class NacosPropertiesBuilder {
 
     public static Properties buildNacosProperties(String serverAddr, String namespaceId, String endpoint, String secreyKey,
-                                                  String accessKey, String configLongPollTimeout, String configRetryTimeout, String maxRetry, boolean enableRemoteSyncConfig) {
+                                                  String accessKey, String configLongPollTimeout, String configRetryTimeout,
+                                                  String maxRetry, boolean enableRemoteSyncConfig) {
 
         Properties properties = new Properties();
         if (StringUtils.isNotEmpty(serverAddr)) {

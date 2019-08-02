@@ -56,7 +56,6 @@ public class NacosBootConfigurationPropertiesBinder extends NacosConfigurationPr
 
         String name = "nacos-bootstrap-" + beanName;
         String configType = properties.yaml() ? ConfigType.YAML.getType() : properties.type().getType();
-
         NacosPropertySource propertySource = new NacosPropertySource(name, dataId, groupId, content, configType);
         context.getEnvironment().getPropertySources().addLast(propertySource);
         Binder binder = Binder.get(context.getEnvironment());
