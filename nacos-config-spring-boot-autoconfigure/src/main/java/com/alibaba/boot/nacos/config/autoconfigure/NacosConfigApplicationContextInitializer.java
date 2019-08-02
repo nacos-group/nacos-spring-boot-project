@@ -82,13 +82,12 @@ public class NacosConfigApplicationContextInitializer implements ApplicationCont
                 configUtils.addListenerIfAutoRefreshed();
             }
 
-            context.getBeanFactory().registerSingleton(CONFIG_GLOBAL_NACOS_PROPERTIES_BEAN_NAME, configUtils.buildGlobalNacosProperties());
         }
 
     }
 
     private boolean enable() {
-        return Boolean.parseBoolean(environment.getProperty(NacosConfigConstants.NACOS_BOOTSTRAP, "false"));
+        return processor.enable(environment) || Boolean.parseBoolean(environment.getProperty(NacosConfigConstants.NACOS_BOOTSTRAP, "false"));
     }
 
 }
