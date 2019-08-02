@@ -1,54 +1,66 @@
 {
-  hints: [ ],
-  groups: [ ],
-  properties: [
+  "hints": [ ],
+  "groups": [ ],
+  "properties": [
     {
-      sourceType: "com.alibaba.boot.nacos.discovery.properties.NacosDiscoveryProperties",
-      name: "nacos.discovery.enabled",
-      description: "enable or disable nacos discovery feature",
-      type: "java.lang.Boolean"
+      "sourceType": "com.alibaba.boot.nacos.discovery.properties.NacosDiscoveryProperties",
+      "name": "nacos.discovery.enabled",
+      "description": "enable or disable nacos discovery feature",
+      "type": "java.lang.Boolean"
     },
     {
-      sourceType: "com.alibaba.boot.nacos.discovery.properties.NacosDiscoveryProperties",
-      name: "nacos.discovery.server-addr",
-      description: "the server address of nacos",
-      type: "java.lang.String"
+      "sourceType": "com.alibaba.boot.nacos.discovery.properties.NacosDiscoveryProperties",
+      "name": "nacos.discovery.server-addr",
+      "description": "the server address of nacos",
+      "type": "java.lang.String"
     },
     {
-      sourceType: "com.alibaba.boot.nacos.discovery.properties.NacosDiscoveryProperties",
-      name: "nacos.discovery.context-path",
-      description: "the context path of nacos server",
-      type: "java.lang.String"
+      "sourceType": "com.alibaba.boot.nacos.discovery.properties.NacosDiscoveryProperties",
+      "name": "nacos.discovery.context-path",
+      "description": "the context path of nacos server",
+      "type": "java.lang.String"
     },
     {
-      sourceType: "com.alibaba.boot.nacos.discovery.properties.NacosDiscoveryProperties",
-      name: "nacos.discovery.endpoint",
-      description: "the entry domain name of a service in each region",
-      type: "java.lang.String"
+      "sourceType": "com.alibaba.boot.nacos.discovery.properties.NacosDiscoveryProperties",
+      "name": "nacos.discovery.endpoint",
+      "description": "the entry domain name of a service in each region",
+      "type": "java.lang.String"
     },
     {
-      sourceType: "com.alibaba.boot.nacos.discovery.properties.NacosDiscoveryProperties",
-      name: "nacos.discovery.cluster-name",
-      description: "cluster info under service",
-      type: "java.lang.String"
+      "sourceType": "com.alibaba.boot.nacos.discovery.properties.NacosDiscoveryProperties",
+      "name": "nacos.discovery.cluster-name",
+      "description": "cluster info under service",
+      "type": "java.lang.String"
     },
     {
-      sourceType: "com.alibaba.boot.nacos.discovery.properties.NacosDiscoveryProperties",
-      name: "nacos.discovery.namespace",
-      description: "for configuration isolation by tenants. Different namespaces may have configurations with the same Group or Data ID. ",
-      type: "java.lang.String"
+      "sourceType": "com.alibaba.boot.nacos.discovery.properties.NacosDiscoveryProperties",
+      "name": "nacos.discovery.namespace",
+      "description": "for configuration isolation by tenants. Different namespaces may have configurations with the same Group or Data ID. ",
+      "type": "java.lang.String"
     },
     {
-      sourceType: "com.alibaba.boot.nacos.discovery.properties.NacosDiscoveryProperties",
-      name: "nacos.discovery.access-key",
-      description: "the accesskey of Alibaba Cloud Account",
-      type: "java.lang.String"
+      "sourceType": "com.alibaba.boot.nacos.discovery.properties.NacosDiscoveryProperties",
+      "name": "nacos.discovery.access-key",
+      "description": "the accesskey of Alibaba Cloud Account",
+      "type": "java.lang.String"
     },
     {
-      sourceType: "com.alibaba.boot.nacos.discovery.properties.NacosDiscoveryProperties",
-      name: "nacos.discovery.secret-key",
-      description: "the secretkey of Alibaba Cloud Account",
-      type: "java.lang.String"
+      "sourceType": "com.alibaba.boot.nacos.discovery.properties.NacosDiscoveryProperties",
+      "name": "nacos.discovery.secret-key",
+      "description": "the secretkey of Alibaba Cloud Account",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.alibaba.boot.nacos.discovery.properties.NacosDiscoveryProperties",
+      "name": "nacos.discovery.access-key",
+      "description": "the accesskey of Alibaba Cloud Account",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.alibaba.boot.nacos.discovery.properties.NacosDiscoveryProperties",
+      "name": "nacos.discovery.register",
+      "description": "the service",
+      "type": "com.alibaba.boot.nacos.discovery.properties.Register"
     }
   ]
 }

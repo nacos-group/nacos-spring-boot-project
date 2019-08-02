@@ -23,6 +23,7 @@ import com.alibaba.boot.nacos.config.util.NacosConfigUtils;
 import com.alibaba.nacos.api.config.ConfigService;
 import com.alibaba.nacos.api.exception.NacosException;
 import com.alibaba.nacos.spring.factory.CacheableEventPublishingNacosServiceFactory;
+import com.alibaba.nacos.spring.util.NacosBeanUtils;
 import com.alibaba.nacos.spring.util.config.NacosConfigLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,6 +33,8 @@ import org.springframework.core.env.ConfigurableEnvironment;
 
 import java.util.Properties;
 import java.util.function.Function;
+
+import static com.alibaba.nacos.spring.util.NacosBeanUtils.CONFIG_GLOBAL_NACOS_PROPERTIES_BEAN_NAME;
 
 /**
  * @author <a href="mailto:liaochunyhm@live.com">liaochuntao</a>
@@ -78,7 +81,10 @@ public class NacosConfigApplicationContextInitializer implements ApplicationCont
                 configUtils.loadConfig(false);
                 configUtils.addListenerIfAutoRefreshed();
             }
+
+            context.getBeanFactory().registerSingleton(CONFIG_GLOBAL_NACOS_PROPERTIES_BEAN_NAME, configUtils.buildGlobalNacosProperties());
         }
+
     }
 
     private boolean enable() {

@@ -14,19 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alibaba.boot.nacos.sample;
+package com.alibaba.boot.nacos.discovery.properties;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import com.alibaba.nacos.api.naming.pojo.Instance;
+
 
 /**
- * @author <a href="mailto:fangjian0423@gmail.com">Jim</a>
+ * @author <a href="mailto:liaochunyhm@live.com">liaochuntao</a>
+ * @since
  */
-@SpringBootApplication
-public class DiscoveryApplication {
+public class Register extends Instance {
 
-    public static void main(String[] args) {
-        SpringApplication.run(DiscoveryApplication.class, args);
-    }
 
 }

@@ -17,8 +17,13 @@
 package com.alibaba.boot.nacos.discovery.properties;
 
 import com.alibaba.boot.nacos.discovery.NacosDiscoveryConstants;
+import com.alibaba.nacos.api.naming.pojo.Service;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.NestedConfigurationProperty;
 import org.springframework.util.Assert;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * {@link ConfigurationProperties} for configuring Nacos Discovery.
@@ -41,6 +46,9 @@ public class NacosDiscoveryProperties {
 	private String accessKey;
 
 	private String secretKey;
+
+	@NestedConfigurationProperty
+	private Register register;
 
     public String getServerAddr() {
         return serverAddr;
@@ -97,5 +105,13 @@ public class NacosDiscoveryProperties {
 
     public void setSecretKey(String secretKey) {
         this.secretKey = secretKey;
+    }
+
+    public Register getRegister() {
+        return register;
+    }
+
+    public void setRegister(Register register) {
+        this.register = register;
     }
 }
