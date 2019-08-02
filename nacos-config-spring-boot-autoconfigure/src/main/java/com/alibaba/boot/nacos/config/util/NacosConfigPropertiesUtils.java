@@ -22,6 +22,7 @@ import com.alibaba.boot.nacos.config.util.editor.NacosCharSequenceEditor;
 import com.alibaba.boot.nacos.config.util.editor.NacosCustomBooleanEditor;
 import com.alibaba.boot.nacos.config.util.editor.NacosEnumEditor;
 import com.alibaba.nacos.api.config.ConfigType;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanWrapper;
@@ -31,11 +32,15 @@ import org.springframework.boot.env.OriginTrackedMapPropertySource;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.MutablePropertySources;
 import org.springframework.core.env.PropertySource;
-import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -62,25 +67,36 @@ public class NacosConfigPropertiesUtils {
 
     private static Map<String, String> findApplicationConfig(ConfigurableEnvironment environment) {
         Map<String, String> result = new HashMap<>(8);
-        String[] activeProfile = environment.getActiveProfiles();
+
+        // find order follow spring.profiles.active=dev,prof => find first is prod, then dev
+        List<String> activeProfile = new ArrayList<>(Arrays.asList(environment.getActiveProfiles()));
+        List<PropertySource> defer = new LinkedList<>();
         MutablePropertySources mutablePropertySources = environment.getPropertySources();
         for (PropertySource tmp : mutablePropertySources) {
             // Spring puts the information of the application.properties file into class{OriginTrackedMapPropertySource}.
             if (tmp instanceof OriginTrackedMapPropertySource) {
-                // find active profile application.properties
+                // find active profile
                 for (String profile : activeProfile) {
                     if (tmp.getName().contains(profile)) {
-                        result.putAll((Map<String, String>) tmp.getSource());
+                        defer.add(tmp);
                         break;
                     }
                 }
             }
         }
+
+        Collections.reverse(defer);
+
+        for (PropertySource propertySource : defer) {
+            result.putAll((Map<String, String>) propertySource.getSource());
+        }
+
         return result;
     }
 
     private static Map<String, String> dataSource(Map<String, String> source) {
         source.remove(NacosConfigConstants.NACOS_BOOTSTRAP);
+        source.remove(NacosConfigConstants.NACOS_LOG_BOOTSTRAP);
         String prefix = NacosConfigConstants.PREFIX + ".";
         HashMap<String, String> targetConfigInfo = new HashMap<>(source.size());
         for (Map.Entry<String, String> entry : source.entrySet()) {

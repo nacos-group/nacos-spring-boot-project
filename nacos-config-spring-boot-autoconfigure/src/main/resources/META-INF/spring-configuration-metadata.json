@@ -102,6 +102,12 @@
     },
     {
       "sourceType": "com.alibaba.boot.nacos.config.properties.NacosConfigProperties",
+      "name": "nacos.config.bootstrap.log.enable",
+      "description": "the secretkey of Alibaba Cloud Account",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.alibaba.boot.nacos.config.properties.NacosConfigProperties",
       "name": "nacos.config.ext-config",
       "description": "the secretkey of Alibaba Cloud Account",
       "type": "java.util.List<com.alibaba.boot.nacos.config.properties.NacosConfigProperties.Config>"
