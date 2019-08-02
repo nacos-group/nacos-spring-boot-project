@@ -70,9 +70,9 @@ public class NacosDiscoveryEndpoint {
 				jsonObject.put("subscribeServices", namingService.getSubscribeServices());
 				array.add(jsonObject);
 			}
-			catch (NacosException e) {
+			catch (Exception e) {
 				jsonObject.put("serverStatus", namingService.getServerStatus() + ": "
-						+ e.getErrCode() + NacosUtils.SEPARATOR + e.getErrMsg());
+						 + NacosUtils.SEPARATOR + e.getMessage());
 			}
 		}
 

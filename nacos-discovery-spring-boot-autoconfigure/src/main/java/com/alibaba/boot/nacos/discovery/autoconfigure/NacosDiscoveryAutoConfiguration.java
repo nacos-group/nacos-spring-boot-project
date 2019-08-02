@@ -39,11 +39,10 @@ import javax.annotation.PostConstruct;
  *
  * @author <a href="mailto:fangjian0423@gmail.com">Jim</a>
  */
-@Configuration
-@EnableConfigurationProperties(value = NacosDiscoveryProperties.class)
 @ConditionalOnProperty(name = NacosDiscoveryConstants.ENABLED, matchIfMissing = true)
 @ConditionalOnMissingBean(name = DISCOVERY_GLOBAL_NACOS_PROPERTIES_BEAN_NAME)
 @EnableNacosDiscovery
+@EnableConfigurationProperties(value = NacosDiscoveryProperties.class)
 @ConditionalOnClass(name = "org.springframework.boot.context.properties.bind.Binder")
 public class NacosDiscoveryAutoConfiguration {
 
