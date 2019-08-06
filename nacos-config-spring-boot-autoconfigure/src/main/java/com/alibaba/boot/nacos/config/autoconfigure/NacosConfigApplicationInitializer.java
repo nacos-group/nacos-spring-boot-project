@@ -18,9 +18,13 @@ package com.alibaba.boot.nacos.config.autoconfigure;
 
 import com.alibaba.boot.nacos.config.NacosConfigConstants;
 import com.alibaba.boot.nacos.config.properties.NacosConfigProperties;
+import com.alibaba.boot.nacos.config.util.Function;
 import com.alibaba.boot.nacos.config.util.NacosConfigPropertiesUtils;
+import com.alibaba.boot.nacos.config.util.NacosConfigUtils;
 import com.alibaba.boot.nacos.config.util.NacosPropertiesBuilder;
+import com.alibaba.nacos.api.config.ConfigService;
 import com.alibaba.nacos.api.config.ConfigType;
+import com.alibaba.nacos.api.exception.NacosException;
 import com.alibaba.nacos.spring.core.env.NacosPropertySource;
 import com.alibaba.nacos.spring.core.env.NacosPropertySourcePostProcessor;
 import com.alibaba.nacos.spring.factory.CacheableEventPublishingNacosServiceFactory;
@@ -52,71 +56,46 @@ public class NacosConfigApplicationInitializer implements ApplicationContextInit
 
     private NacosConfigLoader nacosConfigLoader;
 
+    private final NacosConfigEnvironmentProcessor processor;
+
+    public NacosConfigApplicationInitializer(NacosConfigEnvironmentProcessor configEnvironmentProcessor) {
+        this.processor = configEnvironmentProcessor;
+    }
+
     @Override
     public void initialize(ConfigurableApplicationContext context) {
-        CacheableEventPublishingNacosServiceFactory singleton = CacheableEventPublishingNacosServiceFactory.getSingleton();
+        final CacheableEventPublishingNacosServiceFactory singleton = CacheableEventPublishingNacosServiceFactory.getSingleton();
         singleton.setApplicationContext(context);
         environment = context.getEnvironment();
-        nacosConfigLoader = new NacosConfigLoader(environment);
-        nacosConfigLoader.setNacosServiceFactory(singleton);
-        if (!isEnable()) {
+        if (!enable()) {
             logger.info("[Nacos Config Boot] : The preload configuration is not enabled");
         } else {
-            logger.info("[Nacos Config Boot] : The preload configuration is enabled");
-            nacosConfigProperties = NacosConfigPropertiesUtils.buildNacosConfigProperties(environment);
-            Properties globalProperties = buildGlobalNacosProperties();
-            MutablePropertySources mutablePropertySources = environment.getPropertySources();
-            mutablePropertySources.addLast(reqGlobalNacosConfig(globalProperties, nacosConfigProperties.getType()));
-            for (NacosConfigProperties.Config config : nacosConfigProperties.getExtConfig()) {
-                mutablePropertySources.addLast(reqSubNacosConfig(config, globalProperties, config.getType()));
+            Function<Properties, ConfigService> builder = new Function<Properties, ConfigService>() {
+                @Override
+                public ConfigService apply(Properties input) {
+                    try {
+                        return singleton.createConfigService(input);
+                    } catch (NacosException e) {
+                        throw new RuntimeException("ConfigService can't be created with properties : " + input, e);
+                    }
+                }
+            };
+            NacosConfigUtils configUtils = new NacosConfigUtils(nacosConfigProperties, environment, builder);
+
+            if (processor.enable(environment)) {
+                configUtils.addListenerIfAutoRefreshed(processor.getDeferPropertySources());
+            } else {
+                nacosConfigProperties = NacosConfigPropertiesUtils.buildNacosConfigProperties(environment);
+                configUtils.loadConfig(false);
+                configUtils.addListenerIfAutoRefreshed();
             }
+
         }
+
     }
 
-    private boolean isEnable() {
-        return Boolean.valueOf(environment.getProperty(NacosConfigConstants.NACOS_BOOTSTRAP, "false"));
-    }
 
-    private Properties buildGlobalNacosProperties() {
-        return NacosPropertiesBuilder.buildNacosProperties(nacosConfigProperties.getServerAddr(), nacosConfigProperties.getNamespace(),
-                nacosConfigProperties.getEndpoint(), nacosConfigProperties.getSecretKey(), nacosConfigProperties.getAccessKey(),
-                nacosConfigProperties.getConfigLongPollTimeout(), nacosConfigProperties.getConfigRetryTime(),
-                nacosConfigProperties.getMaxRetry(), nacosConfigProperties.isEnableRemoteSyncConfig());
-    }
-
-    private Properties buildSubNacosProperties(Properties globalProperties, NacosConfigProperties.Config config) {
-        if (StringUtils.isEmpty(config.getServerAddr())) {
-            return globalProperties;
-        }
-        Properties sub = NacosPropertiesBuilder.buildNacosProperties(config.getServerAddr(), config.getNamespace(),
-                config.getEndpoint(), config.getSecretKey(), config.getAccessKey(), config.getConfigLongPollTimeout(),
-                config.getConfigRetryTime(), config.getMaxRetry(), config.isEnableRemoteSyncConfig());
-        NacosPropertiesBuilder.merge(sub, globalProperties);
-        return sub;
-    }
-
-    private NacosPropertySource reqGlobalNacosConfig(Properties globalProperties, ConfigType type) {
-        NacosPropertySource propertySource = reqNacosConfig(globalProperties, nacosConfigProperties.getDataId(), nacosConfigProperties.getGroup(), type);
-        propertySource.setAutoRefreshed(nacosConfigProperties.isAutoRefresh());
-        NacosPropertySourcePostProcessor.addListenerIfAutoRefreshed(propertySource, globalProperties, environment);
-        return propertySource;
-    }
-
-    private NacosPropertySource reqSubNacosConfig(NacosConfigProperties.Config config, Properties globalProperties, ConfigType type) {
-        Properties subConfigProperties = buildSubNacosProperties(globalProperties, config);
-        NacosPropertySource nacosPropertySource = reqNacosConfig(subConfigProperties, config.getDataId(), config.getGroup(), type);
-        nacosPropertySource.setAutoRefreshed(config.isAutoRefresh());
-        NacosPropertySourcePostProcessor.addListenerIfAutoRefreshed(nacosPropertySource, subConfigProperties, environment);
-        return nacosPropertySource;
-    }
-
-    private NacosPropertySource reqNacosConfig(Properties configProperties, String dataId, String groupId, ConfigType type) {
-        NacosPropertySource nacosPropertySource;
-        String config = nacosConfigLoader.load(dataId, groupId, configProperties);
-        nacosPropertySource = new NacosPropertySource(dataId, groupId, buildDefaultPropertySourceName(dataId, groupId, configProperties), config, type.getType());
-        nacosPropertySource.setDataId(dataId);
-        nacosPropertySource.setType(type.getType());
-        nacosPropertySource.setGroupId(groupId);
-        return nacosPropertySource;
+    private boolean enable() {
+        return Boolean.parseBoolean(environment.getProperty(NacosConfigConstants.NACOS_BOOTSTRAP, "false"));
     }
 }

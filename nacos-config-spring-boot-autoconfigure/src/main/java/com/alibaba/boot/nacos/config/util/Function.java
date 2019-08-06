@@ -14,19 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alibaba.boot.nacos.sample;
-
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+package com.alibaba.boot.nacos.config.util;
 
 /**
- * @author <a href="mailto:fangjian0423@gmail.com">Jim</a>
+ * @author <a href="mailto:liaochunyhm@live.com">liaochuntao</a>
+ * @since
  */
-@SpringBootApplication
-public class DiscoveryApplication {
+public interface Function<F, T> {
 
-    public static void main(String[] args) {
-        SpringApplication.run(DiscoveryApplication.class, args);
-    }
+    T apply(F input);
 
 }
