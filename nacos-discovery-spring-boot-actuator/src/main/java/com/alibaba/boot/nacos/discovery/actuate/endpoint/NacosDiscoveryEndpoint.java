@@ -73,9 +73,8 @@ public class NacosDiscoveryEndpoint extends AbstractEndpoint<Map<String, Object>
 				jsonObject.put("subscribeServices", namingService.getSubscribeServices());
 				array.add(jsonObject);
 			}
-			catch (NacosException e) {
-				jsonObject.put("serverStatus", namingService.getServerStatus() + ": "
-						+ e.getErrCode() + NacosUtils.SEPARATOR + e.getErrMsg());
+			catch (Exception e) {
+				jsonObject.put("serverStatus", namingService.getServerStatus() + NacosUtils.SEPARATOR + e.getMessage());
 			}
 		}
 
