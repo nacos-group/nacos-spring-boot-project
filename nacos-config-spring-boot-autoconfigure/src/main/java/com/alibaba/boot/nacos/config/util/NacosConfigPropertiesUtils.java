@@ -30,12 +30,18 @@ import org.springframework.beans.propertyeditors.CustomCollectionEditor;
 import org.springframework.boot.env.EnumerableCompositePropertySource;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.MutablePropertySources;
+import org.springframework.core.env.PropertiesPropertySource;
 import org.springframework.core.env.PropertySource;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author <a href="mailto:liaochunyhm@live.com">liaochuntao</a>
@@ -53,15 +59,19 @@ public class NacosConfigPropertiesUtils {
         wrapper.registerCustomEditor(boolean.class, new NacosBooleanEditor());
         wrapper.registerCustomEditor(ConfigType.class, new NacosEnumEditor(ConfigType.class));
         wrapper.registerCustomEditor(Collection.class, new CustomCollectionEditor(ArrayList.class));
-        PropertySource target = findApplicationConfig(environment);
-        wrapper.setPropertyValues(dataSource((Map<String, Object>) target.getSource()));
+        wrapper.setPropertyValues(dataSource(findApplicationConfig(environment)));
         NacosConfigProperties nacosConfigProperties = (NacosConfigProperties) wrapper.getWrappedInstance();
         logger.info("nacosConfigProperties : {}", nacosConfigProperties);
         return nacosConfigProperties;
     }
 
-    private static PropertySource<Map<String, String>> findApplicationConfig(ConfigurableEnvironment environment) {
-        PropertySource<Map<String, String>> target = null;
+    private static Map<String, Object> findApplicationConfig(ConfigurableEnvironment environment) {
+        Map<String, Object> result = new HashMap<>(8);
+
+        // dev, prod
+        List<String> activeProfile = new ArrayList<>(Arrays.asList(environment.getActiveProfiles()));
+        List<PropertySource> defer = new LinkedList<>();
+
         MutablePropertySources mutablePropertySources = environment.getPropertySources();
         for (PropertySource tmp : mutablePropertySources) {
             // Spring puts the information of the application.properties file into applicationConfigurationProperties.
@@ -70,20 +80,34 @@ public class NacosConfigPropertiesUtils {
                 for (Object obj : list) {
                     if (obj instanceof EnumerableCompositePropertySource) {
                         EnumerableCompositePropertySource propertySource = (EnumerableCompositePropertySource) obj;
-                        target = (PropertySource<Map<String, String>>) propertySource.getSource().iterator().next();
-                        break;
+                        for (String profile : activeProfile) {
+                            if (propertySource.getName().contains(profile)) {
+                                defer.add(propertySource);
+                                break;
+                            }
+                        }
                     }
                 }
             }
-            if (target != null) {
-                break;
+        }
+
+        // dev, prod => prod, dev
+        // According to the search order of spring, the first to find in the end
+        Collections.reverse(defer);
+
+        for (PropertySource propertySource : defer) {
+            Set<PropertiesPropertySource> sources = (Set<PropertiesPropertySource>) propertySource.getSource();
+            for (PropertiesPropertySource source : sources) {
+                result.putAll(source.getSource());
             }
         }
-        return target;
+
+        return result;
     }
 
     private static Map<String, Object> dataSource(Map<String, Object> source) {
         source.remove(NacosConfigConstants.NACOS_BOOTSTRAP);
+        source.remove(NacosConfigConstants.NACOS_LOG_BOOTSTRAP);
         String prefix = NacosConfigConstants.PREFIX + ".";
         HashMap<String, Object> targetConfigInfo = new HashMap<>(source.size());
         for (Map.Entry<String, Object> entry : source.entrySet()) {
