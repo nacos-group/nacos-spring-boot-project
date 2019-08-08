@@ -69,19 +69,12 @@ public class NacosConfigPropertiesUtils {
         Map<String, String> result = new HashMap<>(8);
 
         // find order follow spring.profiles.active=dev,prof => find first is prod, then dev
-        List<String> activeProfile = new ArrayList<>(Arrays.asList(environment.getActiveProfiles()));
         List<PropertySource> defer = new LinkedList<>();
         MutablePropertySources mutablePropertySources = environment.getPropertySources();
         for (PropertySource tmp : mutablePropertySources) {
             // Spring puts the information of the application.properties file into class{OriginTrackedMapPropertySource}.
             if (tmp instanceof OriginTrackedMapPropertySource) {
-                // find active profile
-                for (String profile : activeProfile) {
-                    if (tmp.getName().contains(profile)) {
-                        defer.add(tmp);
-                        break;
-                    }
-                }
+                defer.add(tmp);
             }
         }
 

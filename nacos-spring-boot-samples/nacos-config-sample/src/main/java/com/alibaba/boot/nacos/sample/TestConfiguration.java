@@ -16,44 +16,33 @@
  */
 package com.alibaba.boot.nacos.sample;
 
+import com.alibaba.nacos.api.config.annotation.NacosConfigListener;
 import com.alibaba.nacos.api.config.annotation.NacosValue;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.context.annotation.Configuration;
 
 /**
  * @author <a href="mailto:liaochunyhm@live.com">liaochuntao</a>
  * @since
  */
-@RestController
-public class TestController {
+@Configuration
+public class TestConfiguration {
 
-    @NacosValue(value = "${people.enable:bbbbb}", autoRefreshed = true)
-    private String enable;
+    @NacosValue(value = "${people.count:0}", autoRefreshed = true)
+    private int count;
 
-    @Autowired
-    private Apple apple;
-
-    @Autowired
-    private TestConfiguration configuration;
-
-    @Scheduled(cron = "0/10 * * * * *")
-    public void print() {
-        System.out.println(configuration.getCount());
+    public int getCount() {
+        return count;
     }
 
-    @RequestMapping()
-    @ResponseBody
-    public String testGet() {
-        return enable;
+    public void setCount(int count) {
+        this.count = count;
     }
 
-    @GetMapping("/apple")
-    public Apple getApplr() {
-        return apple;
+    @NacosConfigListener(
+            dataId = "listener.test",
+            timeout = 500
+    )
+    public void onChange(String newContent) throws Exception {
+        System.out.println("onChange : " + newContent);
     }
-
 }

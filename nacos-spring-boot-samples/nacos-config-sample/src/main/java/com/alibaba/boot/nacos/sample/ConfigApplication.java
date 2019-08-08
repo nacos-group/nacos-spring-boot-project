@@ -39,6 +39,7 @@ import com.alibaba.nacos.api.config.ConfigService;
 import com.alibaba.nacos.api.config.annotation.NacosConfigListener;
 import com.alibaba.nacos.api.config.annotation.NacosValue;
 import com.alibaba.nacos.spring.context.annotation.config.NacosPropertySource;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
  * @author <a href="mailto:fangjian0423@gmail.com">Jim</a>
@@ -52,7 +53,7 @@ import com.alibaba.nacos.spring.context.annotation.config.NacosPropertySource;
     after = SYSTEM_ENVIRONMENT_PROPERTY_SOURCE_NAME
 )
 @NacosPropertySource(dataId = "people", autoRefreshed = true)
-@EnableNacosConfig(globalProperties = @NacosProperties(serverAddr = "127.0.0.1:8848"))
+@EnableScheduling
 public class ConfigApplication {
 
 	public static final String content = "dept: Aliware\ngroup: Alibaba";
@@ -83,15 +84,6 @@ public class ConfigApplication {
 	@Bean
 	public Apple apple() {
 		return new Apple();
-	}
-
-	@NacosConfigListener(
-	    dataId = "people",
-        timeout = 500
-    )
-	public void onChange(String newContent) throws Exception {
-		Thread.sleep(100);
-		System.out.println("onChange : " + newContent);
 	}
 
 	@Configuration
