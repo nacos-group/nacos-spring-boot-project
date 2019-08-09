@@ -46,9 +46,8 @@ public class NacosBootConfigurationPropertiesBinder extends NacosConfigurationPr
     }
 
     @Override
-    protected void doBind(Object bean, String beanName, String dataId, String groupId,
+    protected void doBind(Object bean, String beanName, String dataId, String groupId, String configType,
                           NacosConfigurationProperties properties, String content, ConfigService configService) {
-        String configType = properties.yaml() ? ConfigType.YAML.getType() : properties.type().getType();
         Properties prop = toProperties(dataId, groupId, content, configType);
         RelaxedDataBinder binder = new RelaxedDataBinder(bean, properties.prefix());
         binder.bind(new MutablePropertyValues(prop));
