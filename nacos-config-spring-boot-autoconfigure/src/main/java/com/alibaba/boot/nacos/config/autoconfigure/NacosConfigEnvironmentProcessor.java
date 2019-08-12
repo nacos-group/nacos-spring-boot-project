@@ -23,6 +23,8 @@ import com.alibaba.boot.nacos.config.util.NacosConfigUtils;
 import com.alibaba.nacos.api.NacosFactory;
 import com.alibaba.nacos.api.config.ConfigService;
 import com.alibaba.nacos.api.exception.NacosException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.env.EnvironmentPostProcessor;
 import org.springframework.core.env.ConfigurableEnvironment;
@@ -40,6 +42,8 @@ import java.util.function.Function;
  */
 public class NacosConfigEnvironmentProcessor implements EnvironmentPostProcessor {
 
+    private final Logger logger = LoggerFactory.getLogger(EnvironmentPostProcessor.class);
+
     private final LinkedList<NacosConfigUtils.DeferNacosPropertySource> deferPropertySources = new LinkedList<>();
 
     private Function<Properties, ConfigService> builder = properties -> {
@@ -55,6 +59,7 @@ public class NacosConfigEnvironmentProcessor implements EnvironmentPostProcessor
     public void postProcessEnvironment(ConfigurableEnvironment environment, SpringApplication application) {
         application.addInitializers(new NacosConfigApplicationContextInitializer(this));
         if (enable(environment)) {
+            System.out.println("[Nacos Config Boot] : The preload log configuration is enabled");
             initLogConfig(environment);
         }
     }

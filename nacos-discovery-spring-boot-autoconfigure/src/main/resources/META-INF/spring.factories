@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.alibaba.boot.nacos.discovery.autoconfigure.NacosDiscoveryAutoConfiguration
+  com.alibaba.boot.nacos.discovery.autoconfigure.NacosDiscoveryAutoConfiguration
