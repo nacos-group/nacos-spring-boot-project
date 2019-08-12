@@ -79,7 +79,7 @@ public class NacosConfigApplicationInitializer implements ApplicationContextInit
 
     private Properties buildGlobalNacosProperties() {
         return NacosPropertiesBuilder.buildNacosProperties(nacosConfigProperties.getServerAddr(), nacosConfigProperties.getNamespace(),
-                nacosConfigProperties.getEndpoint(), nacosConfigProperties.getSecretKey(), nacosConfigProperties.getAccessKey(),
+                nacosConfigProperties.getEndpoint(), nacosConfigProperties.getSecretKey(), nacosConfigProperties.getAccessKey(), nacosConfigProperties.getRamRoleName(),
                 nacosConfigProperties.getConfigLongPollTimeout(), nacosConfigProperties.getConfigRetryTime(),
                 nacosConfigProperties.getMaxRetry(), nacosConfigProperties.isEnableRemoteSyncConfig());
     }
@@ -89,7 +89,7 @@ public class NacosConfigApplicationInitializer implements ApplicationContextInit
             return globalProperties;
         }
         Properties sub = NacosPropertiesBuilder.buildNacosProperties(config.getServerAddr(), config.getNamespace(),
-                config.getEndpoint(), config.getSecretKey(), config.getAccessKey(), config.getConfigLongPollTimeout(),
+                config.getEndpoint(), config.getSecretKey(), config.getAccessKey(), config.getRamRoleName(), config.getConfigLongPollTimeout(),
                 config.getConfigRetryTime(), config.getMaxRetry(), config.isEnableRemoteSyncConfig());
         NacosPropertiesBuilder.merge(sub, globalProperties);
         return sub;

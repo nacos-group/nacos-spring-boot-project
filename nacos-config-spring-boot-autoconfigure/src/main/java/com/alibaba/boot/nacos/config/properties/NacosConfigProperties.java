@@ -48,6 +48,8 @@ public class NacosConfigProperties {
 
     private String secretKey;
 
+    private String ramRoleName;
+
     private boolean autoRefresh = false;
 
     private String dataId;
@@ -122,6 +124,14 @@ public class NacosConfigProperties {
 
     public void setSecretKey(String secretKey) {
         this.secretKey = secretKey;
+    }
+
+    public String getRamRoleName() {
+        return ramRoleName;
+    }
+
+    public void setRamRoleName(String ramRoleName) {
+        this.ramRoleName = ramRoleName;
     }
 
     public boolean isAutoRefresh() {
@@ -208,6 +218,8 @@ public class NacosConfigProperties {
 
         private String secretKey;
 
+        private String ramRoleName;
+
         private String dataId;
 
         private String group = Constants.DEFAULT_GROUP;
@@ -262,6 +274,14 @@ public class NacosConfigProperties {
 
         public void setSecretKey(String secretKey) {
             this.secretKey = secretKey;
+        }
+
+        public String getRamRoleName() {
+            return ramRoleName;
+        }
+
+        public void setRamRoleName(String ramRoleName) {
+            this.ramRoleName = ramRoleName;
         }
 
         public String getDataId() {
