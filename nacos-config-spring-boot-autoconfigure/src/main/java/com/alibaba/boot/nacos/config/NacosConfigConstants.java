@@ -33,4 +33,6 @@ public interface NacosConfigConstants {
 
 	String NACOS_BOOTSTRAP = PREFIX + ".bootstrap.enable";
 
+	String NACOS_LOG_BOOTSTRAP = PREFIX + ".bootstrap.log.enable";
+
 }

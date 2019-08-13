@@ -45,30 +45,22 @@ import com.alibaba.nacos.spring.context.annotation.config.NacosPropertySource;
  */
 @SpringBootApplication
 @NacosPropertySources(value = {
-		@NacosPropertySource(dataId = "people", autoRefreshed = true),
+		@NacosPropertySource(dataId = "people", groupId = "DEVELOP", autoRefreshed = true),
 		@NacosPropertySource(
 				name = "custom",
 				dataId = ConfigApplication.DATA_ID,
+				groupId = "ALIBABA",
 				first = true,
 				before = SYSTEM_PROPERTIES_PROPERTY_SOURCE_NAME,
 				after = SYSTEM_ENVIRONMENT_PROPERTY_SOURCE_NAME
 		)
 })
-@EnableNacosConfig(globalProperties = @NacosProperties(serverAddr = "192.168.16.104:8848"))
 public class ConfigApplication {
 
-	public static final String content = "dept: Aliware\ngroup: Alibaba";
-
-	public static final String DATA_ID = "test";
+	public static final String DATA_ID = "boot-test";
 
 	public static void main(String[] args) {
 		SpringApplication.run(ConfigApplication.class, args);
-	}
-
-	@Bean
-	@Order(Ordered.LOWEST_PRECEDENCE)
-	public CommandLineRunner firstCommandLineRunner() {
-		return new FirstCommandLineRunner();
 	}
 
 	@Bean
@@ -89,24 +81,6 @@ public class ConfigApplication {
 	public void onChange(String newContent) throws Exception {
 		Thread.sleep(100);
 		System.out.println("onChange : " + newContent);
-	}
-
-	public static class FirstCommandLineRunner implements CommandLineRunner {
-
-		@NacosInjected
-		private ConfigService configService;
-
-		@Override
-		public void run(String... args) throws Exception {
-			if (configService.publishConfig(DATA_ID, Constants.DEFAULT_GROUP, content)) {
-				Thread.sleep(200);
-				System.out.println("First runner success: " + configService
-						.getConfig(DATA_ID, Constants.DEFAULT_GROUP, 5000));
-			}
-			else {
-				System.out.println("First runner error: publish config error");
-			}
-		}
 	}
 
 	@Bean
