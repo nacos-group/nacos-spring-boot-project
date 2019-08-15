@@ -26,4 +26,5 @@ import com.alibaba.nacos.api.naming.pojo.Instance;
 public class Register extends Instance {
 
 
+
 }

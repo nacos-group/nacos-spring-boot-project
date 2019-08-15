@@ -49,17 +49,24 @@ import java.util.Map;
  */
 public class NacosConfigPropertiesUtils {
 
+    private static final String PROPERTIES_PREFIX = "nacos";
+
     private static final Logger logger = LoggerFactory.getLogger(NacosConfigPropertiesUtils.class);
 
     public static NacosConfigProperties buildNacosConfigProperties(ConfigurableEnvironment environment) {
         BeanWrapper wrapper = new BeanWrapperImpl(new NacosConfigProperties());
         wrapper.setAutoGrowNestedPaths(true);
         wrapper.setExtractOldValueForEditor(true);
-        wrapper.registerCustomEditor(String.class, new NacosCharSequenceEditor());
-        wrapper.registerCustomEditor(boolean.class, new NacosCustomBooleanEditor(true));
         wrapper.registerCustomEditor(ConfigType.class, new NacosEnumEditor(ConfigType.class));
         wrapper.registerCustomEditor(Collection.class, new CustomCollectionEditor(ArrayList.class));
-        wrapper.setPropertyValues(dataSource(findApplicationConfig(environment)));
+
+        AttributeExtractTask task = new AttributeExtractTask(PROPERTIES_PREFIX, environment);
+
+        try {
+            wrapper.setPropertyValues(dataSource(task.call()));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         NacosConfigProperties nacosConfigProperties = (NacosConfigProperties) wrapper.getWrappedInstance();
         logger.debug("nacosConfigProperties : {}", nacosConfigProperties);
         return nacosConfigProperties;

@@ -48,7 +48,7 @@ public class NacosDiscoveryProperties {
 	private String secretKey;
 
 	@NestedConfigurationProperty
-	private Register register;
+	private Register register = new Register();
 
     public String getServerAddr() {
         return serverAddr;
