@@ -21,26 +21,17 @@ import com.alibaba.boot.nacos.config.properties.NacosConfigProperties;
 import com.alibaba.boot.nacos.config.util.Function;
 import com.alibaba.boot.nacos.config.util.NacosConfigPropertiesUtils;
 import com.alibaba.boot.nacos.config.util.NacosConfigUtils;
-import com.alibaba.boot.nacos.config.util.NacosPropertiesBuilder;
 import com.alibaba.nacos.api.config.ConfigService;
-import com.alibaba.nacos.api.config.ConfigType;
 import com.alibaba.nacos.api.exception.NacosException;
-import com.alibaba.nacos.spring.core.env.NacosPropertySource;
-import com.alibaba.nacos.spring.core.env.NacosPropertySourcePostProcessor;
 import com.alibaba.nacos.spring.factory.CacheableEventPublishingNacosServiceFactory;
-import com.alibaba.nacos.spring.util.NacosBeanUtils;
 import com.alibaba.nacos.spring.util.config.NacosConfigLoader;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.env.ConfigurableEnvironment;
-import org.springframework.core.env.MutablePropertySources;
 
 import java.util.Properties;
-
-import static com.alibaba.nacos.spring.util.NacosUtils.buildDefaultPropertySourceName;
 
 /**
  * @author <a href="mailto:liaochunyhm@live.com">liaochuntao</a>
@@ -51,10 +42,6 @@ public class NacosConfigApplicationInitializer implements ApplicationContextInit
     private final Logger logger = LoggerFactory.getLogger(NacosConfigApplicationInitializer.class);
 
     private ConfigurableEnvironment environment;
-
-    private NacosConfigProperties nacosConfigProperties;
-
-    private NacosConfigLoader nacosConfigLoader;
 
     private final NacosConfigEnvironmentProcessor processor;
 
@@ -70,7 +57,7 @@ public class NacosConfigApplicationInitializer implements ApplicationContextInit
         if (!enable()) {
             logger.info("[Nacos Config Boot] : The preload configuration is not enabled");
         } else {
-            Function<Properties, ConfigService> builder = new Function<Properties, ConfigService>() {
+            final Function<Properties, ConfigService> builder = new Function<Properties, ConfigService>() {
                 @Override
                 public ConfigService apply(Properties input) {
                     try {
@@ -80,18 +67,15 @@ public class NacosConfigApplicationInitializer implements ApplicationContextInit
                     }
                 }
             };
-            NacosConfigUtils configUtils = new NacosConfigUtils(nacosConfigProperties, environment, builder);
-
+            final NacosConfigProperties nacosConfigProperties = NacosConfigPropertiesUtils.buildNacosConfigProperties(environment);
+            final NacosConfigUtils configUtils = new NacosConfigUtils(nacosConfigProperties, environment, builder);
             if (processor.enable(environment)) {
                 configUtils.addListenerIfAutoRefreshed(processor.getDeferPropertySources());
             } else {
-                nacosConfigProperties = NacosConfigPropertiesUtils.buildNacosConfigProperties(environment);
                 configUtils.loadConfig(false);
                 configUtils.addListenerIfAutoRefreshed();
             }
-
         }
-
     }
 
 

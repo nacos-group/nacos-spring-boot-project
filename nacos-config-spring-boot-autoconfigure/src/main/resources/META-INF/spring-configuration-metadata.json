@@ -52,6 +52,12 @@
     },
     {
       "sourceType": "com.alibaba.boot.nacos.config.properties.NacosConfigProperties",
+      "name": "nacos.config.ram-role-name",
+      "description": "the ramRoleName of Alibaba Cloud Account",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.alibaba.boot.nacos.config.properties.NacosConfigProperties",
       "name": "nacos.config.data-id",
       "type": "java.lang.String"
     },

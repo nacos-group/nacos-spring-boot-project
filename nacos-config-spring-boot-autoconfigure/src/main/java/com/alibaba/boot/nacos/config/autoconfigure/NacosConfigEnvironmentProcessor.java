@@ -44,7 +44,7 @@ public class NacosConfigEnvironmentProcessor implements EnvironmentPostProcessor
 
     private final LinkedList<NacosConfigUtils.DeferNacosPropertySource> deferPropertySources = new LinkedList<>();
 
-    private Function<Properties, ConfigService> builder = new Function<Properties, ConfigService>() {
+    private final Function<Properties, ConfigService> builder = new Function<Properties, ConfigService>() {
 
         @Override
         public ConfigService apply(Properties input) {
@@ -66,8 +66,8 @@ public class NacosConfigEnvironmentProcessor implements EnvironmentPostProcessor
     }
 
     private void initLogConfig(ConfigurableEnvironment environment) {
-        NacosConfigProperties nacosConfigProperties = NacosConfigPropertiesUtils.buildNacosConfigProperties(environment);
-        NacosConfigUtils configUtils = new NacosConfigUtils(nacosConfigProperties, environment, builder);
+        final NacosConfigProperties nacosConfigProperties = NacosConfigPropertiesUtils.buildNacosConfigProperties(environment);
+        final NacosConfigUtils configUtils = new NacosConfigUtils(nacosConfigProperties, environment, builder);
         configUtils.loadConfig(true);
 
         // get defer nacosPropertySource
