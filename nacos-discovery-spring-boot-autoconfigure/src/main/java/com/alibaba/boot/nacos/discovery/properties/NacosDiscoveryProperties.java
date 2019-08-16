@@ -43,6 +43,8 @@ public class NacosDiscoveryProperties {
 
 	private String secretKey;
 
+	private boolean autoRegister = false;
+
     @NestedConfigurationProperty
     private Register register = new Register();
 
@@ -101,6 +103,14 @@ public class NacosDiscoveryProperties {
 
     public void setSecretKey(String secretKey) {
         this.secretKey = secretKey;
+    }
+
+    public boolean isAutoRegister() {
+        return autoRegister;
+    }
+
+    public void setAutoRegister(boolean autoRegister) {
+        this.autoRegister = autoRegister;
     }
 
     public Register getRegister() {

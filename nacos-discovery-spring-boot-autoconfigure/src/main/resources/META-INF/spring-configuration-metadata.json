@@ -55,6 +55,12 @@
       "name": "nacos.discovery.register",
       "description": "the service",
       "type": "com.alibaba.boot.nacos.discovery.properties.Register"
+    },
+    {
+      "sourceType": "com.alibaba.boot.nacos.discovery.properties.NacosDiscoveryProperties",
+      "name": "nacos.discovery.auto-register",
+      "description": "the service",
+      "type": "java.lang.Boolean"
     }
   ]
 }

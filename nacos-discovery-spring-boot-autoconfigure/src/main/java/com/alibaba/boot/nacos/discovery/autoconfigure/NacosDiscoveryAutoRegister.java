@@ -52,6 +52,10 @@ public class NacosDiscoveryAutoRegister implements ApplicationListener<EmbeddedS
     @Override
     public void onApplicationEvent(EmbeddedServletContainerInitializedEvent event) {
 
+        if (!discoveryProperties.isAutoRegister()) {
+            return;
+        }
+
         Register register = discoveryProperties.getRegister();
 
         if (StringUtils.isEmpty(register.getIp())) {
