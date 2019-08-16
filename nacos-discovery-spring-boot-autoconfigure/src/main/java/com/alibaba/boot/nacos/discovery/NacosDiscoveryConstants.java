@@ -25,9 +25,10 @@ import com.alibaba.nacos.spring.context.annotation.discovery.EnableNacosDiscover
  */
 public interface NacosDiscoveryConstants {
 
+    String PREFIX = "nacos.discovery";
+
 	String ENDPOINT_PREFIX = "nacos-discovery";
 
     String ENABLED = EnableNacosDiscovery.DISCOVERY_PREFIX + "enabled";
 
-    String PREFIX = "nacos.discovery";
 }
