@@ -57,7 +57,7 @@ public class NacosDiscoveryHealthIndicator extends AbstractHealthIndicator {
 								PropertiesUtils.extractSafeProperties(properties)),
 						namingService.getServerStatus());
 			}
-			if (!namingService.getServerStatus().toLowerCase().equals(UP_STATUS)) {
+			if (!namingService.getServerStatus().equalsIgnoreCase(UP_STATUS)) {
 				builder.down();
 			}
 		}

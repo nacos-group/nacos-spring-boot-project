@@ -52,6 +52,10 @@ public class NacosDiscoveryAutoRegister implements ApplicationListener<WebServer
     @Override
     public void onApplicationEvent(WebServerInitializedEvent event) {
 
+        if (!discoveryProperties.isAutoRegister()) {
+            return;
+        }
+
         Register register = discoveryProperties.getRegister();
 
         if (StringUtils.isEmpty(register.getIp())) {

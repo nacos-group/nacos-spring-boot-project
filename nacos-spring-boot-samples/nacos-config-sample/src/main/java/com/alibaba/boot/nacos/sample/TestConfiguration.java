@@ -14,21 +14,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alibaba.boot.nacos.discovery;
+package com.alibaba.boot.nacos.sample;
 
-import com.alibaba.nacos.spring.context.annotation.discovery.EnableNacosDiscovery;
+import com.alibaba.nacos.api.config.annotation.NacosConfigListener;
+import com.alibaba.nacos.api.config.annotation.NacosValue;
+import org.springframework.context.annotation.Configuration;
 
 /**
- * Nacos Discovery Constants
- *
- * @author <a href="mailto:fangjian0423@gmail.com">Jim</a>
+ * @author <a href="mailto:liaochunyhm@live.com">liaochuntao</a>
+ * @since
  */
-public interface NacosDiscoveryConstants {
+@Configuration
+public class TestConfiguration {
 
-    String PREFIX = "nacos.discovery";
+    @NacosValue(value = "${people.count:0}", autoRefreshed = true)
+    private int count;
 
-	String ENDPOINT_PREFIX = "nacos-discovery";
+    public int getCount() {
+        return count;
+    }
 
-    String ENABLED = EnableNacosDiscovery.DISCOVERY_PREFIX + "enabled";
+    public void setCount(int count) {
+        this.count = count;
+    }
 
+    @NacosConfigListener(
+            dataId = "listener.test",
+            timeout = 500
+    )
+    public void onChange(String newContent) throws Exception {
+        System.out.println("onChange : " + newContent);
+    }
 }

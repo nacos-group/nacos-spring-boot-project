@@ -72,12 +72,12 @@ public class NacosConfigApplicationContextInitializer implements ApplicationCont
                     throw new RuntimeException("ConfigService can't be created with properties : " + properties, e);
                 }
             };
+            nacosConfigProperties = NacosConfigPropertiesUtils.buildNacosConfigProperties(environment);
             NacosConfigUtils configUtils = new NacosConfigUtils(nacosConfigProperties, environment, builder);
 
             if (processor.enable(environment)) {
                 configUtils.addListenerIfAutoRefreshed(processor.getDeferPropertySources());
             } else {
-                nacosConfigProperties = NacosConfigPropertiesUtils.buildNacosConfigProperties(environment);
                 configUtils.loadConfig(false);
                 configUtils.addListenerIfAutoRefreshed();
             }

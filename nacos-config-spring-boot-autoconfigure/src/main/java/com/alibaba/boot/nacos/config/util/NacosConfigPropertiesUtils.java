@@ -49,17 +49,24 @@ import java.util.Map;
  */
 public class NacosConfigPropertiesUtils {
 
+    private static final String PROPERTIES_PREFIX = "nacos";
+
     private static final Logger logger = LoggerFactory.getLogger(NacosConfigPropertiesUtils.class);
 
     public static NacosConfigProperties buildNacosConfigProperties(ConfigurableEnvironment environment) {
         BeanWrapper wrapper = new BeanWrapperImpl(new NacosConfigProperties());
         wrapper.setAutoGrowNestedPaths(true);
         wrapper.setExtractOldValueForEditor(true);
-        wrapper.registerCustomEditor(String.class, new NacosCharSequenceEditor());
-        wrapper.registerCustomEditor(boolean.class, new NacosCustomBooleanEditor(true));
         wrapper.registerCustomEditor(ConfigType.class, new NacosEnumEditor(ConfigType.class));
         wrapper.registerCustomEditor(Collection.class, new CustomCollectionEditor(ArrayList.class));
-        wrapper.setPropertyValues(dataSource(findApplicationConfig(environment)));
+
+        AttributeExtractTask task = new AttributeExtractTask(PROPERTIES_PREFIX, environment);
+
+        try {
+            wrapper.setPropertyValues(dataSource(task.call()));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         NacosConfigProperties nacosConfigProperties = (NacosConfigProperties) wrapper.getWrappedInstance();
         logger.debug("nacosConfigProperties : {}", nacosConfigProperties);
         return nacosConfigProperties;
@@ -69,19 +76,12 @@ public class NacosConfigPropertiesUtils {
         Map<String, String> result = new HashMap<>(8);
 
         // find order follow spring.profiles.active=dev,prof => find first is prod, then dev
-        List<String> activeProfile = new ArrayList<>(Arrays.asList(environment.getActiveProfiles()));
         List<PropertySource> defer = new LinkedList<>();
         MutablePropertySources mutablePropertySources = environment.getPropertySources();
         for (PropertySource tmp : mutablePropertySources) {
             // Spring puts the information of the application.properties file into class{OriginTrackedMapPropertySource}.
             if (tmp instanceof OriginTrackedMapPropertySource) {
-                // find active profile
-                for (String profile : activeProfile) {
-                    if (tmp.getName().contains(profile)) {
-                        defer.add(tmp);
-                        break;
-                    }
-                }
+                defer.add(tmp);
             }
         }
 

@@ -46,8 +46,8 @@ public class NacosEnumEditor implements PropertyEditor {
             this.type = var1;
             this.tags = new String[var2.length];
 
-            for(int var3 = 0; var3 < var2.length; ++var3) {
-                this.tags[var3] = ((Enum)var2[var3]).name();
+            for (int var3 = 0; var3 < var2.length; ++var3) {
+                this.tags[var3] = ((Enum) var2[var3]).name();
             }
         }
     }
@@ -59,19 +59,20 @@ public class NacosEnumEditor implements PropertyEditor {
 
     @Override
     public void setValue(Object var1) {
-        if (var1 instanceof CharSequence) {
-            ConfigType bean = ConfigType.valueOf(String.valueOf(var1).toUpperCase());
+        if (var1 != null && !this.type.isInstance(var1)) {
+            throw new IllegalArgumentException("Unsupported value: " + var1);
+        } else {
             Object var2;
             PropertyChangeListener[] var3;
             synchronized(this.listeners) {
                 label45: {
                     var2 = this.value;
-                    this.value = bean;
-                    if (bean == null) {
+                    this.value = var1;
+                    if (var1 == null) {
                         if (var2 != null) {
                             break label45;
                         }
-                    } else if (!bean.equals(var2)) {
+                    } else if (!var1.equals(var2)) {
                         break label45;
                     }
 
@@ -86,7 +87,7 @@ public class NacosEnumEditor implements PropertyEditor {
                 var3 = (PropertyChangeListener[])this.listeners.toArray(new PropertyChangeListener[var5]);
             }
 
-            PropertyChangeEvent var4 = new PropertyChangeEvent(this, (String)null, var2, bean);
+            PropertyChangeEvent var4 = new PropertyChangeEvent(this, (String)null, var2, var1);
             PropertyChangeListener[] var10 = var3;
             int var6 = var3.length;
 
@@ -100,17 +101,17 @@ public class NacosEnumEditor implements PropertyEditor {
 
     @Override
     public String getAsText() {
-        return this.value != null ? ((Enum)this.value).name() : null;
+        return this.value != null ? ((Enum) this.value).name() : null;
     }
 
     @Override
     public void setAsText(String var1) {
-        this.setValue(var1 != null ? Enum.valueOf(this.type, var1) : null);
+        this.setValue(var1 != null ? Enum.valueOf(this.type, var1.toUpperCase()) : null);
     }
 
     @Override
     public String[] getTags() {
-        return (String[])this.tags.clone();
+        return (String[]) this.tags.clone();
     }
 
     @Override
@@ -140,16 +141,15 @@ public class NacosEnumEditor implements PropertyEditor {
 
     @Override
     public void addPropertyChangeListener(PropertyChangeListener var1) {
-        synchronized(this.listeners) {
+        synchronized (this.listeners) {
             this.listeners.add(var1);
         }
     }
 
     @Override
     public void removePropertyChangeListener(PropertyChangeListener var1) {
-        synchronized(this.listeners) {
+        synchronized (this.listeners) {
             this.listeners.remove(var1);
         }
     }
-
 }

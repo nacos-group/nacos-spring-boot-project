@@ -63,53 +63,54 @@
     {
       "sourceType": "com.alibaba.boot.nacos.config.properties.NacosConfigProperties",
       "name": "nacos.config.auto-refresh",
+      "description": "auto refresh config",
       "type": "java.lang.Boolean"
     },
     {
       "sourceType": "com.alibaba.boot.nacos.config.properties.NacosConfigProperties",
       "name": "nacos.config.max-retry",
-      "description": "the secretkey of Alibaba Cloud Account",
+      "description": "The biggest retry count when network attempt failed",
       "type": "java.lang.String"
     },
     {
       "sourceType": "com.alibaba.boot.nacos.config.properties.NacosConfigProperties",
       "name": "nacos.config.config-long-poll-timeout",
-      "description": "the secretkey of Alibaba Cloud Account",
+      "description": "Long polling timeout",
       "type": "java.lang.String"
     },
     {
       "sourceType": "com.alibaba.boot.nacos.config.properties.NacosConfigProperties",
       "name": "nacos.config.config-retry-time",
-      "description": "the secretkey of Alibaba Cloud Account",
+      "description": "Long polling tasks punishment fails retry time",
       "type": "java.lang.String"
     },
     {
       "sourceType": "com.alibaba.boot.nacos.config.properties.NacosConfigProperties",
       "name": "nacos.config.type",
-      "description": "the secretkey of Alibaba Cloud Account",
+      "description": "config type",
       "type": "com.alibaba.nacos.api.config.ConfigType"
     },{
       "sourceType": "com.alibaba.boot.nacos.config.properties.NacosConfigProperties",
       "name": "nacos.config.enable-remote-sync-config",
-      "description": "the secretkey of Alibaba Cloud Account",
+      "description": "(WARN !!!) Add a listener when active pull configuration",
       "type": "java.lang.Boolean"
     },
     {
       "sourceType": "com.alibaba.boot.nacos.config.properties.NacosConfigProperties",
       "name": "nacos.config.bootstrap.enable",
-      "description": "the secretkey of Alibaba Cloud Account",
+      "description": "Open the preload configuration",
       "type": "java.lang.String"
     },
     {
       "sourceType": "com.alibaba.boot.nacos.config.properties.NacosConfigProperties",
       "name": "nacos.config.bootstrap.log.enable",
-      "description": "the secretkey of Alibaba Cloud Account",
+      "description": "Log loading priority preload configuration",
       "type": "java.lang.String"
     },
     {
       "sourceType": "com.alibaba.boot.nacos.config.properties.NacosConfigProperties",
       "name": "nacos.config.ext-config",
-      "description": "the secretkey of Alibaba Cloud Account",
+      "description": "The child configuration",
       "type": "java.util.List<com.alibaba.boot.nacos.config.properties.NacosConfigProperties.Config>"
     }
   ]
