@@ -72,28 +72,6 @@ public class NacosConfigPropertiesUtils {
         return nacosConfigProperties;
     }
 
-    private static Map<String, String> findApplicationConfig(ConfigurableEnvironment environment) {
-        Map<String, String> result = new HashMap<>(8);
-
-        // find order follow spring.profiles.active=dev,prof => find first is prod, then dev
-        List<PropertySource> defer = new LinkedList<>();
-        MutablePropertySources mutablePropertySources = environment.getPropertySources();
-        for (PropertySource tmp : mutablePropertySources) {
-            // Spring puts the information of the application.properties file into class{OriginTrackedMapPropertySource}.
-            if (tmp instanceof OriginTrackedMapPropertySource) {
-                defer.add(tmp);
-            }
-        }
-
-        Collections.reverse(defer);
-
-        for (PropertySource propertySource : defer) {
-            result.putAll((Map<String, String>) propertySource.getSource());
-        }
-
-        return result;
-    }
-
     private static Map<String, String> dataSource(Map<String, String> source) {
         source.remove(NacosConfigConstants.NACOS_BOOTSTRAP);
         source.remove(NacosConfigConstants.NACOS_LOG_BOOTSTRAP);

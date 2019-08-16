@@ -29,9 +29,9 @@ import java.util.Properties;
  */
 public class NacosPropertiesBuilder {
 
-    public static Properties buildNacosProperties(String serverAddr, String namespaceId, String endpoint, String secreyKey,
-                                                  String accessKey, String configLongPollTimeout, String configRetryTimeout,
-                                                  String maxRetry, boolean enableRemoteSyncConfig) {
+    public static Properties buildNacosProperties(String serverAddr, String namespaceId, String endpoint, String secretKey,
+                                                  String accessKey, String ramRoleName, String configLongPollTimeout,
+                                                  String configRetryTimeout, String maxRetry, boolean enableRemoteSyncConfig) {
 
         Properties properties = new Properties();
         if (StringUtils.isNotEmpty(serverAddr)) {
@@ -43,11 +43,14 @@ public class NacosPropertiesBuilder {
         if (StringUtils.isNotEmpty(endpoint)) {
             properties.put(PropertyKeyConst.ENDPOINT, endpoint);
         }
-        if (StringUtils.isNotEmpty(secreyKey)) {
-            properties.put(PropertyKeyConst.SECRET_KEY, secreyKey);
+        if (StringUtils.isNotEmpty(secretKey)) {
+            properties.put(PropertyKeyConst.SECRET_KEY, secretKey);
         }
         if (StringUtils.isNotEmpty(accessKey)) {
             properties.put(PropertyKeyConst.ACCESS_KEY, accessKey);
+        }
+        if (StringUtils.isNoneEmpty(ramRoleName)) {
+            properties.put(PropertyKeyConst.RAM_ROLE_NAME, ramRoleName);
         }
         if (StringUtils.isNotEmpty(configLongPollTimeout)) {
             properties.put(PropertyKeyConst.CONFIG_LONG_POLL_TIMEOUT, configLongPollTimeout);

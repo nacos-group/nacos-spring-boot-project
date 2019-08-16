@@ -52,6 +52,12 @@
     },
     {
       "sourceType": "com.alibaba.boot.nacos.config.properties.NacosConfigProperties",
+      "name": "nacos.config.ram-role-name",
+      "description": "the ramRoleName of Alibaba Cloud Account",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.alibaba.boot.nacos.config.properties.NacosConfigProperties",
       "name": "nacos.config.data-id",
       "type": "java.lang.String"
     },
@@ -89,7 +95,8 @@
       "name": "nacos.config.type",
       "description": "config type",
       "type": "com.alibaba.nacos.api.config.ConfigType"
-    },{
+    },
+    {
       "sourceType": "com.alibaba.boot.nacos.config.properties.NacosConfigProperties",
       "name": "nacos.config.enable-remote-sync-config",
       "description": "(WARN !!!) Add a listener when active pull configuration",
