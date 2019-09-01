@@ -49,8 +49,7 @@ public class NacosConfigEnvironmentProcessor implements EnvironmentPostProcessor
     private Function<Properties, ConfigService> builder = properties -> {
         try {
             return NacosFactory.createConfigService(properties);
-        } catch (
-                NacosException e) {
+        } catch (NacosException e) {
             throw new RuntimeException("ConfigService can't be created with properties : " + properties, e);
         }
     };
@@ -67,8 +66,7 @@ public class NacosConfigEnvironmentProcessor implements EnvironmentPostProcessor
     private void initLogConfig(ConfigurableEnvironment environment) {
         NacosConfigProperties nacosConfigProperties = NacosConfigPropertiesUtils.buildNacosConfigProperties(environment);
         NacosConfigUtils configUtils = new NacosConfigUtils(nacosConfigProperties, environment, builder);
-        configUtils.loadConfig(true);
-
+        configUtils.loadConfig();
         // get defer nacosPropertySource
         deferPropertySources.addAll(configUtils.getNacosPropertySources());
     }

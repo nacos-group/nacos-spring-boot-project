@@ -52,7 +52,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
     before = SYSTEM_PROPERTIES_PROPERTY_SOURCE_NAME,
     after = SYSTEM_ENVIRONMENT_PROPERTY_SOURCE_NAME
 )
-@NacosPropertySource(dataId = "people", autoRefreshed = true)
 @EnableScheduling
 public class ConfigApplication {
 

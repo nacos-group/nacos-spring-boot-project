@@ -78,10 +78,9 @@ public class NacosConfigApplicationContextInitializer implements ApplicationCont
             if (processor.enable(environment)) {
                 configUtils.addListenerIfAutoRefreshed(processor.getDeferPropertySources());
             } else {
-                configUtils.loadConfig(false);
+                configUtils.loadConfig();
                 configUtils.addListenerIfAutoRefreshed();
             }
-
         }
 
     }

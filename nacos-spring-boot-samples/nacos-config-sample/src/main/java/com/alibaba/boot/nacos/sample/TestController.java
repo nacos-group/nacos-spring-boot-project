@@ -18,6 +18,7 @@ package com.alibaba.boot.nacos.sample;
 
 import com.alibaba.nacos.api.config.annotation.NacosValue;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,6 +35,9 @@ public class TestController {
     @NacosValue(value = "${people.enable:bbbbb}", autoRefreshed = true)
     private String enable;
 
+    @Value("${people.enable}")
+    private String springEnable;
+
     @Autowired
     private Apple apple;
 
@@ -48,7 +52,7 @@ public class TestController {
     @RequestMapping()
     @ResponseBody
     public String testGet() {
-        return enable;
+        return enable + "-" + springEnable;
     }
 
     @GetMapping("/apple")
