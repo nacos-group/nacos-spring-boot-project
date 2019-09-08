@@ -47,7 +47,7 @@ public class NacosDiscoveryAutoDeregister implements ApplicationListener<Context
     private final WebServer webServer;
 
     @Value("${spring.application.name:spring.application.name}")
-    private String application;
+    private String applicationName;
 
     public NacosDiscoveryAutoDeregister(NacosDiscoveryProperties discoveryProperties, WebServer webServer) {
         this.discoveryProperties = discoveryProperties;
@@ -70,14 +70,13 @@ public class NacosDiscoveryAutoDeregister implements ApplicationListener<Context
             register.setPort(webServer.getPort());
         }
 
-        String serviceName = StringUtils.isEmpty(register.getServiceName()) ? application : register.getServiceName();
+        String serviceName = StringUtils.isEmpty(register.getServiceName()) ? applicationName : register.getServiceName();
 
         try {
             namingService.deregisterInstance(serviceName, register);
             logger.info("Finished auto deregister service : {}, ip : {}, port : {}", register.getServiceName(), register.getIp(), register.getPort());
         } catch (NacosException e) {
-            throw new RuntimeException(e);
+            throw new AutoDeregisterException(e);
         }
-
     }
 }

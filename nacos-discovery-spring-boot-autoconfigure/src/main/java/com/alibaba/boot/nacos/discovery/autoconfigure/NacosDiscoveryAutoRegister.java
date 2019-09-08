@@ -47,7 +47,7 @@ public class NacosDiscoveryAutoRegister implements ApplicationListener<WebServer
     private NacosDiscoveryProperties discoveryProperties;
 
     @Value("${spring.application.name:spring.application.name}")
-    private String application;
+    private String applicationName;
 
     @Override
     public void onApplicationEvent(WebServerInitializedEvent event) {
@@ -69,13 +69,13 @@ public class NacosDiscoveryAutoRegister implements ApplicationListener<WebServer
         register.getMetadata().put("preserved.register.source", "SPRING_BOOT");
 
         register.setInstanceId("");
-        String serviceName = StringUtils.isEmpty(register.getServiceName()) ? application : register.getServiceName();
+        String serviceName = StringUtils.isEmpty(register.getServiceName()) ? applicationName : register.getServiceName();
 
         try {
             namingService.registerInstance(serviceName, register);
             logger.info("Finished auto register service : {}, ip : {}, port : {}", register.getServiceName(), register.getIp(), register.getPort());
         } catch (NacosException e) {
-            throw new RuntimeException(e);
+            throw new AutoRegisterException(e);
         }
     }
 

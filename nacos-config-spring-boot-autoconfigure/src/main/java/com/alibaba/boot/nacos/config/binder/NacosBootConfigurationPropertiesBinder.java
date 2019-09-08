@@ -53,7 +53,6 @@ public class NacosBootConfigurationPropertiesBinder extends NacosConfigurationPr
     @Override
     protected void doBind(Object bean, String beanName, String dataId, String groupId, String configType,
                           NacosConfigurationProperties properties, String content, ConfigService configService) {
-
         String name = "nacos-bootstrap-" + beanName;
         NacosPropertySource propertySource = new NacosPropertySource(name, dataId, groupId, content, configType);
         context.getEnvironment().getPropertySources().addLast(propertySource);

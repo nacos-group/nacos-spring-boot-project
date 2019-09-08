@@ -50,7 +50,7 @@ public class NacosConfigEnvironmentProcessor implements EnvironmentPostProcessor
         try {
             return NacosFactory.createConfigService(properties);
         } catch (NacosException e) {
-            throw new RuntimeException("ConfigService can't be created with properties : " + properties, e);
+            throw new NacosBootConfigException("ConfigService can't be created with properties : " + properties, e);
         }
     };
 
@@ -59,15 +59,15 @@ public class NacosConfigEnvironmentProcessor implements EnvironmentPostProcessor
         application.addInitializers(new NacosConfigApplicationContextInitializer(this));
         if (enable(environment)) {
             System.out.println("[Nacos Config Boot] : The preload log configuration is enabled");
-            initLogConfig(environment);
+            loadConfig(environment);
         }
     }
 
-    private void initLogConfig(ConfigurableEnvironment environment) {
+    private void loadConfig(ConfigurableEnvironment environment) {
         NacosConfigProperties nacosConfigProperties = NacosConfigPropertiesUtils.buildNacosConfigProperties(environment);
         NacosConfigUtils configUtils = new NacosConfigUtils(nacosConfigProperties, environment, builder);
         configUtils.loadConfig();
-        // get defer nacosPropertySource
+        // set defer NacosPropertySource
         deferPropertySources.addAll(configUtils.getNacosPropertySources());
     }
 
