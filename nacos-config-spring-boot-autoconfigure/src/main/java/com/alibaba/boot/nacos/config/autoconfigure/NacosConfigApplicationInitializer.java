@@ -63,7 +63,7 @@ public class NacosConfigApplicationInitializer implements ApplicationContextInit
                     try {
                         return singleton.createConfigService(input);
                     } catch (NacosException e) {
-                        throw new RuntimeException("ConfigService can't be created with properties : " + input, e);
+                        throw new NacosBootConfigException("ConfigService can't be created with properties : " + input, e);
                     }
                 }
             };
@@ -72,12 +72,11 @@ public class NacosConfigApplicationInitializer implements ApplicationContextInit
             if (processor.enable(environment)) {
                 configUtils.addListenerIfAutoRefreshed(processor.getDeferPropertySources());
             } else {
-                configUtils.loadConfig(false);
+                configUtils.loadConfig();
                 configUtils.addListenerIfAutoRefreshed();
             }
         }
     }
-
 
     private boolean enable() {
         return Boolean.parseBoolean(environment.getProperty(NacosConfigConstants.NACOS_BOOTSTRAP, "false"));
