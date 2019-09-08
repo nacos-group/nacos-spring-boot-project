@@ -102,7 +102,12 @@ public class NacosConfigUtils {
             dataIds.add(nacosConfigProperties.getDataId());
         }
         final String groupName = nacosConfigProperties.getGroup();
-        return Arrays.asList(reqNacosConfig(globalProperties, dataIds.toArray(new String[0]), groupName, type));
+        List<NacosPropertySource> result = Arrays.asList(reqNacosConfig(globalProperties, dataIds.toArray(new String[0]), groupName, type));
+        for (NacosPropertySource propertySource : result) {
+            DeferNacosPropertySource defer = new DeferNacosPropertySource(propertySource, globalProperties, environment);
+            nacosPropertySources.add(defer);
+        }
+        return result;
     }
 
     private List<NacosPropertySource> reqSubNacosConfig(NacosConfigProperties.Config config, Properties globalProperties, ConfigType type) {
@@ -114,7 +119,12 @@ public class NacosConfigUtils {
             dataIds.add(config.getDataId());
         }
         final String groupName = config.getGroup();
-        return Arrays.asList(reqNacosConfig(subConfigProperties, dataIds.toArray(new String[0]), groupName, type));
+        List<NacosPropertySource> result =  Arrays.asList(reqNacosConfig(subConfigProperties, dataIds.toArray(new String[0]), groupName, type));
+        for (NacosPropertySource propertySource : result) {
+            DeferNacosPropertySource defer = new DeferNacosPropertySource(propertySource, globalProperties, environment);
+            nacosPropertySources.add(defer);
+        }
+        return result;
     }
 
     private NacosPropertySource[] reqNacosConfig(Properties configProperties, String[] dataIds, String groupId, ConfigType type) {
