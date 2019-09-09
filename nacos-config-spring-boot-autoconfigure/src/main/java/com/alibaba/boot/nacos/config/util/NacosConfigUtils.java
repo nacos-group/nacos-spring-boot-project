@@ -97,12 +97,14 @@ public class NacosConfigUtils {
         List<String> dataIds = new ArrayList<>();
         // Loads all dataid information into the list in the list
         if (StringUtils.isEmpty(nacosConfigProperties.getDataId())) {
-            dataIds.addAll(Arrays.asList(nacosConfigProperties.getDataIds()));
+            dataIds.addAll(Arrays.asList(nacosConfigProperties.getDataIds().split(",")));
         } else {
             dataIds.add(nacosConfigProperties.getDataId());
         }
         final String groupName = nacosConfigProperties.getGroup();
-        List<NacosPropertySource> results = Arrays.asList(reqNacosConfig(globalProperties, dataIds.toArray(new String[0]), groupName, type));
+        final boolean isAutoRefresh = nacosConfigProperties.isAutoRefresh();
+        List<NacosPropertySource> results = new ArrayList<>(Arrays.asList(reqNacosConfig(globalProperties,
+                dataIds.toArray(new String[0]), groupName, type, isAutoRefresh)));
         for (NacosPropertySource propertySource : results) {
             DeferNacosPropertySource defer = new DeferNacosPropertySource(propertySource, globalProperties, environment);
             nacosPropertySources.add(defer);
@@ -114,12 +116,14 @@ public class NacosConfigUtils {
         Properties subConfigProperties = buildSubNacosProperties(globalProperties, config);
         ArrayList<String> dataIds = new ArrayList<>();
         if (StringUtils.isEmpty(config.getDataId())) {
-            dataIds.addAll(Arrays.asList(config.getDataIds()));
+            dataIds.addAll(Arrays.asList(config.getDataIds().split(",")));
         } else {
             dataIds.add(config.getDataId());
         }
         final String groupName = config.getGroup();
-        List<NacosPropertySource> results = Arrays.asList(reqNacosConfig(subConfigProperties, dataIds.toArray(new String[0]), groupName, type));
+        final boolean isAutoRefresh = config.isAutoRefresh();
+        List<NacosPropertySource> results = new ArrayList<>(Arrays.asList(reqNacosConfig(subConfigProperties,
+                dataIds.toArray(new String[0]), groupName, type, isAutoRefresh)));
         for (NacosPropertySource propertySource : results) {
             DeferNacosPropertySource defer = new DeferNacosPropertySource(propertySource, subConfigProperties, environment);
             nacosPropertySources.add(defer);
@@ -127,16 +131,17 @@ public class NacosConfigUtils {
         return results;
     }
 
-    private NacosPropertySource[] reqNacosConfig(Properties configProperties, String[] dataIds, String groupId, ConfigType type) {
-        NacosPropertySource[] propertySources = new NacosPropertySource[dataIds.length];
+    private NacosPropertySource[] reqNacosConfig(Properties configProperties, String[] dataIds, String groupId, ConfigType type, boolean isAutoRefresh) {
+        final NacosPropertySource[] propertySources = new NacosPropertySource[dataIds.length];
         for (int i = 0; i < dataIds.length; i ++) {
-            final String dataId = dataIds[i];
-            String config = NacosUtils.getContent(builder.apply(configProperties), dataId, groupId);
-            NacosPropertySource nacosPropertySource = new NacosPropertySource(dataId, groupId,
+            final String dataId = dataIds[i].trim();
+            final String config = NacosUtils.getContent(builder.apply(configProperties), dataId, groupId);
+            final NacosPropertySource nacosPropertySource = new NacosPropertySource(dataId, groupId,
                     buildDefaultPropertySourceName(dataId, groupId, configProperties), config, type.getType());
             nacosPropertySource.setDataId(dataId);
             nacosPropertySource.setType(type.getType());
             nacosPropertySource.setGroupId(groupId);
+            nacosPropertySource.setAutoRefreshed(isAutoRefresh);
             logger.info("load config from nacos, data-id is : {}, group is : {}", nacosPropertySource.getDataId(), nacosPropertySource.getGroupId());
             propertySources[i] = nacosPropertySource;
         }
