@@ -65,11 +65,9 @@ public class NacosConfigUtils {
             List<NacosPropertySource> elements = reqSubNacosConfig(config, globalProperties, config.getType());
             sources.addAll(elements);
         }
-        CompositePropertySource compositePropertySource = new CompositePropertySource("nacosCompositePropertySource");
         for (NacosPropertySource propertySource : sources) {
-            compositePropertySource.addPropertySource(propertySource);
+            mutablePropertySources.addLast(propertySource);
         }
-        mutablePropertySources.addLast(compositePropertySource);
     }
 
     private Properties buildGlobalNacosProperties() {
