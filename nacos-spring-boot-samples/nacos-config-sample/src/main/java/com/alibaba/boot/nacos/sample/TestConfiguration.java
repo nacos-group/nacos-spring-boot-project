@@ -28,13 +28,13 @@ import org.springframework.context.annotation.Configuration;
 public class TestConfiguration {
 
     @NacosValue(value = "${people.count:0}", autoRefreshed = true)
-    private int count;
+    private String count;
 
-    public int getCount() {
+    public String getCount() {
         return count;
     }
 
-    public void setCount(int count) {
+    public void setCount(String count) {
         this.count = count;
     }
 
