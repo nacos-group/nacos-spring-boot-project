@@ -25,7 +25,6 @@ import com.alibaba.nacos.spring.util.NacosUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.env.CompositePropertySource;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.MutablePropertySources;
 
@@ -64,11 +63,9 @@ public class NacosConfigUtils {
             List<NacosPropertySource> elements = reqSubNacosConfig(config, globalProperties, config.getType());
             sources.addAll(sources.size(), elements);
         }
-        CompositePropertySource compositePropertySource = new CompositePropertySource("nacosCompositePropertySource");
         for (NacosPropertySource propertySource : sources) {
-            compositePropertySource.addPropertySource(propertySource);
+            mutablePropertySources.addLast(propertySource);
         }
-        mutablePropertySources.addLast(compositePropertySource);
     }
 
     private Properties buildGlobalNacosProperties() {
@@ -103,13 +100,8 @@ public class NacosConfigUtils {
         }
         final String groupName = nacosConfigProperties.getGroup();
         final boolean isAutoRefresh = nacosConfigProperties.isAutoRefresh();
-        List<NacosPropertySource> results = new ArrayList<>(Arrays.asList(reqNacosConfig(globalProperties,
+        return new ArrayList<>(Arrays.asList(reqNacosConfig(globalProperties,
                 dataIds.toArray(new String[0]), groupName, type, isAutoRefresh)));
-        for (NacosPropertySource propertySource : results) {
-            DeferNacosPropertySource defer = new DeferNacosPropertySource(propertySource, globalProperties, environment);
-            nacosPropertySources.add(defer);
-        }
-        return results;
     }
 
     private List<NacosPropertySource> reqSubNacosConfig(NacosConfigProperties.Config config, Properties globalProperties, ConfigType type) {
@@ -122,13 +114,8 @@ public class NacosConfigUtils {
         }
         final String groupName = config.getGroup();
         final boolean isAutoRefresh = config.isAutoRefresh();
-        List<NacosPropertySource> results = new ArrayList<>(Arrays.asList(reqNacosConfig(subConfigProperties,
+        return new ArrayList<>(Arrays.asList(reqNacosConfig(subConfigProperties,
                 dataIds.toArray(new String[0]), groupName, type, isAutoRefresh)));
-        for (NacosPropertySource propertySource : results) {
-            DeferNacosPropertySource defer = new DeferNacosPropertySource(propertySource, subConfigProperties, environment);
-            nacosPropertySources.add(defer);
-        }
-        return results;
     }
 
     private NacosPropertySource[] reqNacosConfig(Properties configProperties, String[] dataIds, String groupId, ConfigType type, boolean isAutoRefresh) {
@@ -142,8 +129,11 @@ public class NacosConfigUtils {
             nacosPropertySource.setType(type.getType());
             nacosPropertySource.setGroupId(groupId);
             nacosPropertySource.setAutoRefreshed(isAutoRefresh);
-            logger.info("load config from nacos, data-id is : {}, group is : {}", nacosPropertySource.getDataId(), nacosPropertySource.getGroupId());
+            logger.info("load config from nacos, data-id is : [{}], group is : [{}], config-text is : [{}]",
+                    dataId, groupId, config);
             propertySources[i] = nacosPropertySource;
+            DeferNacosPropertySource defer = new DeferNacosPropertySource(nacosPropertySource, configProperties, environment);
+            nacosPropertySources.add(defer);
         }
         return propertySources;
     }
