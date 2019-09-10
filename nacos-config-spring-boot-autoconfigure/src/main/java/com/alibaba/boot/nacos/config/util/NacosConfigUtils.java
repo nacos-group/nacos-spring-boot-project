@@ -100,13 +100,8 @@ public class NacosConfigUtils {
         }
         final String groupName = nacosConfigProperties.getGroup();
         final boolean isAutoRefresh = nacosConfigProperties.isAutoRefresh();
-        List<NacosPropertySource> result = new ArrayList<>(Arrays.asList(reqNacosConfig(globalProperties,
+        return new ArrayList<>(Arrays.asList(reqNacosConfig(globalProperties,
                 dataIds.toArray(new String[0]), groupName, type, isAutoRefresh)));
-        for (NacosPropertySource propertySource : result) {
-            DeferNacosPropertySource defer = new DeferNacosPropertySource(propertySource, globalProperties, environment);
-            nacosPropertySources.add(defer);
-        }
-        return result;
     }
 
     private List<NacosPropertySource> reqSubNacosConfig(NacosConfigProperties.Config config, Properties globalProperties, ConfigType type) {
@@ -119,13 +114,8 @@ public class NacosConfigUtils {
         }
         final String groupName = config.getGroup();
         final boolean isAutoRefresh = config.isAutoRefresh();
-        List<NacosPropertySource> result =  new ArrayList<>(Arrays.asList(reqNacosConfig(subConfigProperties,
+        return new ArrayList<>(Arrays.asList(reqNacosConfig(subConfigProperties,
                 dataIds.toArray(new String[0]), groupName, type, isAutoRefresh)));
-        for (NacosPropertySource propertySource : result) {
-            DeferNacosPropertySource defer = new DeferNacosPropertySource(propertySource, globalProperties, environment);
-            nacosPropertySources.add(defer);
-        }
-        return result;
     }
 
     private NacosPropertySource[] reqNacosConfig(Properties configProperties, String[] dataIds, String groupId, ConfigType type, boolean isAutoRefresh) {
@@ -142,6 +132,8 @@ public class NacosConfigUtils {
             nacosPropertySource.setAutoRefreshed(isAutoRefresh);
             logger.info("load config from nacos, data-id is : {}, group is : {}", nacosPropertySource.getDataId(), nacosPropertySource.getGroupId());
             propertySources[i] = nacosPropertySource;
+            DeferNacosPropertySource defer = new DeferNacosPropertySource(nacosPropertySource, configProperties, environment);
+            nacosPropertySources.add(defer);
         }
         return propertySources;
     }
