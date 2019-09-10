@@ -64,15 +64,6 @@
                 <role>Developer</role>
             </roles>
         </developer>
-        <developer>
-            <id>SanLi</id>
-            <name>Qinggang Zuo</name>
-            <email>2689170096@qq.com</email>
-            <url>https://github.com/leshalv</url>
-            <roles>
-                <role>Developer</role>
-            </roles>
-        </developer>
     </developers>
 
     <profiles>
