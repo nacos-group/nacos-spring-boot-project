@@ -208,7 +208,7 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>${maven-compiler-plugin.version}</version>
                 <configuration>
-                    <compilerArgument>-proc:none</compilerArgument>
+                   <!-- <compilerArgument>-proc:none</compilerArgument>-->
                     <fork>true</fork>
                     <source>${java.source.version}</source>
                     <target>${java.target.version}</target>
