@@ -24,7 +24,6 @@ import com.alibaba.nacos.spring.core.env.NacosPropertySourcePostProcessor;
 import com.alibaba.nacos.spring.util.NacosUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.env.CompositePropertySource;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.MutablePropertySources;
 import org.springframework.util.StringUtils;
@@ -98,7 +97,7 @@ public class NacosConfigUtils {
         } else {
             dataIds.add(nacosConfigProperties.getDataId());
         }
-        final String groupName = nacosConfigProperties.getGroup();
+        final String groupName = environment.resolvePlaceholders(nacosConfigProperties.getGroup());
         final boolean isAutoRefresh = nacosConfigProperties.isAutoRefresh();
         return new ArrayList<>(Arrays.asList(reqNacosConfig(globalProperties,
                 dataIds.toArray(new String[0]), groupName, type, isAutoRefresh)));
@@ -112,7 +111,7 @@ public class NacosConfigUtils {
         } else {
             dataIds.add(config.getDataId());
         }
-        final String groupName = config.getGroup();
+        final String groupName = environment.resolvePlaceholders(config.getGroup());
         final boolean isAutoRefresh = config.isAutoRefresh();
         return new ArrayList<>(Arrays.asList(reqNacosConfig(subConfigProperties,
                 dataIds.toArray(new String[0]), groupName, type, isAutoRefresh)));
@@ -122,7 +121,7 @@ public class NacosConfigUtils {
         final NacosPropertySource[] propertySources = new NacosPropertySource[dataIds.length];
         for (int i = 0; i < dataIds.length; i ++) {
             // Remove excess Spaces
-            final String dataId = dataIds[i].trim();
+            final String dataId = environment.resolvePlaceholders(dataIds[i].trim());
             final String config = NacosUtils.getContent(builder.apply(configProperties), dataId, groupId);
             final NacosPropertySource nacosPropertySource = new NacosPropertySource(dataId, groupId,
                     buildDefaultPropertySourceName(dataId, groupId, configProperties), config, type.getType());
