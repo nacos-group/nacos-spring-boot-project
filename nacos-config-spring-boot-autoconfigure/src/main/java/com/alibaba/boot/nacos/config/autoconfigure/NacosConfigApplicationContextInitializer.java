@@ -46,10 +46,6 @@ public class NacosConfigApplicationContextInitializer implements ApplicationCont
 
     private ConfigurableEnvironment environment;
 
-    private NacosConfigProperties nacosConfigProperties;
-
-    private NacosConfigLoader nacosConfigLoader;
-
     private final NacosConfigEnvironmentProcessor processor;
 
     public NacosConfigApplicationContextInitializer(NacosConfigEnvironmentProcessor configEnvironmentProcessor) {
@@ -69,21 +65,20 @@ public class NacosConfigApplicationContextInitializer implements ApplicationCont
                     return singleton.createConfigService(properties);
                 } catch (
                         NacosException e) {
-                    throw new RuntimeException("ConfigService can't be created with properties : " + properties, e);
+                    throw new NacosBootConfigException("ConfigService can't be created with properties : " + properties, e);
                 }
             };
-            nacosConfigProperties = NacosConfigPropertiesUtils.buildNacosConfigProperties(environment);
+            NacosConfigProperties nacosConfigProperties = NacosConfigPropertiesUtils.buildNacosConfigProperties(environment);
             NacosConfigUtils configUtils = new NacosConfigUtils(nacosConfigProperties, environment, builder);
 
+            // If it opens the log level loading directly will cache DeferNacosPropertySource release
             if (processor.enable(environment)) {
                 configUtils.addListenerIfAutoRefreshed(processor.getDeferPropertySources());
             } else {
-                configUtils.loadConfig(false);
+                configUtils.loadConfig();
                 configUtils.addListenerIfAutoRefreshed();
             }
-
         }
-
     }
 
     private boolean enable() {

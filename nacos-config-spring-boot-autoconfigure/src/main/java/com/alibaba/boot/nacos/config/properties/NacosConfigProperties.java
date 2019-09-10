@@ -54,6 +54,8 @@ public class NacosConfigProperties {
 
     private String dataId;
 
+    private String dataIds;
+
     private String group = Constants.DEFAULT_GROUP;
 
     private ConfigType type;
@@ -150,6 +152,14 @@ public class NacosConfigProperties {
         this.dataId = dataId;
     }
 
+    public String getDataIds() {
+        return dataIds;
+    }
+
+    public void setDataIds(String dataIds) {
+        this.dataIds = dataIds;
+    }
+
     public String getGroup() {
         return group;
     }
@@ -222,6 +232,8 @@ public class NacosConfigProperties {
 
         private String dataId;
 
+        private String dataIds;
+
         private String group = Constants.DEFAULT_GROUP;
 
         private ConfigType type;
@@ -290,6 +302,14 @@ public class NacosConfigProperties {
 
         public void setDataId(String dataId) {
             this.dataId = dataId;
+        }
+
+        public String getDataIds() {
+            return dataIds;
+        }
+
+        public void setDataIds(String dataIds) {
+            this.dataIds = dataIds;
         }
 
         public String getGroup() {

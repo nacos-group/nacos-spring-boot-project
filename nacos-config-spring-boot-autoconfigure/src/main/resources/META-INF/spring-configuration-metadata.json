@@ -63,6 +63,11 @@
     },
     {
       "sourceType": "com.alibaba.boot.nacos.config.properties.NacosConfigProperties",
+      "name": "nacos.config.data-ids",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.alibaba.boot.nacos.config.properties.NacosConfigProperties",
       "name": "nacos.config.group",
       "type": "java.lang.String"
     },

@@ -14,14 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alibaba.boot.nacos.discovery.properties;
-
-import com.alibaba.nacos.api.naming.pojo.Instance;
-
+package com.alibaba.boot.nacos.discovery.autoconfigure;
 
 /**
  * @author <a href="mailto:liaochunyhm@live.com">liaochuntao</a>
  * @since
  */
-public class Register extends Instance {
+public class AutoRegisterException extends RuntimeException {
+
+    public AutoRegisterException(Throwable cause) {
+        super(cause);
+    }
 }
