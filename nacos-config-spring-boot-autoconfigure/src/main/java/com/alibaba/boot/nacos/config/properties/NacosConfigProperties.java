@@ -21,6 +21,7 @@ import com.alibaba.fastjson.annotation.JSONField;
 import com.alibaba.nacos.api.common.Constants;
 import com.alibaba.nacos.api.config.ConfigType;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.NestedConfigurationProperty;
 import org.springframework.util.Assert;
 
 import java.util.ArrayList;
@@ -70,6 +71,9 @@ public class NacosConfigProperties {
 
     @JSONField(serialize = false)
     private List<Config> extConfig = new ArrayList<>();
+
+    @NestedConfigurationProperty
+    private Bootstrap bootstrap = new Bootstrap();
 
     public String getServerAddr() {
         return serverAddr;
@@ -214,6 +218,37 @@ public class NacosConfigProperties {
 
     public void setExtConfig(List<Config> extConfig) {
         this.extConfig = extConfig;
+    }
+
+    public Bootstrap getBootstrap() {
+        return bootstrap;
+    }
+
+    public void setBootstrap(Bootstrap bootstrap) {
+        this.bootstrap = bootstrap;
+    }
+
+    public static class Bootstrap {
+
+        private boolean enable;
+
+        private boolean logEnable;
+
+        public boolean isEnable() {
+            return enable;
+        }
+
+        public void setEnable(boolean enable) {
+            this.enable = enable;
+        }
+
+        public boolean isLogEnable() {
+            return logEnable;
+        }
+
+        public void setLogEnable(boolean logEnable) {
+            this.logEnable = logEnable;
+        }
     }
 
     public static class Config {

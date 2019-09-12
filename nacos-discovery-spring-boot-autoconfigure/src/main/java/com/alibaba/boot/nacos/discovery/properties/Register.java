@@ -24,4 +24,14 @@ import com.alibaba.nacos.api.naming.pojo.Instance;
  * @since
  */
 public class Register extends Instance {
+
+    private String groupName;
+
+    public String getGroupName() {
+        return groupName;
+    }
+
+    public void setGroupName(String groupName) {
+        this.groupName = groupName;
+    }
 }

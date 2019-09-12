@@ -44,6 +44,8 @@ public class NacosConfigEnvironmentProcessor implements EnvironmentPostProcessor
 
     private final Logger logger = LoggerFactory.getLogger(EnvironmentPostProcessor.class);
 
+    private NacosConfigProperties nacosConfigProperties;
+
     private final LinkedList<NacosConfigUtils.DeferNacosPropertySource> deferPropertySources = new LinkedList<>();
 
     private Function<Properties, ConfigService> builder = properties -> {
@@ -57,22 +59,22 @@ public class NacosConfigEnvironmentProcessor implements EnvironmentPostProcessor
     @Override
     public void postProcessEnvironment(ConfigurableEnvironment environment, SpringApplication application) {
         application.addInitializers(new NacosConfigApplicationContextInitializer(this));
-        if (enable(environment)) {
+        if (enable()) {
             System.out.println("[Nacos Config Boot] : The preload log configuration is enabled");
             loadConfig(environment);
         }
     }
 
     private void loadConfig(ConfigurableEnvironment environment) {
-        NacosConfigProperties nacosConfigProperties = NacosConfigPropertiesUtils.buildNacosConfigProperties(environment);
+        nacosConfigProperties = NacosConfigPropertiesUtils.buildNacosConfigProperties(environment);
         NacosConfigUtils configUtils = new NacosConfigUtils(nacosConfigProperties, environment, builder);
         configUtils.loadConfig();
         // set defer NacosPropertySource
         deferPropertySources.addAll(configUtils.getNacosPropertySources());
     }
 
-    boolean enable(Environment environment) {
-        return Boolean.parseBoolean(environment.getProperty(NacosConfigConstants.NACOS_LOG_BOOTSTRAP, "false"));
+    boolean enable() {
+        return nacosConfigProperties != null && nacosConfigProperties.getBootstrap().isLogEnable();
     }
 
     LinkedList<NacosConfigUtils.DeferNacosPropertySource> getDeferPropertySources() {
