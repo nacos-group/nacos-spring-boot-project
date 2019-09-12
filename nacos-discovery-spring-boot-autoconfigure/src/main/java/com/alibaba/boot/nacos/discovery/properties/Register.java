@@ -16,6 +16,7 @@
  */
 package com.alibaba.boot.nacos.discovery.properties;
 
+import com.alibaba.nacos.api.common.Constants;
 import com.alibaba.nacos.api.naming.pojo.Instance;
 
 
@@ -25,7 +26,7 @@ import com.alibaba.nacos.api.naming.pojo.Instance;
  */
 public class Register extends Instance {
 
-    private String groupName;
+    private String groupName = Constants.DEFAULT_GROUP;
 
     public String getGroupName() {
         return groupName;
