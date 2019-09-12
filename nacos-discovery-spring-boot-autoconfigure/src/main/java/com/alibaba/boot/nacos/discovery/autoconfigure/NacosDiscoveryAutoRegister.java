@@ -72,7 +72,7 @@ public class NacosDiscoveryAutoRegister implements ApplicationListener<WebServer
         String serviceName = StringUtils.isEmpty(register.getServiceName()) ? applicationName : register.getServiceName();
 
         try {
-            namingService.registerInstance(serviceName, register);
+            namingService.registerInstance(serviceName, register.getGroupName(), register);
             logger.info("Finished auto register service : {}, ip : {}, port : {}", register.getServiceName(), register.getIp(), register.getPort());
         } catch (NacosException e) {
             throw new AutoRegisterException(e);

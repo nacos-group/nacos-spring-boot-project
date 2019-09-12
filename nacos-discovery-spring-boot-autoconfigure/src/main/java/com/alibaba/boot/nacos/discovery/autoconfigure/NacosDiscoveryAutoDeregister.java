@@ -73,7 +73,7 @@ public class NacosDiscoveryAutoDeregister implements ApplicationListener<Context
         String serviceName = StringUtils.isEmpty(register.getServiceName()) ? applicationName : register.getServiceName();
 
         try {
-            namingService.deregisterInstance(serviceName, register);
+            namingService.deregisterInstance(serviceName, register.getGroupName(), register);
             logger.info("Finished auto deregister service : {}, ip : {}, port : {}", register.getServiceName(), register.getIp(), register.getPort());
         } catch (NacosException e) {
             throw new AutoDeregisterException(e);
