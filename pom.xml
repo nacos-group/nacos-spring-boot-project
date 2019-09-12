@@ -10,6 +10,7 @@
     <properties>
         <maven_javadoc_version>3.0.1</maven_javadoc_version>
         <maven_surefire_version>2.19.1</maven_surefire_version>
+        <maven-source-plugin.version>3.1.0</maven-source-plugin.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
     <groupId>com.alibaba.boot</groupId>
@@ -104,7 +105,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
-                <version>3.0.1</version>
+                <version>${maven-source-plugin.version}</version>
                 <executions>
                     <execution>
                         <id>attach-sources</id>

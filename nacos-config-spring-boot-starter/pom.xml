@@ -34,7 +34,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
-            <scope>true</scope>
         </dependency>
 
         <!-- Nacos -->
