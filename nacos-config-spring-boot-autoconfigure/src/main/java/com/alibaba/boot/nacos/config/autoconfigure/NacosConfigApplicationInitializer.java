@@ -16,7 +16,6 @@
  */
 package com.alibaba.boot.nacos.config.autoconfigure;
 
-import com.alibaba.boot.nacos.config.NacosConfigConstants;
 import com.alibaba.boot.nacos.config.properties.NacosConfigProperties;
 import com.alibaba.boot.nacos.config.util.Function;
 import com.alibaba.boot.nacos.config.util.NacosConfigPropertiesUtils;
@@ -24,7 +23,6 @@ import com.alibaba.boot.nacos.config.util.NacosConfigUtils;
 import com.alibaba.nacos.api.config.ConfigService;
 import com.alibaba.nacos.api.exception.NacosException;
 import com.alibaba.nacos.spring.factory.CacheableEventPublishingNacosServiceFactory;
-import com.alibaba.nacos.spring.util.config.NacosConfigLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContextInitializer;
@@ -45,6 +43,8 @@ public class NacosConfigApplicationInitializer implements ApplicationContextInit
 
     private final NacosConfigEnvironmentProcessor processor;
 
+    private NacosConfigProperties nacosConfigProperties;
+
     public NacosConfigApplicationInitializer(NacosConfigEnvironmentProcessor configEnvironmentProcessor) {
         this.processor = configEnvironmentProcessor;
     }
@@ -54,6 +54,7 @@ public class NacosConfigApplicationInitializer implements ApplicationContextInit
         final CacheableEventPublishingNacosServiceFactory singleton = CacheableEventPublishingNacosServiceFactory.getSingleton();
         singleton.setApplicationContext(context);
         environment = context.getEnvironment();
+        nacosConfigProperties = NacosConfigPropertiesUtils.buildNacosConfigProperties(environment);
         if (!enable()) {
             logger.info("[Nacos Config Boot] : The preload configuration is not enabled");
         } else {
@@ -67,9 +68,8 @@ public class NacosConfigApplicationInitializer implements ApplicationContextInit
                     }
                 }
             };
-            final NacosConfigProperties nacosConfigProperties = NacosConfigPropertiesUtils.buildNacosConfigProperties(environment);
             final NacosConfigUtils configUtils = new NacosConfigUtils(nacosConfigProperties, environment, builder);
-            if (processor.enable(environment)) {
+            if (processor.enable()) {
                 configUtils.addListenerIfAutoRefreshed(processor.getDeferPropertySources());
             } else {
                 configUtils.loadConfig();
@@ -79,6 +79,6 @@ public class NacosConfigApplicationInitializer implements ApplicationContextInit
     }
 
     private boolean enable() {
-        return Boolean.parseBoolean(environment.getProperty(NacosConfigConstants.NACOS_BOOTSTRAP, "false"));
+        return nacosConfigProperties.getBootstrap().isEnable();
     }
 }
