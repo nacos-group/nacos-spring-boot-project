@@ -1,0 +1,10 @@
+{
+  "groups": [
+    {
+      "sourceType": "com.alibaba.boot.nacos.discovery.properties.NacosDiscoveryProperties",
+      "name": "nacos.discovery.register",
+      "sourceMethod": "getInstance()",
+      "type": "com.alibaba.nacos.api.naming.pojo.Instance"
+    }
+  ]
+}
