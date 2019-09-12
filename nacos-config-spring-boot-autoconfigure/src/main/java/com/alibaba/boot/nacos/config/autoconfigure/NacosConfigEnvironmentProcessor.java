@@ -59,6 +59,7 @@ public class NacosConfigEnvironmentProcessor implements EnvironmentPostProcessor
     @Override
     public void postProcessEnvironment(ConfigurableEnvironment environment, SpringApplication application) {
         application.addInitializers(new NacosConfigApplicationContextInitializer(this));
+        nacosConfigProperties = NacosConfigPropertiesUtils.buildNacosConfigProperties(environment);
         if (enable()) {
             System.out.println("[Nacos Config Boot] : The preload log configuration is enabled");
             loadConfig(environment);
@@ -66,7 +67,6 @@ public class NacosConfigEnvironmentProcessor implements EnvironmentPostProcessor
     }
 
     private void loadConfig(ConfigurableEnvironment environment) {
-        nacosConfigProperties = NacosConfigPropertiesUtils.buildNacosConfigProperties(environment);
         NacosConfigUtils configUtils = new NacosConfigUtils(nacosConfigProperties, environment, builder);
         configUtils.loadConfig();
         // set defer NacosPropertySource
