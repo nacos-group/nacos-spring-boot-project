@@ -16,7 +16,6 @@
  */
 package com.alibaba.boot.nacos.config.autoconfigure;
 
-import com.alibaba.boot.nacos.config.NacosConfigConstants;
 import com.alibaba.boot.nacos.config.properties.NacosConfigProperties;
 import com.alibaba.boot.nacos.config.util.Function;
 import com.alibaba.boot.nacos.config.util.NacosConfigPropertiesUtils;
@@ -24,12 +23,10 @@ import com.alibaba.boot.nacos.config.util.NacosConfigUtils;
 import com.alibaba.nacos.api.NacosFactory;
 import com.alibaba.nacos.api.config.ConfigService;
 import com.alibaba.nacos.api.exception.NacosException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.env.EnvironmentPostProcessor;
+import org.springframework.core.Ordered;
 import org.springframework.core.env.ConfigurableEnvironment;
-import org.springframework.core.env.Environment;
 
 import java.util.LinkedList;
 import java.util.Properties;
@@ -38,9 +35,7 @@ import java.util.Properties;
  * @author <a href="mailto:liaochunyhm@live.com">liaochuntao</a>
  * @since
  */
-public class NacosConfigEnvironmentProcessor implements EnvironmentPostProcessor {
-
-    private final Logger logger = LoggerFactory.getLogger(EnvironmentPostProcessor.class);
+public class NacosConfigEnvironmentProcessor implements EnvironmentPostProcessor, Ordered {
 
     private final LinkedList<NacosConfigUtils.DeferNacosPropertySource> deferPropertySources = new LinkedList<>();
 
@@ -51,6 +46,7 @@ public class NacosConfigEnvironmentProcessor implements EnvironmentPostProcessor
         @Override
         public ConfigService apply(Properties input) {
             try {
+                // TODO And prevent to create a large number of ConfigService optimization point is given
                 return NacosFactory.createConfigService(input);
             } catch (NacosException e) {
                 throw new NacosBootConfigException("ConfigService can't be created with properties : " + input, e);
@@ -81,5 +77,10 @@ public class NacosConfigEnvironmentProcessor implements EnvironmentPostProcessor
 
     LinkedList<NacosConfigUtils.DeferNacosPropertySource> getDeferPropertySources() {
         return deferPropertySources;
+    }
+
+    @Override
+    public int getOrder() {
+        return Ordered.LOWEST_PRECEDENCE;
     }
 }
