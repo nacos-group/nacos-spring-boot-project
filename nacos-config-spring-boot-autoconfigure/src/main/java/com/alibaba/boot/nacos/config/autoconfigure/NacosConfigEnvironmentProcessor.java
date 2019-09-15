@@ -16,19 +16,17 @@
  */
 package com.alibaba.boot.nacos.config.autoconfigure;
 
-import com.alibaba.boot.nacos.config.NacosConfigConstants;
 import com.alibaba.boot.nacos.config.properties.NacosConfigProperties;
 import com.alibaba.boot.nacos.config.util.NacosConfigPropertiesUtils;
 import com.alibaba.boot.nacos.config.util.NacosConfigUtils;
 import com.alibaba.nacos.api.NacosFactory;
 import com.alibaba.nacos.api.config.ConfigService;
 import com.alibaba.nacos.api.exception.NacosException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.env.EnvironmentPostProcessor;
+import org.springframework.core.Ordered;
+import org.springframework.core.PriorityOrdered;
 import org.springframework.core.env.ConfigurableEnvironment;
-import org.springframework.core.env.Environment;
 
 import java.util.LinkedList;
 import java.util.Properties;
@@ -38,11 +36,9 @@ import java.util.function.Function;
  * In the Context to create premise before loading the log configuration information
  *
  * @author <a href="mailto:liaochunyhm@live.com">liaochuntao</a>
- * @since
+ * @since 0.2.3
  */
-public class NacosConfigEnvironmentProcessor implements EnvironmentPostProcessor {
-
-    private final Logger logger = LoggerFactory.getLogger(EnvironmentPostProcessor.class);
+public class NacosConfigEnvironmentProcessor implements EnvironmentPostProcessor, Ordered {
 
     private NacosConfigProperties nacosConfigProperties;
 
@@ -50,6 +46,7 @@ public class NacosConfigEnvironmentProcessor implements EnvironmentPostProcessor
 
     private Function<Properties, ConfigService> builder = properties -> {
         try {
+            // TODO And prevent to create a large number of ConfigService optimization point is given
             return NacosFactory.createConfigService(properties);
         } catch (NacosException e) {
             throw new NacosBootConfigException("ConfigService can't be created with properties : " + properties, e);
@@ -59,6 +56,7 @@ public class NacosConfigEnvironmentProcessor implements EnvironmentPostProcessor
     @Override
     public void postProcessEnvironment(ConfigurableEnvironment environment, SpringApplication application) {
         application.addInitializers(new NacosConfigApplicationContextInitializer(this));
+        nacosConfigProperties = NacosConfigPropertiesUtils.buildNacosConfigProperties(environment);
         if (enable()) {
             System.out.println("[Nacos Config Boot] : The preload log configuration is enabled");
             loadConfig(environment);
@@ -66,7 +64,6 @@ public class NacosConfigEnvironmentProcessor implements EnvironmentPostProcessor
     }
 
     private void loadConfig(ConfigurableEnvironment environment) {
-        nacosConfigProperties = NacosConfigPropertiesUtils.buildNacosConfigProperties(environment);
         NacosConfigUtils configUtils = new NacosConfigUtils(nacosConfigProperties, environment, builder);
         configUtils.loadConfig();
         // set defer NacosPropertySource
@@ -79,5 +76,10 @@ public class NacosConfigEnvironmentProcessor implements EnvironmentPostProcessor
 
     LinkedList<NacosConfigUtils.DeferNacosPropertySource> getDeferPropertySources() {
         return deferPropertySources;
+    }
+
+    @Override
+    public int getOrder() {
+        return Ordered.LOWEST_PRECEDENCE;
     }
 }

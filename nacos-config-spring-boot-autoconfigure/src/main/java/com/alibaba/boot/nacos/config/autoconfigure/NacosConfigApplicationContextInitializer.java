@@ -61,8 +61,7 @@ public class NacosConfigApplicationContextInitializer implements ApplicationCont
             Function<Properties, ConfigService> builder = properties -> {
                 try {
                     return singleton.createConfigService(properties);
-                } catch (
-                        NacosException e) {
+                } catch (NacosException e) {
                     throw new NacosBootConfigException("ConfigService can't be created with properties : " + properties, e);
                 }
             };
