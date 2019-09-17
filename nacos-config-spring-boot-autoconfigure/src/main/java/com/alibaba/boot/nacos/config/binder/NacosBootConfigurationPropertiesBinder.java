@@ -28,23 +28,24 @@ import org.springframework.boot.context.properties.bind.Bindable;
 import org.springframework.boot.context.properties.bind.Binder;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.ResolvableType;
+import org.springframework.core.env.Environment;
+import org.springframework.core.env.StandardEnvironment;
 
 import java.lang.reflect.Method;
 
 /**
  * @author <a href="mailto:liaochunyhm@live.com">liaochuntao</a>
- * @since
+ * @since 0.2.2
  */
 public class NacosBootConfigurationPropertiesBinder extends NacosConfigurationPropertiesBinder {
 
     private final Logger logger = LoggerFactory.getLogger(NacosBootConfigurationPropertiesBinder.class);
 
-    private ConfigurableApplicationContext context;
     private ConfigurationBeanFactoryMetadata beanFactoryMetadata;
+    private StandardEnvironment environment = new StandardEnvironment();
 
     public NacosBootConfigurationPropertiesBinder(ConfigurableApplicationContext applicationContext) {
         super(applicationContext);
-        this.context = applicationContext;
         this.beanFactoryMetadata = applicationContext.getBean(
                 ConfigurationBeanFactoryMetadata.BEAN_NAME,
                 ConfigurationBeanFactoryMetadata.class);
@@ -55,14 +56,14 @@ public class NacosBootConfigurationPropertiesBinder extends NacosConfigurationPr
                           NacosConfigurationProperties properties, String content, ConfigService configService) {
         String name = "nacos-bootstrap-" + beanName;
         NacosPropertySource propertySource = new NacosPropertySource(name, dataId, groupId, content, configType);
-        context.getEnvironment().getPropertySources().addLast(propertySource);
-        Binder binder = Binder.get(context.getEnvironment());
+        environment.getPropertySources().addLast(propertySource);
+        Binder binder = Binder.get(environment);
         ResolvableType type = getBeanType(bean, beanName);
         Bindable<?> target = Bindable.of(type).withExistingValue(bean);
         binder.bind(properties.prefix(), target);
         publishBoundEvent(bean, beanName, dataId, groupId, properties, content, configService);
         publishMetadataEvent(bean, beanName, dataId, groupId, properties);
-        context.getEnvironment().getPropertySources().remove(name);
+        environment.getPropertySources().remove(name);
     }
 
     private ResolvableType getBeanType(Object bean, String beanName) {
