@@ -18,30 +18,22 @@ package com.alibaba.boot.nacos.config.util;
 
 import com.alibaba.boot.nacos.config.NacosConfigConstants;
 import com.alibaba.boot.nacos.config.properties.NacosConfigProperties;
-import com.alibaba.boot.nacos.config.util.editor.NacosCharSequenceEditor;
-import com.alibaba.boot.nacos.config.util.editor.NacosCustomBooleanEditor;
 import com.alibaba.boot.nacos.config.util.editor.NacosEnumEditor;
 import com.alibaba.nacos.api.config.ConfigType;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.beans.propertyeditors.CustomCollectionEditor;
-import org.springframework.boot.env.OriginTrackedMapPropertySource;
 import org.springframework.core.env.ConfigurableEnvironment;
-import org.springframework.core.env.MutablePropertySources;
-import org.springframework.core.env.PropertySource;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author <a href="mailto:liaochunyhm@live.com">liaochuntao</a>
@@ -53,6 +45,16 @@ public class NacosConfigPropertiesUtils {
 
     private static final Logger logger = LoggerFactory.getLogger(NacosConfigPropertiesUtils.class);
 
+    private static final Set<String> OBJ_FILED_NAME = new HashSet<>();
+
+    static {
+        Class<NacosConfigProperties> cls = NacosConfigProperties.class;
+        Field[] fields = cls.getDeclaredFields();
+        for (Field field : fields) {
+            OBJ_FILED_NAME.add(field.getName());
+        }
+    }
+
     public static NacosConfigProperties buildNacosConfigProperties(ConfigurableEnvironment environment) {
         BeanWrapper wrapper = new BeanWrapperImpl(new NacosConfigProperties());
         wrapper.setAutoGrowNestedPaths(true);
@@ -63,7 +65,13 @@ public class NacosConfigPropertiesUtils {
         AttributeExtractTask task = new AttributeExtractTask(PROPERTIES_PREFIX, environment);
 
         try {
-            wrapper.setPropertyValues(dataSource(task.call()));
+            // Filter object property values
+            Map<String, String> properties = task.call()
+                    .entrySet()
+                    .stream()
+                    .filter(entry -> OBJ_FILED_NAME.contains(entry.getKey()))
+                    .collect(HashMap::new, (m, e) -> m.put(e.getKey(), e.getValue()), HashMap::putAll);
+            wrapper.setPropertyValues(dataSource(properties));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -73,8 +81,6 @@ public class NacosConfigPropertiesUtils {
     }
 
     private static Map<String, String> dataSource(Map<String, String> source) {
-        source.remove(NacosConfigConstants.NACOS_BOOTSTRAP);
-        source.remove(NacosConfigConstants.NACOS_LOG_BOOTSTRAP);
         String prefix = NacosConfigConstants.PREFIX + ".";
         HashMap<String, String> targetConfigInfo = new HashMap<>(source.size());
         for (Map.Entry<String, String> entry : source.entrySet()) {

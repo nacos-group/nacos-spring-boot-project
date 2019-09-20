@@ -17,7 +17,6 @@
 package com.alibaba.boot.nacos.config.binder;
 
 import com.alibaba.nacos.api.config.ConfigService;
-import com.alibaba.nacos.api.config.ConfigType;
 import com.alibaba.nacos.api.config.annotation.NacosConfigurationProperties;
 import com.alibaba.nacos.spring.context.properties.config.NacosConfigurationPropertiesBinder;
 import com.alibaba.nacos.spring.core.env.NacosPropertySource;
@@ -28,7 +27,6 @@ import org.springframework.boot.context.properties.bind.Bindable;
 import org.springframework.boot.context.properties.bind.Binder;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.ResolvableType;
-import org.springframework.core.env.Environment;
 import org.springframework.core.env.StandardEnvironment;
 
 import java.lang.reflect.Method;
