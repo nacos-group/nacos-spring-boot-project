@@ -35,11 +35,13 @@ import org.springframework.core.env.MutablePropertySources;
 import org.springframework.core.env.PropertiesPropertySource;
 import org.springframework.core.env.PropertySource;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -56,6 +58,15 @@ public class NacosConfigPropertiesUtils {
 
     private static final Logger logger = LoggerFactory.getLogger(NacosConfigPropertiesUtils.class);
 
+    private static Set<String> OBJ_FIELD_NAME = new HashSet<>();
+
+    static {
+        Field[] fields = NacosConfigProperties.class.getDeclaredFields();
+        for (Field field : fields) {
+            OBJ_FIELD_NAME.add(field.getName());
+        }
+    }
+
     public static NacosConfigProperties buildNacosConfigProperties(ConfigurableEnvironment environment) {
         BeanWrapper wrapper = new BeanWrapperImpl(new NacosConfigProperties());
         wrapper.setAutoGrowNestedPaths(true);
@@ -68,7 +79,16 @@ public class NacosConfigPropertiesUtils {
         AttributeExtractTask task = new AttributeExtractTask(PROPERTIES_PREFIX, environment);
 
         try {
-            wrapper.setPropertyValues(dataSource(task.call()));
+            // Realize the object attribute value filtering
+            Map<String, Object> properties = new HashMap<>(8);
+            for (Map.Entry<String, Object> entry : task.call().entrySet()) {
+                for (String fieldName : OBJ_FIELD_NAME) {
+                    if (entry.getKey().matches(fieldName)) {
+                        properties.put(entry.getKey(), entry.getValue());
+                    }
+                }
+            }
+            wrapper.setPropertyValues(dataSource(properties));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
