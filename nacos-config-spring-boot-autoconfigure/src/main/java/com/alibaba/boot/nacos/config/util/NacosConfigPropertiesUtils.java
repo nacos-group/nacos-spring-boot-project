@@ -67,15 +67,16 @@ public class NacosConfigPropertiesUtils {
         try {
             // Filter object property values
             Map<String, String> properties = new HashMap<>(8);
-            for (Map.Entry<String, String> entry : task.call().entrySet()) {
+            Map<String, String> tmp = dataSource(task.call());
+            for (Map.Entry<String, String> entry : tmp.entrySet()) {
                 for (String fieldName : OBJ_FILED_NAME) {
-                    if (entry.getKey().matches(fieldName)) {
+                    if (entry.getKey().contains(fieldName)) {
                         properties.put(entry.getKey(), entry.getValue());
                         break;
                     }
                 }
             }
-            wrapper.setPropertyValues(dataSource(properties));
+            wrapper.setPropertyValues(properties);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

@@ -80,11 +80,6 @@ public class ConfigApplication {
 		return new Foo();
 	}
 
-	@Bean
-	public Apple apple() {
-		return new Apple();
-	}
-
 	@Configuration
 	@ConditionalOnProperty(prefix = "people", name = "enable", havingValue = "true")
 	protected static class People {

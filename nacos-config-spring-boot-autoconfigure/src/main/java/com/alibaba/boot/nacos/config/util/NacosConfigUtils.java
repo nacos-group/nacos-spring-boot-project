@@ -78,9 +78,6 @@ public class NacosConfigUtils {
     }
 
     private Properties buildSubNacosProperties(Properties globalProperties, NacosConfigProperties.Config config) {
-        if (StringUtils.isEmpty(config.getServerAddr())) {
-            return globalProperties;
-        }
         Properties sub = NacosPropertiesBuilder.buildNacosProperties(config.getServerAddr(), config.getNamespace(),
                 config.getEndpoint(), config.getSecretKey(), config.getAccessKey(), config.getRamRoleName(),
                 config.getConfigLongPollTimeout(), config.getConfigRetryTime(), config.getMaxRetry(),

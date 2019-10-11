@@ -56,8 +56,8 @@ public class TestController {
     }
 
     @GetMapping("/apple")
-    public Apple getApplr() {
-        return apple;
+    public String getApplr() {
+        return apple.toString();
     }
 
 }

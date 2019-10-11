@@ -18,6 +18,7 @@ package com.alibaba.boot.nacos.sample;
 
 import com.alibaba.nacos.api.config.ConfigType;
 import com.alibaba.nacos.api.config.annotation.NacosConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
 
 import java.util.List;
 import java.util.Map;
@@ -27,6 +28,7 @@ import java.util.Map;
  * @since
  */
 @NacosConfigurationProperties(prefix = "apple", dataId = "apple", type = ConfigType.YAML, autoRefreshed = true)
+@Configuration
 public class Apple {
 
     private List<String> list;
