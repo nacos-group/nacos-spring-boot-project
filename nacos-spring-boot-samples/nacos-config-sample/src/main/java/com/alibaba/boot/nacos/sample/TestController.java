@@ -17,6 +17,7 @@
 package com.alibaba.boot.nacos.sample;
 
 import com.alibaba.nacos.api.config.annotation.NacosValue;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -32,32 +33,32 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class TestController {
 
-    @NacosValue(value = "${people.enable:bbbbb}", autoRefreshed = true)
-    private String enable;
+	@NacosValue(value = "${people.enable:bbbbb}", autoRefreshed = true)
+	private String enable;
 
-    @Value("${people.enable}")
-    private String springEnable;
+	@Value("${people.enable}")
+	private String springEnable;
 
-    @Autowired
-    private Apple apple;
+	@Autowired
+	private Apple apple;
 
-    @Autowired
-    private TestConfiguration configuration;
+	@Autowired
+	private TestConfiguration configuration;
 
-    @Scheduled(cron = "0/10 * * * * *")
-    public void print() {
-        System.out.println(configuration.getCount());
-    }
+	@Scheduled(cron = "0/10 * * * * *")
+	public void print() {
+		System.out.println(configuration.getCount());
+	}
 
-    @RequestMapping()
-    @ResponseBody
-    public String testGet() {
-        return enable + "-" + springEnable;
-    }
+	@RequestMapping()
+	@ResponseBody
+	public String testGet() {
+		return enable + "-" + springEnable;
+	}
 
-    @GetMapping("/apple")
-    public String getApplr() {
-        return apple.toString();
-    }
+	@GetMapping("/apple")
+	public String getApplr() {
+		return apple.toString();
+	}
 
 }

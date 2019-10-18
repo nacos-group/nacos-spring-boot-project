@@ -18,6 +18,7 @@ package com.alibaba.boot.nacos.sample;
 
 import com.alibaba.nacos.api.config.annotation.NacosConfigListener;
 import com.alibaba.nacos.api.config.annotation.NacosValue;
+
 import org.springframework.context.annotation.Configuration;
 
 /**
@@ -27,22 +28,19 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class TestConfiguration {
 
-    @NacosValue(value = "${people.count:0}", autoRefreshed = true)
-    private String count;
+	@NacosValue(value = "${people.count:0}", autoRefreshed = true)
+	private String count;
 
-    public String getCount() {
-        return count;
-    }
+	public String getCount() {
+		return count;
+	}
 
-    public void setCount(String count) {
-        this.count = count;
-    }
+	public void setCount(String count) {
+		this.count = count;
+	}
 
-    @NacosConfigListener(
-            dataId = "listener.test",
-            timeout = 500
-    )
-    public void onChange(String newContent) throws Exception {
-        System.out.println("onChange : " + newContent);
-    }
+	@NacosConfigListener(dataId = "listener.test", timeout = 500)
+	public void onChange(String newContent) throws Exception {
+		System.out.println("onChange : " + newContent);
+	}
 }

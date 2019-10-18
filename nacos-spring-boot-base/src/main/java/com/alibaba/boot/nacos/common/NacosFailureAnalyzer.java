@@ -16,13 +16,14 @@
  */
 package com.alibaba.boot.nacos.common;
 
+import com.alibaba.nacos.api.exception.NacosException;
+
 import org.springframework.boot.diagnostics.AbstractFailureAnalyzer;
 import org.springframework.boot.diagnostics.FailureAnalysis;
 
-import com.alibaba.nacos.api.exception.NacosException;
-
 /**
- * An {@link AbstractFailureAnalyzer} that performs analysis of failures caused by a {@link NacosException}
+ * An {@link AbstractFailureAnalyzer} that performs analysis of failures caused by a
+ * {@link NacosException}
  *
  * @author <a href="mailto:fangjian0423@gmail.com">Jim</a>
  */
@@ -32,32 +33,32 @@ public class NacosFailureAnalyzer extends AbstractFailureAnalyzer<NacosException
 	protected FailureAnalysis analyze(Throwable rootFailure, NacosException cause) {
 		StringBuilder description = new StringBuilder();
 		switch (cause.getErrCode()) {
-            case NacosException.CLIENT_INVALID_PARAM:
-                description.append("client error: invalid param");
-                break;
-            case NacosException.CLIENT_OVER_THRESHOLD:
-                description.append("client error: over client threshold");
-                break;
-            case NacosException.BAD_GATEWAY:
-                description.append("server error: bad gateway");
-                break;
-            case NacosException.CONFLICT:
-                description.append("server error: conflict");
-                break;
-            case NacosException.INVALID_PARAM:
-                description.append("server error: invalid param");
-                break;
-            case NacosException.NO_RIGHT:
-                description.append("server error: no right");
-                break;
-            case NacosException.OVER_THRESHOLD:
-                description.append("server error: over threshold");
-                break;
-            case NacosException.SERVER_ERROR:
-                description.append("server error: such as timeout");
-                break;
-            default:
-                description.append("unknown reason");
+		case NacosException.CLIENT_INVALID_PARAM:
+			description.append("client error: invalid param");
+			break;
+		case NacosException.CLIENT_OVER_THRESHOLD:
+			description.append("client error: over client threshold");
+			break;
+		case NacosException.BAD_GATEWAY:
+			description.append("server error: bad gateway");
+			break;
+		case NacosException.CONFLICT:
+			description.append("server error: conflict");
+			break;
+		case NacosException.INVALID_PARAM:
+			description.append("server error: invalid param");
+			break;
+		case NacosException.NO_RIGHT:
+			description.append("server error: no right");
+			break;
+		case NacosException.OVER_THRESHOLD:
+			description.append("server error: over threshold");
+			break;
+		case NacosException.SERVER_ERROR:
+			description.append("server error: such as timeout");
+			break;
+		default:
+			description.append("unknown reason");
 		}
 		description.append(". ").append(cause.getErrMsg());
 		String action;

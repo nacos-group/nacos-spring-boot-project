@@ -17,6 +17,7 @@
 package com.alibaba.boot.nacos.config.autoconfigure;
 
 import com.alibaba.boot.nacos.config.binder.NacosBootConfigurationPropertiesBinder;
+
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
@@ -32,18 +33,22 @@ import org.springframework.core.type.AnnotationMetadata;
  * @since
  */
 @Configuration
-public class NacosConfigBootBeanDefinitionRegistrar implements ImportBeanDefinitionRegistrar, BeanFactoryAware {
+public class NacosConfigBootBeanDefinitionRegistrar
+		implements ImportBeanDefinitionRegistrar, BeanFactoryAware {
 
-    @Override
-    public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
-        DefaultListableBeanFactory defaultListableBeanFactory = (DefaultListableBeanFactory) beanFactory;
-        BeanDefinitionBuilder beanDefinitionBuilder = BeanDefinitionBuilder
-                .rootBeanDefinition(NacosBootConfigurationPropertiesBinder.class);
-        defaultListableBeanFactory.registerBeanDefinition(NacosBootConfigurationPropertiesBinder.BEAN_NAME, beanDefinitionBuilder.getBeanDefinition());
-    }
+	@Override
+	public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
+		DefaultListableBeanFactory defaultListableBeanFactory = (DefaultListableBeanFactory) beanFactory;
+		BeanDefinitionBuilder beanDefinitionBuilder = BeanDefinitionBuilder
+				.rootBeanDefinition(NacosBootConfigurationPropertiesBinder.class);
+		defaultListableBeanFactory.registerBeanDefinition(
+				NacosBootConfigurationPropertiesBinder.BEAN_NAME,
+				beanDefinitionBuilder.getBeanDefinition());
+	}
 
-    @Override
-    public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata, BeanDefinitionRegistry registry) {
+	@Override
+	public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata,
+			BeanDefinitionRegistry registry) {
 
-    }
+	}
 }

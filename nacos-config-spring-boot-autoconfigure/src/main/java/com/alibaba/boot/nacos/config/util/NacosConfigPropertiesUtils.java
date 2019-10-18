@@ -16,17 +16,6 @@
  */
 package com.alibaba.boot.nacos.config.util;
 
-import com.alibaba.boot.nacos.config.NacosConfigConstants;
-import com.alibaba.boot.nacos.config.properties.NacosConfigProperties;
-import com.alibaba.boot.nacos.config.util.editor.NacosEnumEditor;
-import com.alibaba.nacos.api.config.ConfigType;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanWrapper;
-import org.springframework.beans.BeanWrapperImpl;
-import org.springframework.beans.propertyeditors.CustomCollectionEditor;
-import org.springframework.core.env.ConfigurableEnvironment;
-
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -35,81 +24,100 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import com.alibaba.boot.nacos.config.NacosConfigConstants;
+import com.alibaba.boot.nacos.config.properties.NacosConfigProperties;
+import com.alibaba.boot.nacos.config.util.editor.NacosEnumEditor;
+import com.alibaba.nacos.api.config.ConfigType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import org.springframework.beans.BeanWrapper;
+import org.springframework.beans.BeanWrapperImpl;
+import org.springframework.beans.propertyeditors.CustomCollectionEditor;
+import org.springframework.core.env.ConfigurableEnvironment;
+
 /**
  * @author <a href="mailto:liaochunyhm@live.com">liaochuntao</a>
  * @since
  */
 public class NacosConfigPropertiesUtils {
 
-    private static final String PROPERTIES_PREFIX = "nacos";
+	private static final String PROPERTIES_PREFIX = "nacos";
 
-    private static final Logger logger = LoggerFactory.getLogger(NacosConfigPropertiesUtils.class);
+	private static final Logger logger = LoggerFactory
+			.getLogger(NacosConfigPropertiesUtils.class);
 
-    private static final Set<String> OBJ_FILED_NAME = new HashSet<>();
+	private static final Set<String> OBJ_FILED_NAME = new HashSet<>();
 
-    static {
-        Class<NacosConfigProperties> cls = NacosConfigProperties.class;
-        Field[] fields = cls.getDeclaredFields();
-        for (Field field : fields) {
-            OBJ_FILED_NAME.add(field.getName());
-        }
-    }
+	static {
+		Class<NacosConfigProperties> cls = NacosConfigProperties.class;
+		Field[] fields = cls.getDeclaredFields();
+		for (Field field : fields) {
+			OBJ_FILED_NAME.add(field.getName());
+		}
+	}
 
-    public static NacosConfigProperties buildNacosConfigProperties(ConfigurableEnvironment environment) {
-        BeanWrapper wrapper = new BeanWrapperImpl(new NacosConfigProperties());
-        wrapper.setAutoGrowNestedPaths(true);
-        wrapper.setExtractOldValueForEditor(true);
-        wrapper.registerCustomEditor(ConfigType.class, new NacosEnumEditor(ConfigType.class));
-        wrapper.registerCustomEditor(Collection.class, new CustomCollectionEditor(ArrayList.class));
+	public static NacosConfigProperties buildNacosConfigProperties(
+			ConfigurableEnvironment environment) {
+		BeanWrapper wrapper = new BeanWrapperImpl(new NacosConfigProperties());
+		wrapper.setAutoGrowNestedPaths(true);
+		wrapper.setExtractOldValueForEditor(true);
+		wrapper.registerCustomEditor(ConfigType.class,
+				new NacosEnumEditor(ConfigType.class));
+		wrapper.registerCustomEditor(Collection.class,
+				new CustomCollectionEditor(ArrayList.class));
 
-        AttributeExtractTask task = new AttributeExtractTask(PROPERTIES_PREFIX, environment);
+		AttributeExtractTask task = new AttributeExtractTask(PROPERTIES_PREFIX,
+				environment);
 
-        try {
-            // Filter object property values
-            Map<String, String> properties = new HashMap<>(8);
-            Map<String, String> tmp = dataSource(task.call());
-            for (Map.Entry<String, String> entry : tmp.entrySet()) {
-                for (String fieldName : OBJ_FILED_NAME) {
-                    if (entry.getKey().contains(fieldName)) {
-                        properties.put(entry.getKey(), entry.getValue());
-                        break;
-                    }
-                }
-            }
-            wrapper.setPropertyValues(properties);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-        NacosConfigProperties nacosConfigProperties = (NacosConfigProperties) wrapper.getWrappedInstance();
-        logger.debug("nacosConfigProperties : {}", nacosConfigProperties);
-        return nacosConfigProperties;
-    }
+		try {
+			// Filter object property values
+			Map<String, String> properties = new HashMap<>(8);
+			Map<String, String> tmp = dataSource(task.call());
+			for (Map.Entry<String, String> entry : tmp.entrySet()) {
+				for (String fieldName : OBJ_FILED_NAME) {
+					if (entry.getKey().contains(fieldName)) {
+						properties.put(entry.getKey(), entry.getValue());
+						break;
+					}
+				}
+			}
+			wrapper.setPropertyValues(properties);
+		}
+		catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+		NacosConfigProperties nacosConfigProperties = (NacosConfigProperties) wrapper
+				.getWrappedInstance();
+		logger.debug("nacosConfigProperties : {}", nacosConfigProperties);
+		return nacosConfigProperties;
+	}
 
-    private static Map<String, String> dataSource(Map<String, String> source) {
-        String prefix = NacosConfigConstants.PREFIX + ".";
-        HashMap<String, String> targetConfigInfo = new HashMap<>(source.size());
-        for (Map.Entry<String, String> entry : source.entrySet()) {
-            if (entry.getKey().startsWith(prefix)) {
-                String key = entry.getKey().replace(prefix, "");
-                if (key.contains("-")) {
-                    String[] subs = key.split("-");
-                    key = buildJavaField(subs);
-                }
-                targetConfigInfo.put(key, entry.getValue());
-            }
-        }
-        return targetConfigInfo;
-    }
+	private static Map<String, String> dataSource(Map<String, String> source) {
+		String prefix = NacosConfigConstants.PREFIX + ".";
+		HashMap<String, String> targetConfigInfo = new HashMap<>(source.size());
+		for (Map.Entry<String, String> entry : source.entrySet()) {
+			if (entry.getKey().startsWith(prefix)) {
+				String key = entry.getKey().replace(prefix, "");
+				if (key.contains("-")) {
+					String[] subs = key.split("-");
+					key = buildJavaField(subs);
+				}
+				targetConfigInfo.put(key, entry.getValue());
+			}
+		}
+		return targetConfigInfo;
+	}
 
-    private static String buildJavaField(String[] subs) {
-        StringBuilder sb = new StringBuilder();
-        sb.append(subs[0]);
-        for (int i = 1; i < subs.length; i ++) {
-            char[] chars = subs[i].toCharArray();
-            chars[0] = Character.toUpperCase(chars[0]);
-            sb.append(chars);
-        }
-        return sb.toString();
-    }
+	private static String buildJavaField(String[] subs) {
+		StringBuilder sb = new StringBuilder();
+		sb.append(subs[0]);
+		for (int i = 1; i < subs.length; i++) {
+			char[] chars = subs[i].toCharArray();
+			chars[0] = Character.toUpperCase(chars[0]);
+			sb.append(chars);
+		}
+		return sb.toString();
+	}
 
 }

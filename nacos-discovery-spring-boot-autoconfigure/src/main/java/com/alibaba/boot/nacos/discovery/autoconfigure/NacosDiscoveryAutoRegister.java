@@ -25,6 +25,7 @@ import com.alibaba.nacos.client.naming.utils.NetUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.context.WebServerInitializedEvent;
@@ -36,47 +37,54 @@ import org.springframework.stereotype.Component;
  * @since
  */
 @Component
-public class NacosDiscoveryAutoRegister implements ApplicationListener<WebServerInitializedEvent> {
+public class NacosDiscoveryAutoRegister
+		implements ApplicationListener<WebServerInitializedEvent> {
 
-    private static final Logger logger = LoggerFactory.getLogger(NacosDiscoveryAutoRegister.class);
+	private static final Logger logger = LoggerFactory
+			.getLogger(NacosDiscoveryAutoRegister.class);
 
-    @NacosInjected
-    private NamingService namingService;
+	@NacosInjected
+	private NamingService namingService;
 
-    @Autowired
-    private NacosDiscoveryProperties discoveryProperties;
+	@Autowired
+	private NacosDiscoveryProperties discoveryProperties;
 
-    @Value("${spring.application.name:spring.application.name}")
-    private String applicationName;
+	@Value("${spring.application.name:spring.application.name}")
+	private String applicationName;
 
-    @Override
-    public void onApplicationEvent(WebServerInitializedEvent event) {
+	@Override
+	public void onApplicationEvent(WebServerInitializedEvent event) {
 
-        if (!discoveryProperties.isAutoRegister()) {
-            return;
-        }
+		if (!discoveryProperties.isAutoRegister()) {
+			return;
+		}
 
-        Register register = discoveryProperties.getRegister();
+		Register register = discoveryProperties.getRegister();
 
-        if (StringUtils.isEmpty(register.getIp())) {
-            register.setIp(NetUtils.localIP());
-        }
+		if (StringUtils.isEmpty(register.getIp())) {
+			register.setIp(NetUtils.localIP());
+		}
 
-        if (register.getPort() == 0) {
-            register.setPort(event.getWebServer().getPort());
-        }
+		if (register.getPort() == 0) {
+			register.setPort(event.getWebServer().getPort());
+		}
 
-        register.getMetadata().put("preserved.register.source", "SPRING_BOOT");
+		register.getMetadata().put("preserved.register.source", "SPRING_BOOT");
 
-        register.setInstanceId("");
-        String serviceName = StringUtils.isEmpty(register.getServiceName()) ? applicationName : register.getServiceName();
+		register.setInstanceId("");
+		String serviceName = StringUtils.isEmpty(register.getServiceName())
+				? applicationName
+				: register.getServiceName();
 
-        try {
-            namingService.registerInstance(serviceName, register.getGroupName(), register);
-            logger.info("Finished auto register service : {}, ip : {}, port : {}", register.getServiceName(), register.getIp(), register.getPort());
-        } catch (NacosException e) {
-            throw new AutoRegisterException(e);
-        }
-    }
+		try {
+			namingService.registerInstance(serviceName, register.getGroupName(),
+					register);
+			logger.info("Finished auto register service : {}, ip : {}, port : {}",
+					register.getServiceName(), register.getIp(), register.getPort());
+		}
+		catch (NacosException e) {
+			throw new AutoRegisterException(e);
+		}
+	}
 
 }

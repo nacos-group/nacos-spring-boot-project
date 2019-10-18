@@ -18,18 +18,18 @@ package com.alibaba.boot.nacos.actuate.health;
 
 import java.util.Properties;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.actuate.health.AbstractHealthIndicator;
-import org.springframework.boot.actuate.health.Health;
-import org.springframework.boot.actuate.health.HealthIndicator;
-import org.springframework.context.ApplicationContext;
-
 import com.alibaba.boot.nacos.common.PropertiesUtils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.nacos.api.config.ConfigService;
 import com.alibaba.nacos.spring.factory.CacheableEventPublishingNacosServiceFactory;
 import com.alibaba.nacos.spring.factory.NacosServiceFactory;
 import com.alibaba.nacos.spring.metadata.NacosServiceMetaData;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.actuate.health.AbstractHealthIndicator;
+import org.springframework.boot.actuate.health.Health;
+import org.springframework.boot.actuate.health.HealthIndicator;
+import org.springframework.context.ApplicationContext;
 
 /**
  * Nacos Config {@link HealthIndicator}
@@ -46,7 +46,8 @@ public class NacosConfigHealthIndicator extends AbstractHealthIndicator {
 	@Override
 	protected void doHealthCheck(Health.Builder builder) throws Exception {
 		builder.up();
-		NacosServiceFactory nacosServiceFactory = CacheableEventPublishingNacosServiceFactory.getSingleton();
+		NacosServiceFactory nacosServiceFactory = CacheableEventPublishingNacosServiceFactory
+				.getSingleton();
 		for (ConfigService configService : nacosServiceFactory.getConfigServices()) {
 			if (configService instanceof NacosServiceMetaData) {
 				NacosServiceMetaData nacosServiceMetaData = (NacosServiceMetaData) configService;

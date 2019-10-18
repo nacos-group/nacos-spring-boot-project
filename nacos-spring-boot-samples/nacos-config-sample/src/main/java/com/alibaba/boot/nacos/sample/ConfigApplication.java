@@ -16,12 +16,12 @@
  */
 package com.alibaba.boot.nacos.sample;
 
-import static org.springframework.core.env.StandardEnvironment.SYSTEM_ENVIRONMENT_PROPERTY_SOURCE_NAME;
-import static org.springframework.core.env.StandardEnvironment.SYSTEM_PROPERTIES_PROPERTY_SOURCE_NAME;
+import com.alibaba.nacos.api.annotation.NacosInjected;
+import com.alibaba.nacos.api.common.Constants;
+import com.alibaba.nacos.api.config.ConfigService;
+import com.alibaba.nacos.api.config.annotation.NacosValue;
+import com.alibaba.nacos.spring.context.annotation.config.NacosPropertySource;
 
-import com.alibaba.nacos.api.annotation.NacosProperties;
-import com.alibaba.nacos.spring.context.annotation.EnableNacos;
-import com.alibaba.nacos.spring.context.annotation.config.EnableNacosConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -29,29 +29,18 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.ImportResource;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
-
-import com.alibaba.nacos.api.annotation.NacosInjected;
-import com.alibaba.nacos.api.common.Constants;
-import com.alibaba.nacos.api.config.ConfigService;
-import com.alibaba.nacos.api.config.annotation.NacosConfigListener;
-import com.alibaba.nacos.api.config.annotation.NacosValue;
-import com.alibaba.nacos.spring.context.annotation.config.NacosPropertySource;
 import org.springframework.scheduling.annotation.EnableScheduling;
+
+import static org.springframework.core.env.StandardEnvironment.SYSTEM_ENVIRONMENT_PROPERTY_SOURCE_NAME;
+import static org.springframework.core.env.StandardEnvironment.SYSTEM_PROPERTIES_PROPERTY_SOURCE_NAME;
 
 /**
  * @author <a href="mailto:fangjian0423@gmail.com">Jim</a>
  */
 @SpringBootApplication
-@NacosPropertySource(
-    name = "custom",
-    dataId = ConfigApplication.DATA_ID,
-    first = true,
-    before = SYSTEM_PROPERTIES_PROPERTY_SOURCE_NAME,
-    after = SYSTEM_ENVIRONMENT_PROPERTY_SOURCE_NAME
-)
+@NacosPropertySource(name = "custom", dataId = ConfigApplication.DATA_ID, first = true, before = SYSTEM_PROPERTIES_PROPERTY_SOURCE_NAME, after = SYSTEM_ENVIRONMENT_PROPERTY_SOURCE_NAME)
 @EnableScheduling
 public class ConfigApplication {
 
@@ -101,7 +90,8 @@ public class ConfigApplication {
 		public void run(String... args) throws Exception {
 			if (configService.publishConfig(DATA_ID, Constants.DEFAULT_GROUP, content)) {
 				Thread.sleep(200);
-				System.out.println("First runner success: " + configService.getConfig(DATA_ID, Constants.DEFAULT_GROUP, 5000));
+				System.out.println("First runner success: " + configService
+						.getConfig(DATA_ID, Constants.DEFAULT_GROUP, 5000));
 			}
 			else {
 				System.out.println("First runner error: publish config error");

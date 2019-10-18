@@ -17,13 +17,10 @@
 package com.alibaba.boot.nacos.discovery.properties;
 
 import com.alibaba.boot.nacos.discovery.NacosDiscoveryConstants;
-import com.alibaba.nacos.api.naming.pojo.Service;
+
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
 import org.springframework.util.Assert;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * {@link ConfigurationProperties} for configuring Nacos Discovery.
@@ -35,7 +32,7 @@ public class NacosDiscoveryProperties {
 
 	private String serverAddr;
 
-    private String contextPath;
+	private String contextPath;
 
 	private String clusterName;
 
@@ -52,76 +49,76 @@ public class NacosDiscoveryProperties {
 	@NestedConfigurationProperty
 	private Register register = new Register();
 
-    public String getServerAddr() {
-        return serverAddr;
-    }
+	public String getServerAddr() {
+		return serverAddr;
+	}
 
-    public void setServerAddr(String serverAddr) {
-        Assert.notNull(serverAddr, "nacos discovery server-addr must not be null");
-        this.serverAddr = serverAddr;
-    }
+	public void setServerAddr(String serverAddr) {
+		Assert.notNull(serverAddr, "nacos discovery server-addr must not be null");
+		this.serverAddr = serverAddr;
+	}
 
-    public String getContextPath() {
-        return contextPath;
-    }
+	public String getContextPath() {
+		return contextPath;
+	}
 
-    public void setContextPath(String contextPath) {
-        this.contextPath = contextPath;
-    }
+	public void setContextPath(String contextPath) {
+		this.contextPath = contextPath;
+	}
 
-    public String getClusterName() {
-        return clusterName;
-    }
+	public String getClusterName() {
+		return clusterName;
+	}
 
-    public void setClusterName(String clusterName) {
-        this.clusterName = clusterName;
-    }
+	public void setClusterName(String clusterName) {
+		this.clusterName = clusterName;
+	}
 
-    public String getEndpoint() {
-        return endpoint;
-    }
+	public String getEndpoint() {
+		return endpoint;
+	}
 
-    public void setEndpoint(String endpoint) {
-        this.endpoint = endpoint;
-    }
+	public void setEndpoint(String endpoint) {
+		this.endpoint = endpoint;
+	}
 
-    public String getNamespace() {
-        return namespace;
-    }
+	public String getNamespace() {
+		return namespace;
+	}
 
-    public void setNamespace(String namespace) {
-        this.namespace = namespace;
-    }
+	public void setNamespace(String namespace) {
+		this.namespace = namespace;
+	}
 
-    public String getAccessKey() {
-        return accessKey;
-    }
+	public String getAccessKey() {
+		return accessKey;
+	}
 
-    public void setAccessKey(String accessKey) {
-        this.accessKey = accessKey;
-    }
+	public void setAccessKey(String accessKey) {
+		this.accessKey = accessKey;
+	}
 
-    public String getSecretKey() {
-        return secretKey;
-    }
+	public String getSecretKey() {
+		return secretKey;
+	}
 
-    public void setSecretKey(String secretKey) {
-        this.secretKey = secretKey;
-    }
+	public void setSecretKey(String secretKey) {
+		this.secretKey = secretKey;
+	}
 
-    public boolean isAutoRegister() {
-        return autoRegister;
-    }
+	public boolean isAutoRegister() {
+		return autoRegister;
+	}
 
-    public void setAutoRegister(boolean autoRegister) {
-        this.autoRegister = autoRegister;
-    }
+	public void setAutoRegister(boolean autoRegister) {
+		this.autoRegister = autoRegister;
+	}
 
-    public Register getRegister() {
-        return register;
-    }
+	public Register getRegister() {
+		return register;
+	}
 
-    public void setRegister(Register register) {
-        this.register = register;
-    }
+	public void setRegister(Register register) {
+		this.register = register;
+	}
 }

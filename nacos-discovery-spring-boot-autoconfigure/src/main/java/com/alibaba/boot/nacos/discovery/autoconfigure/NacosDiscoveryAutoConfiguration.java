@@ -16,23 +16,18 @@
  */
 package com.alibaba.boot.nacos.discovery.autoconfigure;
 
-import static com.alibaba.nacos.spring.util.NacosBeanUtils.DISCOVERY_GLOBAL_NACOS_PROPERTIES_BEAN_NAME;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-
 import com.alibaba.boot.nacos.discovery.NacosDiscoveryConstants;
 import com.alibaba.boot.nacos.discovery.properties.NacosDiscoveryProperties;
 import com.alibaba.nacos.spring.context.annotation.discovery.EnableNacosDiscovery;
 
-import javax.annotation.PostConstruct;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+import static com.alibaba.nacos.spring.util.NacosBeanUtils.DISCOVERY_GLOBAL_NACOS_PROPERTIES_BEAN_NAME;
 
 /**
  * Nacos Discovery Auto {@link Configuration}
@@ -46,9 +41,9 @@ import javax.annotation.PostConstruct;
 @ConditionalOnClass(name = "org.springframework.boot.context.properties.bind.Binder")
 public class NacosDiscoveryAutoConfiguration {
 
-    @Bean
-    public NacosDiscoveryAutoRegister discoveryAutoRegister() {
-        return new NacosDiscoveryAutoRegister();
-    }
+	@Bean
+	public NacosDiscoveryAutoRegister discoveryAutoRegister() {
+		return new NacosDiscoveryAutoRegister();
+	}
 
 }

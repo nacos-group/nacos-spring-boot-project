@@ -16,12 +16,13 @@
  */
 package com.alibaba.boot.nacos.config.util;
 
-import com.alibaba.nacos.api.PropertyKeyConst;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.util.CollectionUtils;
-
 import java.util.Map;
 import java.util.Properties;
+
+import com.alibaba.nacos.api.PropertyKeyConst;
+import org.apache.commons.lang3.StringUtils;
+
+import org.springframework.util.CollectionUtils;
 
 /**
  * @author <a href="mailto:liaochunyhm@live.com">liaochuntao</a>
@@ -29,56 +30,59 @@ import java.util.Properties;
  */
 public class NacosPropertiesBuilder {
 
-    public static Properties buildNacosProperties(String serverAddr, String namespaceId, String endpoint, String secretKey,
-                                                  String accessKey, String ramRoleName, String configLongPollTimeout,
-                                                  String configRetryTimeout, String maxRetry, boolean enableRemoteSyncConfig) {
+	public static Properties buildNacosProperties(String serverAddr, String namespaceId,
+			String endpoint, String secretKey, String accessKey, String ramRoleName,
+			String configLongPollTimeout, String configRetryTimeout, String maxRetry,
+			boolean enableRemoteSyncConfig) {
 
-        Properties properties = new Properties();
-        if (StringUtils.isNotEmpty(serverAddr)) {
-            properties.put(PropertyKeyConst.SERVER_ADDR, serverAddr);
-        }
-        if (StringUtils.isNotEmpty(namespaceId)) {
-            properties.put(PropertyKeyConst.NAMESPACE, namespaceId);
-        }
-        if (StringUtils.isNotEmpty(endpoint)) {
-            properties.put(PropertyKeyConst.ENDPOINT, endpoint);
-        }
-        if (StringUtils.isNotEmpty(secretKey)) {
-            properties.put(PropertyKeyConst.SECRET_KEY, secretKey);
-        }
-        if (StringUtils.isNotEmpty(accessKey)) {
-            properties.put(PropertyKeyConst.ACCESS_KEY, accessKey);
-        }
-        if (StringUtils.isNoneEmpty(ramRoleName)) {
-            properties.put(PropertyKeyConst.RAM_ROLE_NAME, ramRoleName);
-        }
-        if (StringUtils.isNotEmpty(configLongPollTimeout)) {
-            properties.put(PropertyKeyConst.CONFIG_LONG_POLL_TIMEOUT, configLongPollTimeout);
-        }
-        if (StringUtils.isNotEmpty(configRetryTimeout)) {
-            properties.put(PropertyKeyConst.CONFIG_RETRY_TIME, configRetryTimeout);
-        }
-        if (StringUtils.isNotEmpty(maxRetry)) {
-            properties.put(PropertyKeyConst.MAX_RETRY, maxRetry);
-        }
-        properties.put(PropertyKeyConst.ENABLE_REMOTE_SYNC_CONFIG, String.valueOf(enableRemoteSyncConfig));
-        return properties;
-    }
+		Properties properties = new Properties();
+		if (StringUtils.isNotEmpty(serverAddr)) {
+			properties.put(PropertyKeyConst.SERVER_ADDR, serverAddr);
+		}
+		if (StringUtils.isNotEmpty(namespaceId)) {
+			properties.put(PropertyKeyConst.NAMESPACE, namespaceId);
+		}
+		if (StringUtils.isNotEmpty(endpoint)) {
+			properties.put(PropertyKeyConst.ENDPOINT, endpoint);
+		}
+		if (StringUtils.isNotEmpty(secretKey)) {
+			properties.put(PropertyKeyConst.SECRET_KEY, secretKey);
+		}
+		if (StringUtils.isNotEmpty(accessKey)) {
+			properties.put(PropertyKeyConst.ACCESS_KEY, accessKey);
+		}
+		if (StringUtils.isNoneEmpty(ramRoleName)) {
+			properties.put(PropertyKeyConst.RAM_ROLE_NAME, ramRoleName);
+		}
+		if (StringUtils.isNotEmpty(configLongPollTimeout)) {
+			properties.put(PropertyKeyConst.CONFIG_LONG_POLL_TIMEOUT,
+					configLongPollTimeout);
+		}
+		if (StringUtils.isNotEmpty(configRetryTimeout)) {
+			properties.put(PropertyKeyConst.CONFIG_RETRY_TIME, configRetryTimeout);
+		}
+		if (StringUtils.isNotEmpty(maxRetry)) {
+			properties.put(PropertyKeyConst.MAX_RETRY, maxRetry);
+		}
+		properties.put(PropertyKeyConst.ENABLE_REMOTE_SYNC_CONFIG,
+				String.valueOf(enableRemoteSyncConfig));
+		return properties;
+	}
 
-    public static void merge(Properties targetProperties, Properties sourceProperties) {
+	public static void merge(Properties targetProperties, Properties sourceProperties) {
 
-        if (CollectionUtils.isEmpty(sourceProperties)) {
-            return;
-        }
+		if (CollectionUtils.isEmpty(sourceProperties)) {
+			return;
+		}
 
-        for (Map.Entry entry : sourceProperties.entrySet()) {
-            String propertyName = (String) entry.getKey();
-            if (!targetProperties.containsKey(propertyName)) {
-                String propertyValue = (String) entry.getValue();
-                targetProperties.setProperty(propertyName, propertyValue);
-            }
-        }
+		for (Map.Entry entry : sourceProperties.entrySet()) {
+			String propertyName = (String) entry.getKey();
+			if (!targetProperties.containsKey(propertyName)) {
+				String propertyValue = (String) entry.getValue();
+				targetProperties.setProperty(propertyName, propertyValue);
+			}
+		}
 
-    }
+	}
 
 }

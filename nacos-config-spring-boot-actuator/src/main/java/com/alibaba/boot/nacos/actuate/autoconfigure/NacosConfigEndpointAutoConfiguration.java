@@ -16,13 +16,13 @@
  */
 package com.alibaba.boot.nacos.actuate.autoconfigure;
 
+import com.alibaba.boot.nacos.actuate.endpoint.NacosConfigEndpoint;
+
 import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnEnabledEndpoint;
 import org.springframework.boot.actuate.endpoint.annotation.Endpoint;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import com.alibaba.boot.nacos.actuate.endpoint.NacosConfigEndpoint;
 
 /**
  * Nacos Config {@link Endpoint} Auto-{@link Configuration}

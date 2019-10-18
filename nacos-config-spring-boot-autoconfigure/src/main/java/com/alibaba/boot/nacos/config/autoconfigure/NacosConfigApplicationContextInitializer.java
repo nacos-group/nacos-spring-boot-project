@@ -16,6 +16,9 @@
  */
 package com.alibaba.boot.nacos.config.autoconfigure;
 
+import java.util.Properties;
+import java.util.function.Function;
+
 import com.alibaba.boot.nacos.config.properties.NacosConfigProperties;
 import com.alibaba.boot.nacos.config.util.NacosConfigPropertiesUtils;
 import com.alibaba.boot.nacos.config.util.NacosConfigUtils;
@@ -24,61 +27,73 @@ import com.alibaba.nacos.api.exception.NacosException;
 import com.alibaba.nacos.spring.factory.CacheableEventPublishingNacosServiceFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.env.ConfigurableEnvironment;
-
-import java.util.Properties;
-import java.util.function.Function;
 
 /**
  * @author <a href="mailto:liaochunyhm@live.com">liaochuntao</a>
  * @since
  */
-public class NacosConfigApplicationContextInitializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
+public class NacosConfigApplicationContextInitializer
+		implements ApplicationContextInitializer<ConfigurableApplicationContext> {
 
-    private final Logger logger = LoggerFactory.getLogger(NacosConfigApplicationContextInitializer.class);
+	private final Logger logger = LoggerFactory
+			.getLogger(NacosConfigApplicationContextInitializer.class);
 
-    private ConfigurableEnvironment environment;
+	private ConfigurableEnvironment environment;
 
-    private final NacosConfigEnvironmentProcessor processor;
+	private final NacosConfigEnvironmentProcessor processor;
 
-    private NacosConfigProperties nacosConfigProperties;
+	private NacosConfigProperties nacosConfigProperties;
 
-    public NacosConfigApplicationContextInitializer(NacosConfigEnvironmentProcessor configEnvironmentProcessor) {
-        this.processor = configEnvironmentProcessor;
-    }
+	public NacosConfigApplicationContextInitializer(
+			NacosConfigEnvironmentProcessor configEnvironmentProcessor) {
+		this.processor = configEnvironmentProcessor;
+	}
 
-    @Override
-    public void initialize(ConfigurableApplicationContext context) {
-        CacheableEventPublishingNacosServiceFactory singleton = CacheableEventPublishingNacosServiceFactory.getSingleton();
-        singleton.setApplicationContext(context);
-        environment = context.getEnvironment();
-        nacosConfigProperties = NacosConfigPropertiesUtils.buildNacosConfigProperties(environment);
-        if (!enable()) {
-            logger.info("[Nacos Config Boot] : The preload configuration is not enabled");
-        } else {
-            Function<Properties, ConfigService> builder = properties -> {
-                try {
-                    return singleton.createConfigService(properties);
-                } catch (NacosException e) {
-                    throw new NacosBootConfigException("ConfigService can't be created with properties : " + properties, e);
-                }
-            };
-            NacosConfigUtils configUtils = new NacosConfigUtils(nacosConfigProperties, environment, builder);
+	@Override
+	public void initialize(ConfigurableApplicationContext context) {
+		CacheableEventPublishingNacosServiceFactory singleton = CacheableEventPublishingNacosServiceFactory
+				.getSingleton();
+		singleton.setApplicationContext(context);
+		environment = context.getEnvironment();
+		nacosConfigProperties = NacosConfigPropertiesUtils
+				.buildNacosConfigProperties(environment);
+		if (!enable()) {
+			logger.info("[Nacos Config Boot] : The preload configuration is not enabled");
+		}
+		else {
+			Function<Properties, ConfigService> builder = properties -> {
+				try {
+					return singleton.createConfigService(properties);
+				}
+				catch (NacosException e) {
+					throw new NacosBootConfigException(
+							"ConfigService can't be created with properties : "
+									+ properties,
+							e);
+				}
+			};
+			NacosConfigUtils configUtils = new NacosConfigUtils(nacosConfigProperties,
+					environment, builder);
 
-            // If it opens the log level loading directly will cache DeferNacosPropertySource release
-            if (processor.enable()) {
-                configUtils.addListenerIfAutoRefreshed(processor.getDeferPropertySources());
-            } else {
-                configUtils.loadConfig();
-                configUtils.addListenerIfAutoRefreshed();
-            }
-        }
-    }
+			// If it opens the log level loading directly will cache
+			// DeferNacosPropertySource release
+			if (processor.enable()) {
+				configUtils
+						.addListenerIfAutoRefreshed(processor.getDeferPropertySources());
+			}
+			else {
+				configUtils.loadConfig();
+				configUtils.addListenerIfAutoRefreshed();
+			}
+		}
+	}
 
-    private boolean enable() {
-        return processor.enable() || nacosConfigProperties.getBootstrap().isEnable();
-    }
+	private boolean enable() {
+		return processor.enable() || nacosConfigProperties.getBootstrap().isEnable();
+	}
 
 }

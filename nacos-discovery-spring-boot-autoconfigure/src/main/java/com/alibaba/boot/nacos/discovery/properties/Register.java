@@ -19,20 +19,19 @@ package com.alibaba.boot.nacos.discovery.properties;
 import com.alibaba.nacos.api.common.Constants;
 import com.alibaba.nacos.api.naming.pojo.Instance;
 
-
 /**
  * @author <a href="mailto:liaochunyhm@live.com">liaochuntao</a>
  * @since
  */
 public class Register extends Instance {
 
-    private String groupName = Constants.DEFAULT_GROUP;
+	private String groupName = Constants.DEFAULT_GROUP;
 
-    public String getGroupName() {
-        return groupName;
-    }
+	public String getGroupName() {
+		return groupName;
+	}
 
-    public void setGroupName(String groupName) {
-        this.groupName = groupName;
-    }
+	public void setGroupName(String groupName) {
+		this.groupName = groupName;
+	}
 }
