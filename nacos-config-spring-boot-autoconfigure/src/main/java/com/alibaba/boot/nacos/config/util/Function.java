@@ -22,6 +22,6 @@ package com.alibaba.boot.nacos.config.util;
  */
 public interface Function<F, T> {
 
-    T apply(F input);
+	T apply(F input);
 
 }

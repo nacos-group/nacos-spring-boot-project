@@ -17,8 +17,8 @@
 package com.alibaba.boot.nacos.sample;
 
 import com.alibaba.nacos.api.config.annotation.NacosValue;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -31,21 +31,21 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class TestController {
 
-    @NacosValue(value = "${people.enable:bbbbb}", autoRefreshed = true)
-    private String enable;
+	@NacosValue(value = "${people.enable:bbbbb}", autoRefreshed = true)
+	private String enable;
 
-    @Autowired
-    private Apple apple;
+	@Autowired
+	private Apple apple;
 
-    @RequestMapping()
-    @ResponseBody
-    public String testGet() {
-        return enable;
-    }
+	@RequestMapping()
+	@ResponseBody
+	public String testGet() {
+		return enable;
+	}
 
-    @GetMapping("/apple")
-    public Apple getApple() {
-        return apple;
-    }
+	@GetMapping("/apple")
+	public Apple getApple() {
+		return apple;
+	}
 
 }

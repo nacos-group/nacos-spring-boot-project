@@ -16,17 +16,17 @@
  */
 package com.alibaba.boot.nacos.config.binder;
 
+import java.util.Properties;
+
 import com.alibaba.nacos.api.config.ConfigService;
-import com.alibaba.nacos.api.config.ConfigType;
 import com.alibaba.nacos.api.config.annotation.NacosConfigurationProperties;
 import com.alibaba.nacos.spring.context.properties.config.NacosConfigurationPropertiesBinder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.MutablePropertyValues;
 import org.springframework.boot.bind.RelaxedDataBinder;
 import org.springframework.context.ConfigurableApplicationContext;
-
-import java.util.Properties;
 
 import static com.alibaba.nacos.spring.util.NacosUtils.toProperties;
 
@@ -34,25 +34,30 @@ import static com.alibaba.nacos.spring.util.NacosUtils.toProperties;
  * @author <a href="mailto:liaochunyhm@live.com">liaochuntao</a>
  * @since
  */
-public class NacosBootConfigurationPropertiesBinder extends NacosConfigurationPropertiesBinder {
+public class NacosBootConfigurationPropertiesBinder
+		extends NacosConfigurationPropertiesBinder {
 
-    private final Logger logger = LoggerFactory.getLogger(NacosBootConfigurationPropertiesBinder.class);
+	private final Logger logger = LoggerFactory
+			.getLogger(NacosBootConfigurationPropertiesBinder.class);
 
-    private ConfigurableApplicationContext context;
+	private ConfigurableApplicationContext context;
 
-    public NacosBootConfigurationPropertiesBinder(ConfigurableApplicationContext applicationContext) {
-        super(applicationContext);
-        this.context = applicationContext;
-    }
+	public NacosBootConfigurationPropertiesBinder(
+			ConfigurableApplicationContext applicationContext) {
+		super(applicationContext);
+		this.context = applicationContext;
+	}
 
-    @Override
-    protected void doBind(Object bean, String beanName, String dataId, String groupId, String configType,
-                          NacosConfigurationProperties properties, String content, ConfigService configService) {
-        Properties prop = toProperties(dataId, groupId, content, configType);
-        RelaxedDataBinder binder = new RelaxedDataBinder(bean, properties.prefix());
-        binder.bind(new MutablePropertyValues(prop));
-        publishBoundEvent(bean, beanName, dataId, groupId, properties, content, configService);
-        publishMetadataEvent(bean, beanName, dataId, groupId, properties);
-    }
+	@Override
+	protected void doBind(Object bean, String beanName, String dataId, String groupId,
+			String configType, NacosConfigurationProperties properties, String content,
+			ConfigService configService) {
+		Properties prop = toProperties(dataId, groupId, content, configType);
+		RelaxedDataBinder binder = new RelaxedDataBinder(bean, properties.prefix());
+		binder.bind(new MutablePropertyValues(prop));
+		publishBoundEvent(bean, beanName, dataId, groupId, properties, content,
+				configService);
+		publishMetadataEvent(bean, beanName, dataId, groupId, properties);
+	}
 
 }

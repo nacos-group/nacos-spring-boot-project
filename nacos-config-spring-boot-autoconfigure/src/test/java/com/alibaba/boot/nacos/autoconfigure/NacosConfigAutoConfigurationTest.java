@@ -16,6 +16,8 @@
  */
 package com.alibaba.boot.nacos.autoconfigure;
 
+import java.util.Properties;
+
 import com.alibaba.boot.nacos.config.autoconfigure.NacosConfigAutoConfiguration;
 import com.alibaba.boot.nacos.config.properties.NacosConfigProperties;
 import com.alibaba.nacos.api.PropertyKeyConst;
@@ -25,14 +27,13 @@ import com.alibaba.nacos.spring.util.NacosBeanUtils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
-import java.util.Properties;
 
 /**
  * {@link NacosConfigAutoConfiguration} Test
@@ -41,46 +42,46 @@ import java.util.Properties;
  * @see NacosConfigAutoConfiguration
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@TestPropertySource(
-        properties = {
-                "nacos.config.server-addr=localhost"
-        }
-)
-@SpringBootTest(
-        classes = {NacosConfigAutoConfiguration.class}
-)
+@TestPropertySource(properties = { "nacos.config.server-addr=localhost" })
+@SpringBootTest(classes = { NacosConfigAutoConfiguration.class })
 public class NacosConfigAutoConfigurationTest {
 
-    @Autowired
-    private NacosConfigProperties nacosConfigProperties;
+	@Autowired
+	private NacosConfigProperties nacosConfigProperties;
 
-    @Autowired
-    private ApplicationContext applicationContext;
+	@Autowired
+	private ApplicationContext applicationContext;
 
-    @NacosInjected
-    private ConfigService configService;
+	@NacosInjected
+	private ConfigService configService;
 
-    @Test
-    public void testNacosConfig() {
-        Assert.assertNotNull(configService);
-        Assert.assertNotNull(applicationContext.getBean(NacosBeanUtils.CONFIG_GLOBAL_NACOS_PROPERTIES_BEAN_NAME));
-        Assert.assertEquals("localhost", nacosConfigProperties.getServerAddr());
-    }
+	@Test
+	public void testNacosConfig() {
+		Assert.assertNotNull(configService);
+		Assert.assertNotNull(applicationContext
+				.getBean(NacosBeanUtils.CONFIG_GLOBAL_NACOS_PROPERTIES_BEAN_NAME));
+		Assert.assertEquals("localhost", nacosConfigProperties.getServerAddr());
+	}
 
-    @Test(expected = NoSuchBeanDefinitionException.class)
-    public void testNacosConfigGlobalBean() {
-        Assert.assertNull(applicationContext.getBean(NacosBeanUtils.GLOBAL_NACOS_PROPERTIES_BEAN_NAME));
-    }
+	@Test(expected = NoSuchBeanDefinitionException.class)
+	public void testNacosConfigGlobalBean() {
+		Assert.assertNull(applicationContext
+				.getBean(NacosBeanUtils.GLOBAL_NACOS_PROPERTIES_BEAN_NAME));
+	}
 
-    @Test(expected = NoSuchBeanDefinitionException.class)
-    public void testNacosDiscoveryGlobalBean() {
-        Assert.assertNull(applicationContext.getBean(NacosBeanUtils.DISCOVERY_GLOBAL_NACOS_PROPERTIES_BEAN_NAME));
-    }
+	@Test(expected = NoSuchBeanDefinitionException.class)
+	public void testNacosDiscoveryGlobalBean() {
+		Assert.assertNull(applicationContext
+				.getBean(NacosBeanUtils.DISCOVERY_GLOBAL_NACOS_PROPERTIES_BEAN_NAME));
+	}
 
-    @Test
-    public void testNacosGlobalProperties() {
-        Properties properties = applicationContext.getBean(NacosBeanUtils.CONFIG_GLOBAL_NACOS_PROPERTIES_BEAN_NAME, Properties.class);
-        Assert.assertEquals("localhost", properties.getProperty(PropertyKeyConst.SERVER_ADDR));
-    }
+	@Test
+	public void testNacosGlobalProperties() {
+		Properties properties = applicationContext.getBean(
+				NacosBeanUtils.CONFIG_GLOBAL_NACOS_PROPERTIES_BEAN_NAME,
+				Properties.class);
+		Assert.assertEquals("localhost",
+				properties.getProperty(PropertyKeyConst.SERVER_ADDR));
+	}
 
 }

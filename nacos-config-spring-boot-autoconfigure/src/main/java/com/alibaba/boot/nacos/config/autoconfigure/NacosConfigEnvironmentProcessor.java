@@ -16,6 +16,9 @@
  */
 package com.alibaba.boot.nacos.config.autoconfigure;
 
+import java.util.LinkedList;
+import java.util.Properties;
+
 import com.alibaba.boot.nacos.config.properties.NacosConfigProperties;
 import com.alibaba.boot.nacos.config.util.Function;
 import com.alibaba.boot.nacos.config.util.NacosConfigPropertiesUtils;
@@ -23,64 +26,71 @@ import com.alibaba.boot.nacos.config.util.NacosConfigUtils;
 import com.alibaba.nacos.api.NacosFactory;
 import com.alibaba.nacos.api.config.ConfigService;
 import com.alibaba.nacos.api.exception.NacosException;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.env.EnvironmentPostProcessor;
 import org.springframework.core.Ordered;
 import org.springframework.core.env.ConfigurableEnvironment;
 
-import java.util.LinkedList;
-import java.util.Properties;
-
 /**
  * @author <a href="mailto:liaochunyhm@live.com">liaochuntao</a>
  * @since
  */
-public class NacosConfigEnvironmentProcessor implements EnvironmentPostProcessor, Ordered {
+public class NacosConfigEnvironmentProcessor
+		implements EnvironmentPostProcessor, Ordered {
 
-    private final LinkedList<NacosConfigUtils.DeferNacosPropertySource> deferPropertySources = new LinkedList<>();
+	private final LinkedList<NacosConfigUtils.DeferNacosPropertySource> deferPropertySources = new LinkedList<>();
 
-    private NacosConfigProperties nacosConfigProperties;
+	private NacosConfigProperties nacosConfigProperties;
 
-    private final Function<Properties, ConfigService> builder = new Function<Properties, ConfigService>() {
+	private final Function<Properties, ConfigService> builder = new Function<Properties, ConfigService>() {
 
-        @Override
-        public ConfigService apply(Properties input) {
-            try {
-                // TODO And prevent to create a large number of ConfigService optimization point is given
-                return NacosFactory.createConfigService(input);
-            } catch (NacosException e) {
-                throw new NacosBootConfigException("ConfigService can't be created with properties : " + input, e);
-            }
-        }
-    };
+		@Override
+		public ConfigService apply(Properties input) {
+			try {
+				// TODO And prevent to create a large number of ConfigService optimization
+				// point is given
+				return NacosFactory.createConfigService(input);
+			}
+			catch (NacosException e) {
+				throw new NacosBootConfigException(
+						"ConfigService can't be created with properties : " + input, e);
+			}
+		}
+	};
 
-    @Override
-    public void postProcessEnvironment(ConfigurableEnvironment environment, SpringApplication application) {
-        application.addInitializers(new NacosConfigApplicationInitializer(this));
-        nacosConfigProperties = NacosConfigPropertiesUtils.buildNacosConfigProperties(environment);
-        if (enable()) {
-            System.out.println("[Nacos Config Boot] : The preload log configuration is enabled");
-            loadConfig(environment);
-        }
-    }
+	@Override
+	public void postProcessEnvironment(ConfigurableEnvironment environment,
+			SpringApplication application) {
+		application.addInitializers(new NacosConfigApplicationInitializer(this));
+		nacosConfigProperties = NacosConfigPropertiesUtils
+				.buildNacosConfigProperties(environment);
+		if (enable()) {
+			System.out.println(
+					"[Nacos Config Boot] : The preload log configuration is enabled");
+			loadConfig(environment);
+		}
+	}
 
-    private void loadConfig(ConfigurableEnvironment environment) {
-        final NacosConfigUtils configUtils = new NacosConfigUtils(nacosConfigProperties, environment, builder);
-        configUtils.loadConfig();
-        // set defer nacosPropertySource
-        deferPropertySources.addAll(configUtils.getNacosPropertySources());
-    }
+	private void loadConfig(ConfigurableEnvironment environment) {
+		final NacosConfigUtils configUtils = new NacosConfigUtils(nacosConfigProperties,
+				environment, builder);
+		configUtils.loadConfig();
+		// set defer nacosPropertySource
+		deferPropertySources.addAll(configUtils.getNacosPropertySources());
+	}
 
-    boolean enable() {
-        return nacosConfigProperties != null && nacosConfigProperties.getBootstrap().isLogEnable();
-    }
+	boolean enable() {
+		return nacosConfigProperties != null
+				&& nacosConfigProperties.getBootstrap().isLogEnable();
+	}
 
-    LinkedList<NacosConfigUtils.DeferNacosPropertySource> getDeferPropertySources() {
-        return deferPropertySources;
-    }
+	LinkedList<NacosConfigUtils.DeferNacosPropertySource> getDeferPropertySources() {
+		return deferPropertySources;
+	}
 
-    @Override
-    public int getOrder() {
-        return Ordered.LOWEST_PRECEDENCE;
-    }
+	@Override
+	public int getOrder() {
+		return Ordered.LOWEST_PRECEDENCE;
+	}
 }
