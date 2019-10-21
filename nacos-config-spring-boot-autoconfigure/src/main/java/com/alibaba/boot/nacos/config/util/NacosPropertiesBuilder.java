@@ -26,12 +26,12 @@ import org.springframework.util.CollectionUtils;
 
 /**
  * @author <a href="mailto:liaochunyhm@live.com">liaochuntao</a>
- * @since
+ * @since 0.3.3
  */
 public class NacosPropertiesBuilder {
 
 	public static Properties buildNacosProperties(String serverAddr, String namespaceId,
-			String endpoint, String secreyKey, String accessKey, String ramRoleName,
+			String endpoint, String secretKey, String accessKey, String ramRoleName,
 			String configLongPollTimeout, String configRetryTimeout, String maxRetry,
 			boolean enableRemoteSyncConfig) {
 
@@ -45,8 +45,8 @@ public class NacosPropertiesBuilder {
 		if (StringUtils.isNotEmpty(endpoint)) {
 			properties.put(PropertyKeyConst.ENDPOINT, endpoint);
 		}
-		if (StringUtils.isNotEmpty(secreyKey)) {
-			properties.put(PropertyKeyConst.SECRET_KEY, secreyKey);
+		if (StringUtils.isNotEmpty(secretKey)) {
+			properties.put(PropertyKeyConst.SECRET_KEY, secretKey);
 		}
 		if (StringUtils.isNotEmpty(accessKey)) {
 			properties.put(PropertyKeyConst.ACCESS_KEY, accessKey);

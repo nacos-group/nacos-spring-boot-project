@@ -39,7 +39,7 @@ import static com.alibaba.nacos.spring.util.NacosUtils.buildDefaultPropertySourc
 
 /**
  * @author <a href="mailto:liaochunyhm@live.com">liaochuntao</a>
- * @since
+ * @since 0.3.3
  */
 public class NacosConfigUtils {
 
@@ -144,6 +144,9 @@ public class NacosConfigUtils {
 			String[] dataIds, String groupId, ConfigType type, boolean isAutoRefresh) {
 		final NacosPropertySource[] propertySources = new NacosPropertySource[dataIds.length];
 		for (int i = 0; i < dataIds.length; i++) {
+			if (StringUtils.isEmpty(dataIds[i])) {
+				continue;
+			}
 			final String dataId = environment.resolvePlaceholders(dataIds[i].trim());
 			final String config = NacosUtils.getContent(builder.apply(configProperties),
 					dataId, groupId);

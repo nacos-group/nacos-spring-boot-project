@@ -40,7 +40,7 @@ import org.springframework.core.env.ConfigurableEnvironment;
 
 /**
  * @author <a href="mailto:liaochunyhm@live.com">liaochuntao</a>
- * @since
+ * @since 0.3.3
  */
 public class NacosConfigPropertiesUtils {
 
@@ -77,9 +77,11 @@ public class NacosConfigPropertiesUtils {
 			// Realize the object attribute value filtering
 			Map<String, Object> properties = new HashMap<>(8);
 			for (Map.Entry<String, Object> entry : task.call().entrySet()) {
+				String key = buildJavaField(entry.getKey());
 				for (String fieldName : OBJ_FIELD_NAME) {
-					if (entry.getKey().matches(fieldName)) {
+					if (key.contains(fieldName)) {
 						properties.put(entry.getKey(), entry.getValue());
+						break;
 					}
 				}
 			}
@@ -102,25 +104,26 @@ public class NacosConfigPropertiesUtils {
 		for (Map.Entry<String, Object> entry : source.entrySet()) {
 			if (entry.getKey().startsWith(prefix)) {
 				String key = entry.getKey().replace(prefix, "");
-				if (key.contains("-")) {
-					String[] subs = key.split("-");
-					key = buildJavaField(subs);
-				}
+				key = buildJavaField(key);
 				targetConfigInfo.put(key, entry.getValue());
 			}
 		}
 		return targetConfigInfo;
 	}
 
-	private static String buildJavaField(String[] subs) {
-		StringBuilder sb = new StringBuilder();
-		sb.append(subs[0]);
-		for (int i = 1; i < subs.length; i++) {
-			char[] chars = subs[i].toCharArray();
-			chars[0] = Character.toUpperCase(chars[0]);
-			sb.append(chars);
+	private static String buildJavaField(String key) {
+		if (key.contains("-")) {
+			StringBuilder sb = new StringBuilder();
+			String[] subs = key.split("-");
+			sb.append(subs[0]);
+			for (int i = 1; i < subs.length; i++) {
+				char[] chars = subs[i].toCharArray();
+				chars[0] = Character.toUpperCase(chars[0]);
+				sb.append(chars);
+			}
+			return sb.toString();
 		}
-		return sb.toString();
+		return key;
 	}
 
 }
