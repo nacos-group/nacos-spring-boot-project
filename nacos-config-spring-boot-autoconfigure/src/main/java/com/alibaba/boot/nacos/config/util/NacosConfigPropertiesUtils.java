@@ -75,8 +75,9 @@ public class NacosConfigPropertiesUtils {
 			Map<String, String> properties = new HashMap<>(8);
 			Map<String, String> tmp = dataSource(task.call());
 			for (Map.Entry<String, String> entry : tmp.entrySet()) {
+				String key = buildJavaField(entry.getKey());
 				for (String fieldName : OBJ_FILED_NAME) {
-					if (entry.getKey().contains(fieldName)) {
+					if (key.contains(fieldName)) {
 						properties.put(entry.getKey(), entry.getValue());
 						break;
 					}
@@ -99,25 +100,26 @@ public class NacosConfigPropertiesUtils {
 		for (Map.Entry<String, String> entry : source.entrySet()) {
 			if (entry.getKey().startsWith(prefix)) {
 				String key = entry.getKey().replace(prefix, "");
-				if (key.contains("-")) {
-					String[] subs = key.split("-");
-					key = buildJavaField(subs);
-				}
+				key = buildJavaField(key);
 				targetConfigInfo.put(key, entry.getValue());
 			}
 		}
 		return targetConfigInfo;
 	}
 
-	private static String buildJavaField(String[] subs) {
-		StringBuilder sb = new StringBuilder();
-		sb.append(subs[0]);
-		for (int i = 1; i < subs.length; i++) {
-			char[] chars = subs[i].toCharArray();
-			chars[0] = Character.toUpperCase(chars[0]);
-			sb.append(chars);
+	private static String buildJavaField(String key) {
+		if (key.contains("-")) {
+			String[] subs = key.split("-");
+			StringBuilder sb = new StringBuilder();
+			sb.append(subs[0]);
+			for (int i = 1; i < subs.length; i++) {
+				char[] chars = subs[i].toCharArray();
+				chars[0] = Character.toUpperCase(chars[0]);
+				sb.append(chars);
+			}
+			return sb.toString();
 		}
-		return sb.toString();
+		return key;
 	}
 
 }

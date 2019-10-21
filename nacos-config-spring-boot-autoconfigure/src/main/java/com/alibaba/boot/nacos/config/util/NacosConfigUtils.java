@@ -137,6 +137,9 @@ public class NacosConfigUtils {
 			String[] dataIds, String groupId, ConfigType type, boolean isAutoRefresh) {
 		final NacosPropertySource[] propertySources = new NacosPropertySource[dataIds.length];
 		for (int i = 0; i < dataIds.length; i++) {
+			if (StringUtils.isEmpty(dataIds[i])) {
+				continue;
+			}
 			// Remove excess Spaces
 			final String dataId = environment.resolvePlaceholders(dataIds[i].trim());
 			final String config = NacosUtils.getContent(builder.apply(configProperties),
