@@ -16,110 +16,36 @@
  */
 package com.alibaba.boot.nacos.config.util;
 
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
 import com.alibaba.boot.nacos.config.NacosConfigConstants;
 import com.alibaba.boot.nacos.config.properties.NacosConfigProperties;
-import com.alibaba.boot.nacos.config.util.editor.NacosEnumEditor;
-import com.alibaba.nacos.api.config.ConfigType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.springframework.beans.BeanWrapper;
-import org.springframework.beans.BeanWrapperImpl;
-import org.springframework.beans.propertyeditors.CustomCollectionEditor;
+import org.springframework.boot.context.properties.bind.Bindable;
+import org.springframework.boot.context.properties.bind.Binder;
+import org.springframework.core.ResolvableType;
 import org.springframework.core.env.ConfigurableEnvironment;
 
 /**
+ * Springboot used to own property binding configured binding
+ *
  * @author <a href="mailto:liaochunyhm@live.com">liaochuntao</a>
- * @since
+ * @since 0.2.4
  */
 public class NacosConfigPropertiesUtils {
-
-	private static final String PROPERTIES_PREFIX = "nacos";
 
 	private static final Logger logger = LoggerFactory
 			.getLogger(NacosConfigPropertiesUtils.class);
 
-	private static final Set<String> OBJ_FILED_NAME = new HashSet<>();
-
-	static {
-		Class<NacosConfigProperties> cls = NacosConfigProperties.class;
-		Field[] fields = cls.getDeclaredFields();
-		for (Field field : fields) {
-			OBJ_FILED_NAME.add(field.getName());
-		}
-	}
-
 	public static NacosConfigProperties buildNacosConfigProperties(
 			ConfigurableEnvironment environment) {
-		BeanWrapper wrapper = new BeanWrapperImpl(new NacosConfigProperties());
-		wrapper.setAutoGrowNestedPaths(true);
-		wrapper.setExtractOldValueForEditor(true);
-		wrapper.registerCustomEditor(ConfigType.class,
-				new NacosEnumEditor(ConfigType.class));
-		wrapper.registerCustomEditor(Collection.class,
-				new CustomCollectionEditor(ArrayList.class));
-
-		AttributeExtractTask task = new AttributeExtractTask(PROPERTIES_PREFIX,
-				environment);
-
-		try {
-			// Filter object property values
-			Map<String, String> properties = new HashMap<>(8);
-			Map<String, String> tmp = dataSource(task.call());
-			for (Map.Entry<String, String> entry : tmp.entrySet()) {
-				String key = buildJavaField(entry.getKey());
-				for (String fieldName : OBJ_FILED_NAME) {
-					if (key.contains(fieldName)) {
-						properties.put(entry.getKey(), entry.getValue());
-						break;
-					}
-				}
-			}
-			wrapper.setPropertyValues(properties);
-		}
-		catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-		NacosConfigProperties nacosConfigProperties = (NacosConfigProperties) wrapper
-				.getWrappedInstance();
+		NacosConfigProperties nacosConfigProperties = new NacosConfigProperties();
+		Binder binder = Binder.get(environment);
+		ResolvableType type = ResolvableType.forClass(NacosConfigProperties.class);
+		Bindable<?> target = Bindable.of(type).withExistingValue(nacosConfigProperties);
+		binder.bind(NacosConfigConstants.PREFIX, target);
 		logger.debug("nacosConfigProperties : {}", nacosConfigProperties);
 		return nacosConfigProperties;
-	}
-
-	private static Map<String, String> dataSource(Map<String, String> source) {
-		String prefix = NacosConfigConstants.PREFIX + ".";
-		HashMap<String, String> targetConfigInfo = new HashMap<>(source.size());
-		for (Map.Entry<String, String> entry : source.entrySet()) {
-			if (entry.getKey().startsWith(prefix)) {
-				String key = entry.getKey().replace(prefix, "");
-				key = buildJavaField(key);
-				targetConfigInfo.put(key, entry.getValue());
-			}
-		}
-		return targetConfigInfo;
-	}
-
-	private static String buildJavaField(String key) {
-		if (key.contains("-")) {
-			String[] subs = key.split("-");
-			StringBuilder sb = new StringBuilder();
-			sb.append(subs[0]);
-			for (int i = 1; i < subs.length; i++) {
-				char[] chars = subs[i].toCharArray();
-				chars[0] = Character.toUpperCase(chars[0]);
-				sb.append(chars);
-			}
-			return sb.toString();
-		}
-		return key;
 	}
 
 }
