@@ -31,7 +31,7 @@ import org.springframework.core.env.PropertySource;
 
 /**
  * @author <a href="mailto:liaochunyhm@live.com">liaochuntao</a>
- * @since
+ * @since 0.1.3
  */
 public class AttributeExtractTask implements Callable<Map<String, Object>> {
 

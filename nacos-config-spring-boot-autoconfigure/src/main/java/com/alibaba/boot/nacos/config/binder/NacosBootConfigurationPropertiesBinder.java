@@ -18,14 +18,13 @@ package com.alibaba.boot.nacos.config.binder;
 
 import java.util.Properties;
 
+import com.alibaba.boot.nacos.config.util.BinderUtils;
 import com.alibaba.nacos.api.config.ConfigService;
 import com.alibaba.nacos.api.config.annotation.NacosConfigurationProperties;
 import com.alibaba.nacos.spring.context.properties.config.NacosConfigurationPropertiesBinder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.springframework.beans.MutablePropertyValues;
-import org.springframework.boot.bind.RelaxedDataBinder;
 import org.springframework.context.ConfigurableApplicationContext;
 
 import static com.alibaba.nacos.spring.util.NacosUtils.toProperties;
@@ -53,8 +52,7 @@ public class NacosBootConfigurationPropertiesBinder
 			String configType, NacosConfigurationProperties properties, String content,
 			ConfigService configService) {
 		Properties prop = toProperties(dataId, groupId, content, configType);
-		RelaxedDataBinder binder = new RelaxedDataBinder(bean, properties.prefix());
-		binder.bind(new MutablePropertyValues(prop));
+		BinderUtils.bind(bean, properties.prefix(), prop);
 		publishBoundEvent(bean, beanName, dataId, groupId, properties, content,
 				configService);
 		publishMetadataEvent(bean, beanName, dataId, groupId, properties);
