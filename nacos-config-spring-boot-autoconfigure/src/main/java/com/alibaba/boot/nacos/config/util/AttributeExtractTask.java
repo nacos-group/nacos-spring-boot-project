@@ -33,7 +33,6 @@ import org.springframework.core.env.PropertySource;
  * @author <a href="mailto:liaochunyhm@live.com">liaochuntao</a>
  * @since 0.2.3
  */
-@Deprecated
 public class AttributeExtractTask implements Callable<Map<String, String>> {
 
 	private final String prefix;

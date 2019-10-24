@@ -30,7 +30,7 @@ import org.springframework.core.type.AnnotationMetadata;
 
 /**
  * @author <a href="mailto:liaochunyhm@live.com">liaochuntao</a>
- * @since
+ * @since 0.2.2
  */
 @Configuration
 public class NacosConfigBootBeanDefinitionRegistrar

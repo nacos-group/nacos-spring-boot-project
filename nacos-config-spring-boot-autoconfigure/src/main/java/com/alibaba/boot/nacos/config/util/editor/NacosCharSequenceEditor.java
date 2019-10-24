@@ -20,7 +20,7 @@ import java.beans.PropertyEditorSupport;
 
 /**
  * @author <a href="mailto:liaochunyhm@live.com">liaochuntao</a>
- * @since
+ * @since 0.2.3
  */
 public class NacosCharSequenceEditor extends PropertyEditorSupport {
 

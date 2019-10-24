@@ -30,7 +30,7 @@ import org.springframework.core.env.ConfigurableEnvironment;
  * Springboot used to own property binding configured binding
  *
  * @author <a href="mailto:liaochunyhm@live.com">liaochuntao</a>
- * @since 0.2.4
+ * @since 0.2.3
  */
 public class NacosConfigPropertiesUtils {
 

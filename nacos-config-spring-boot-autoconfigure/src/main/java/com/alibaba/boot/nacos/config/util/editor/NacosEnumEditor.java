@@ -25,11 +25,11 @@ import java.util.List;
 
 /**
  * @author <a href="mailto:liaochunyhm@live.com">liaochuntao</a>
- * @since
+ * @since 0.2.3
  */
 public class NacosEnumEditor implements PropertyEditor {
 
-	private final List<PropertyChangeListener> listeners = new ArrayList();
+	private final List<PropertyChangeListener> listeners = new ArrayList<>(8);
 	private final Class type;
 	private final String[] tags;
 	private Object value;

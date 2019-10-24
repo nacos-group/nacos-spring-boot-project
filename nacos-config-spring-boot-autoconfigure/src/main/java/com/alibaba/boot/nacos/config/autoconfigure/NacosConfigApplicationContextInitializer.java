@@ -34,7 +34,7 @@ import org.springframework.core.env.ConfigurableEnvironment;
 
 /**
  * @author <a href="mailto:liaochunyhm@live.com">liaochuntao</a>
- * @since
+ * @since 0.2.2
  */
 public class NacosConfigApplicationContextInitializer
 		implements ApplicationContextInitializer<ConfigurableApplicationContext> {
