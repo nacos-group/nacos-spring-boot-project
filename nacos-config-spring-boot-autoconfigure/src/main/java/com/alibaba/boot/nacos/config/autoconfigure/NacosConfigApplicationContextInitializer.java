@@ -61,6 +61,7 @@ public class NacosConfigApplicationContextInitializer
 		environment = context.getEnvironment();
 		nacosConfigProperties = NacosConfigPropertiesUtils
 				.buildNacosConfigProperties(environment);
+		processor.publishDeferService();
 		if (!enable()) {
 			logger.info("[Nacos Config Boot] : The preload configuration is not enabled");
 		}
