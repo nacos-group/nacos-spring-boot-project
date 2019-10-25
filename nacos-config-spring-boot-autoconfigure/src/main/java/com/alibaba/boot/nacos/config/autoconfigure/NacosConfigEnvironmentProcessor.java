@@ -16,7 +16,9 @@
  */
 package com.alibaba.boot.nacos.config.autoconfigure;
 
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 import java.util.Properties;
 
 import com.alibaba.boot.nacos.config.properties.NacosConfigProperties;
@@ -26,7 +28,11 @@ import com.alibaba.boot.nacos.config.util.NacosConfigUtils;
 import com.alibaba.nacos.api.NacosFactory;
 import com.alibaba.nacos.api.config.ConfigService;
 import com.alibaba.nacos.api.exception.NacosException;
+import com.alibaba.nacos.spring.factory.CacheableEventPublishingNacosServiceFactory;
+import com.alibaba.nacos.spring.util.NacosUtils;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.env.EnvironmentPostProcessor;
 import org.springframework.core.Ordered;
@@ -34,12 +40,18 @@ import org.springframework.core.env.ConfigurableEnvironment;
 
 /**
  * @author <a href="mailto:liaochunyhm@live.com">liaochuntao</a>
- * @since
+ * @since 0.2.3
  */
 public class NacosConfigEnvironmentProcessor
 		implements EnvironmentPostProcessor, Ordered {
 
+	private final Logger logger = LoggerFactory
+			.getLogger(NacosConfigEnvironmentProcessor.class);
+
+	private final CacheableEventPublishingNacosServiceFactory nacosServiceFactory = CacheableEventPublishingNacosServiceFactory
+			.getSingleton();
 	private final LinkedList<NacosConfigUtils.DeferNacosPropertySource> deferPropertySources = new LinkedList<>();
+	private final Map<String, ConfigService> serviceCache = new HashMap<>(8);
 
 	private NacosConfigProperties nacosConfigProperties;
 
@@ -48,9 +60,14 @@ public class NacosConfigEnvironmentProcessor
 		@Override
 		public ConfigService apply(Properties input) {
 			try {
-				// TODO And prevent to create a large number of ConfigService optimization
-				// point is given
-				return NacosFactory.createConfigService(input);
+				final String key = NacosUtils.identify(input);
+				ConfigService service = serviceCache.get(key);
+				if (service != null) {
+					return serviceCache.get(key);
+				}
+				service = NacosFactory.createConfigService(input);
+				serviceCache.put(key, service);
+				return nacosServiceFactory.deferCreateService(service, input);
 			}
 			catch (NacosException e) {
 				throw new NacosBootConfigException(
@@ -87,6 +104,16 @@ public class NacosConfigEnvironmentProcessor
 
 	LinkedList<NacosConfigUtils.DeferNacosPropertySource> getDeferPropertySources() {
 		return deferPropertySources;
+	}
+
+	void publishDeferService() {
+		try {
+			nacosServiceFactory.publishDeferService();
+			serviceCache.clear();
+		}
+		catch (Exception e) {
+			logger.error("publish defer ConfigService has some error : {}", e);
+		}
 	}
 
 	@Override

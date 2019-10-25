@@ -108,9 +108,11 @@ public class NacosConfigUtils {
 	private List<NacosPropertySource> reqGlobalNacosConfig(Properties globalProperties,
 			ConfigType type) {
 		List<String> dataIds = new ArrayList<>();
-		// Loads all dataid information into the list in the list
+		// Loads all data-id information into the list in the list
 		if (StringUtils.isEmpty(nacosConfigProperties.getDataId())) {
-			dataIds.addAll(Arrays.asList(nacosConfigProperties.getDataIds().split(",")));
+			final String ids = environment
+					.resolvePlaceholders(nacosConfigProperties.getDataIds());
+			dataIds.addAll(Arrays.asList(ids.split(",")));
 		}
 		else {
 			dataIds.add(nacosConfigProperties.getDataId());
@@ -129,7 +131,8 @@ public class NacosConfigUtils {
 				config);
 		ArrayList<String> dataIds = new ArrayList<>();
 		if (StringUtils.isEmpty(config.getDataId())) {
-			dataIds.addAll(Arrays.asList(config.getDataIds().split(",")));
+			final String ids = environment.resolvePlaceholders(config.getDataId());
+			dataIds.addAll(Arrays.asList(ids.split(",")));
 		}
 		else {
 			dataIds.add(config.getDataId());
