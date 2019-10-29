@@ -18,14 +18,14 @@ package com.alibaba.boot.nacos.actuate.endpoint;
 
 import java.util.Map;
 
+import com.alibaba.boot.nacos.config.autoconfigure.NacosConfigAutoConfiguration;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-
-import com.alibaba.boot.nacos.config.autoconfigure.NacosConfigAutoConfiguration;
 
 /**
  * {@link NacosConfigEndpoint} Test

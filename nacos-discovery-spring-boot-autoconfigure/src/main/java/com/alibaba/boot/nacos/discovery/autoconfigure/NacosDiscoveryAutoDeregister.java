@@ -25,6 +25,7 @@ import com.alibaba.nacos.client.naming.utils.NetUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.server.WebServer;
 import org.springframework.context.ApplicationListener;
@@ -33,50 +34,58 @@ import org.springframework.stereotype.Component;
 
 /**
  * @author <a href="mailto:liaochunyhm@live.com">liaochuntao</a>
- * @since
+ * @since 0.2.4
  */
 @Component
-public class NacosDiscoveryAutoDeregister implements ApplicationListener<ContextClosedEvent> {
+public class NacosDiscoveryAutoDeregister
+		implements ApplicationListener<ContextClosedEvent> {
 
-    private static final Logger logger = LoggerFactory.getLogger(NacosDiscoveryAutoRegister.class);
+	private static final Logger logger = LoggerFactory
+			.getLogger(NacosDiscoveryAutoRegister.class);
 
-    @NacosInjected
-    private NamingService namingService;
+	@NacosInjected
+	private NamingService namingService;
 
-    private final NacosDiscoveryProperties discoveryProperties;
-    private final WebServer webServer;
+	private final NacosDiscoveryProperties discoveryProperties;
+	private final WebServer webServer;
 
-    @Value("${spring.application.name:spring.application.name}")
-    private String applicationName;
+	@Value("${spring.application.name:spring.application.name}")
+	private String applicationName;
 
-    public NacosDiscoveryAutoDeregister(NacosDiscoveryProperties discoveryProperties, WebServer webServer) {
-        this.discoveryProperties = discoveryProperties;
-        this.webServer = webServer;
-    }
+	public NacosDiscoveryAutoDeregister(NacosDiscoveryProperties discoveryProperties,
+			WebServer webServer) {
+		this.discoveryProperties = discoveryProperties;
+		this.webServer = webServer;
+	}
 
-    @Override
-    public void onApplicationEvent(ContextClosedEvent event) {
-        if (!discoveryProperties.isAutoRegister()) {
-            return;
-        }
+	@Override
+	public void onApplicationEvent(ContextClosedEvent event) {
+		if (!discoveryProperties.isAutoRegister()) {
+			return;
+		}
 
-        Register register = discoveryProperties.getRegister();
+		Register register = discoveryProperties.getRegister();
 
-        if (StringUtils.isEmpty(register.getIp())) {
-            register.setIp(NetUtils.localIP());
-        }
+		if (StringUtils.isEmpty(register.getIp())) {
+			register.setIp(NetUtils.localIP());
+		}
 
-        if (register.getPort() == 0) {
-            register.setPort(webServer.getPort());
-        }
+		if (register.getPort() == 0) {
+			register.setPort(webServer.getPort());
+		}
 
-        String serviceName = StringUtils.isEmpty(register.getServiceName()) ? applicationName : register.getServiceName();
+		String serviceName = StringUtils.isEmpty(register.getServiceName())
+				? applicationName
+				: register.getServiceName();
 
-        try {
-            namingService.deregisterInstance(serviceName, register.getGroupName(), register);
-            logger.info("Finished auto deregister service : {}, ip : {}, port : {}", register.getServiceName(), register.getIp(), register.getPort());
-        } catch (NacosException e) {
-            throw new AutoDeregisterException(e);
-        }
-    }
+		try {
+			namingService.deregisterInstance(serviceName, register.getGroupName(),
+					register);
+			logger.info("Finished auto deregister service : {}, ip : {}, port : {}",
+					register.getServiceName(), register.getIp(), register.getPort());
+		}
+		catch (NacosException e) {
+			throw new AutoDeregisterException(e);
+		}
+	}
 }

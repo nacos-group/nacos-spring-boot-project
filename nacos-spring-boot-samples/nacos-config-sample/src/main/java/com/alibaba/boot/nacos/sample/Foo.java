@@ -16,42 +16,36 @@
  */
 package com.alibaba.boot.nacos.sample;
 
-
 import com.alibaba.nacos.api.config.annotation.NacosConfigurationProperties;
 
 /**
  * @author <a href="mailto:fangjian0423@gmail.com">Jim</a>
  */
-@NacosConfigurationProperties(
-    dataId = ConfigApplication.DATA_ID
-)
+@NacosConfigurationProperties(dataId = ConfigApplication.DATA_ID)
 public class Foo {
 
-    private String dept;
+	private String dept;
 
-    private String group;
+	private String group;
 
-    public String getDept() {
-        return dept;
-    }
+	public String getDept() {
+		return dept;
+	}
 
-    public void setDept(String dept) {
-        this.dept = dept;
-    }
+	public void setDept(String dept) {
+		this.dept = dept;
+	}
 
-    public String getGroup() {
-        return group;
-    }
+	public String getGroup() {
+		return group;
+	}
 
-    public void setGroup(String group) {
-        this.group = group;
-    }
+	public void setGroup(String group) {
+		this.group = group;
+	}
 
-    @Override
-    public String toString() {
-        return "Foo{" +
-                "dept='" + dept + '\'' +
-                ", group='" + group + '\'' +
-                '}';
-    }
+	@Override
+	public String toString() {
+		return "Foo{" + "dept='" + dept + '\'' + ", group='" + group + '\'' + '}';
+	}
 }

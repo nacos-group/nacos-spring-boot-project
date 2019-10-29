@@ -16,6 +16,10 @@
  */
 package com.alibaba.boot.nacos.actuate.autoconfigure;
 
+import com.alibaba.boot.nacos.actuate.health.NacosConfigHealthIndicator;
+import com.alibaba.boot.nacos.config.NacosConfigConstants;
+import com.alibaba.boot.nacos.config.autoconfigure.NacosConfigAutoConfiguration;
+
 import org.springframework.boot.actuate.autoconfigure.endpoint.EndpointAutoConfiguration;
 import org.springframework.boot.actuate.autoconfigure.health.ConditionalOnEnabledHealthIndicator;
 import org.springframework.boot.actuate.health.HealthIndicator;
@@ -25,10 +29,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import com.alibaba.boot.nacos.actuate.health.NacosConfigHealthIndicator;
-import com.alibaba.boot.nacos.config.NacosConfigConstants;
-import com.alibaba.boot.nacos.config.autoconfigure.NacosConfigAutoConfiguration;
 
 /**
  * Nacos {@link NacosConfigHealthIndicator} Auto Configuration
