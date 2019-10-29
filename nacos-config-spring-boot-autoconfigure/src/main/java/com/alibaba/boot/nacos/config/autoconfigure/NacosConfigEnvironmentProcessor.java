@@ -35,6 +35,7 @@ import org.slf4j.LoggerFactory;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.env.EnvironmentPostProcessor;
+import org.springframework.context.ApplicationContext;
 import org.springframework.core.Ordered;
 import org.springframework.core.env.ConfigurableEnvironment;
 
@@ -110,9 +111,9 @@ public class NacosConfigEnvironmentProcessor
 		return Ordered.LOWEST_PRECEDENCE;
 	}
 
-	void publishDeferService() {
+	void publishDeferService(ApplicationContext context) {
 		try {
-			nacosServiceFactory.publishDeferService();
+			nacosServiceFactory.publishDeferService(context);
 			serviceCache.clear();
 		}
 		catch (Exception e) {
