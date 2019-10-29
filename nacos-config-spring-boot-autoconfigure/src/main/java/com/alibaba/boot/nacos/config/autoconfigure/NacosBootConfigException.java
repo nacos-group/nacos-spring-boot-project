@@ -22,11 +22,11 @@ package com.alibaba.boot.nacos.config.autoconfigure;
  */
 public class NacosBootConfigException extends RuntimeException {
 
-    public NacosBootConfigException(Throwable cause) {
-        super(cause);
-    }
+	public NacosBootConfigException(Throwable cause) {
+		super(cause);
+	}
 
-    public NacosBootConfigException(String message, Throwable cause) {
-        super(message, cause);
-    }
+	public NacosBootConfigException(String message, Throwable cause) {
+		super(message, cause);
+	}
 }

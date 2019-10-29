@@ -22,7 +22,7 @@ package com.alibaba.boot.nacos.discovery.autoconfigure;
  */
 public class AutoDeregisterException extends RuntimeException {
 
-    public AutoDeregisterException(Throwable cause) {
-        super(cause);
-    }
+	public AutoDeregisterException(Throwable cause) {
+		super(cause);
+	}
 }

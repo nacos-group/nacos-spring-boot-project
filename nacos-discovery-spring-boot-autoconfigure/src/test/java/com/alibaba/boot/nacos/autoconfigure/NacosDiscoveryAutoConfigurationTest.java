@@ -20,20 +20,20 @@ import java.util.Properties;
 
 import com.alibaba.boot.nacos.discovery.autoconfigure.NacosDiscoveryAutoConfiguration;
 import com.alibaba.boot.nacos.discovery.properties.NacosDiscoveryProperties;
+import com.alibaba.nacos.api.PropertyKeyConst;
+import com.alibaba.nacos.api.annotation.NacosInjected;
 import com.alibaba.nacos.api.naming.NamingService;
+import com.alibaba.nacos.spring.util.NacosBeanUtils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
-import com.alibaba.nacos.api.PropertyKeyConst;
-import com.alibaba.nacos.api.annotation.NacosInjected;
-import com.alibaba.nacos.spring.util.NacosBeanUtils;
 
 /**
  * {@link NacosDiscoveryAutoConfiguration} Test
@@ -42,46 +42,46 @@ import com.alibaba.nacos.spring.util.NacosBeanUtils;
  * @see NacosDiscoveryAutoConfiguration
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@TestPropertySource(
-        properties = {
-                "nacos.discovery.server-addr=localhost"
-        }
-)
-@SpringBootTest(
-        classes = {NacosDiscoveryAutoConfiguration.class}
-)
+@TestPropertySource(properties = { "nacos.discovery.server-addr=localhost" })
+@SpringBootTest(classes = { NacosDiscoveryAutoConfiguration.class })
 public class NacosDiscoveryAutoConfigurationTest {
 
-    @Autowired
-    private NacosDiscoveryProperties nacosDiscoveryProperties;
+	@Autowired
+	private NacosDiscoveryProperties nacosDiscoveryProperties;
 
-    @Autowired
-    private ApplicationContext applicationContext;
+	@Autowired
+	private ApplicationContext applicationContext;
 
-    @NacosInjected
-    private NamingService namingService;
+	@NacosInjected
+	private NamingService namingService;
 
-    @Test
-    public void testNacosDiscovery() {
-        Assert.assertNotNull(namingService);
-        Assert.assertNotNull(applicationContext.getBean(NacosBeanUtils.DISCOVERY_GLOBAL_NACOS_PROPERTIES_BEAN_NAME));
-        Assert.assertEquals("localhost", nacosDiscoveryProperties.getServerAddr());
-    }
+	@Test
+	public void testNacosDiscovery() {
+		Assert.assertNotNull(namingService);
+		Assert.assertNotNull(applicationContext
+				.getBean(NacosBeanUtils.DISCOVERY_GLOBAL_NACOS_PROPERTIES_BEAN_NAME));
+		Assert.assertEquals("localhost", nacosDiscoveryProperties.getServerAddr());
+	}
 
-    @Test(expected = NoSuchBeanDefinitionException.class)
-    public void testNacosConfigGlobalBean() {
-        Assert.assertNull(applicationContext.getBean(NacosBeanUtils.GLOBAL_NACOS_PROPERTIES_BEAN_NAME));
-    }
+	@Test(expected = NoSuchBeanDefinitionException.class)
+	public void testNacosConfigGlobalBean() {
+		Assert.assertNull(applicationContext
+				.getBean(NacosBeanUtils.GLOBAL_NACOS_PROPERTIES_BEAN_NAME));
+	}
 
-    @Test(expected = NoSuchBeanDefinitionException.class)
-    public void testNacosDiscoveryGlobalBean() {
-        Assert.assertNull(applicationContext.getBean(NacosBeanUtils.CONFIG_GLOBAL_NACOS_PROPERTIES_BEAN_NAME));
-    }
+	@Test(expected = NoSuchBeanDefinitionException.class)
+	public void testNacosDiscoveryGlobalBean() {
+		Assert.assertNull(applicationContext
+				.getBean(NacosBeanUtils.CONFIG_GLOBAL_NACOS_PROPERTIES_BEAN_NAME));
+	}
 
-    @Test
-    public void testNacosGlobalProperties() {
-        Properties properties = applicationContext.getBean(NacosBeanUtils.DISCOVERY_GLOBAL_NACOS_PROPERTIES_BEAN_NAME, Properties.class);
-        Assert.assertEquals("localhost", properties.getProperty(PropertyKeyConst.SERVER_ADDR));
-    }
+	@Test
+	public void testNacosGlobalProperties() {
+		Properties properties = applicationContext.getBean(
+				NacosBeanUtils.DISCOVERY_GLOBAL_NACOS_PROPERTIES_BEAN_NAME,
+				Properties.class);
+		Assert.assertEquals("localhost",
+				properties.getProperty(PropertyKeyConst.SERVER_ADDR));
+	}
 
 }

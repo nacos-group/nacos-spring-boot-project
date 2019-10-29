@@ -27,7 +27,7 @@ public interface NacosDiscoveryConstants {
 
 	String ENDPOINT_PREFIX = "nacos_discovery";
 
-    String ENABLED = EnableNacosDiscovery.DISCOVERY_PREFIX + "enabled";
+	String ENABLED = EnableNacosDiscovery.DISCOVERY_PREFIX + "enabled";
 
-    String PREFIX = "nacos.discovery";
+	String PREFIX = "nacos.discovery";
 }

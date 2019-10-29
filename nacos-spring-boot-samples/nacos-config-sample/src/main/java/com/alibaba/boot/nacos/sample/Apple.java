@@ -16,11 +16,11 @@
  */
 package com.alibaba.boot.nacos.sample;
 
-import com.alibaba.nacos.api.config.ConfigType;
-import com.alibaba.nacos.api.config.annotation.NacosConfigurationProperties;
-
 import java.util.List;
 import java.util.Map;
+
+import com.alibaba.nacos.api.config.ConfigType;
+import com.alibaba.nacos.api.config.annotation.NacosConfigurationProperties;
 
 /**
  * @author <a href="mailto:liaochunyhm@live.com">liaochuntao</a>
@@ -29,31 +29,28 @@ import java.util.Map;
 @NacosConfigurationProperties(dataId = "apple", type = ConfigType.YAML, ignoreNestedProperties = true)
 public class Apple {
 
-    private List<String> list;
+	private List<String> list;
 
-    private Map<String, List<String>> listMap;
+	private Map<String, List<String>> listMap;
 
-    public List<String> getList() {
-        return list;
-    }
+	public List<String> getList() {
+		return list;
+	}
 
-    public void setList(List<String> list) {
-        this.list = list;
-    }
+	public void setList(List<String> list) {
+		this.list = list;
+	}
 
-    public Map<String, List<String>> getListMap() {
-        return listMap;
-    }
+	public Map<String, List<String>> getListMap() {
+		return listMap;
+	}
 
-    public void setListMap(Map<String, List<String>> listMap) {
-        this.listMap = listMap;
-    }
+	public void setListMap(Map<String, List<String>> listMap) {
+		this.listMap = listMap;
+	}
 
-    @Override
-    public String toString() {
-        return "Apple{" +
-                "list=" + list +
-                ", listMap=" + listMap +
-                '}';
-    }
+	@Override
+	public String toString() {
+		return "Apple{" + "list=" + list + ", listMap=" + listMap + '}';
+	}
 }

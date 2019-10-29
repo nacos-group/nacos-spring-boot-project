@@ -18,17 +18,18 @@ package com.alibaba.boot.nacos.sample;
 
 import java.util.Properties;
 import java.util.concurrent.Executors;
-import javax.annotation.PostConstruct;
 import java.util.concurrent.TimeUnit;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.boot.logging.LogLevel;
-import org.springframework.boot.logging.LoggingSystem;
-import org.springframework.stereotype.Service;
+import javax.annotation.PostConstruct;
 
 import com.alibaba.nacos.api.config.annotation.NacosConfigListener;
 import com.alibaba.nacos.spring.util.parse.DefaultPropertiesConfigParse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import org.springframework.boot.logging.LogLevel;
+import org.springframework.boot.logging.LoggingSystem;
+import org.springframework.stereotype.Service;
 
 /**
  * @author <a href="mailto:liaochunyhm@live.com">liaochuntao</a>
@@ -36,46 +37,45 @@ import com.alibaba.nacos.spring.util.parse.DefaultPropertiesConfigParse;
  */
 @Service
 public class PrintLogger {
-    private static Logger logger = LoggerFactory.getLogger(PrintLogger.class);
+	private static Logger logger = LoggerFactory.getLogger(PrintLogger.class);
 
-    private static final String LOGGER_TAG = "logging.level.";
+	private static final String LOGGER_TAG = "logging.level.";
 
-    private LoggingSystem loggingSystem = LoggingSystem.get(PrintLogger.class.getClassLoader());
+	private LoggingSystem loggingSystem = LoggingSystem
+			.get(PrintLogger.class.getClassLoader());
 
-    @NacosConfigListener(
-            dataId = "nacos.log",
-            timeout = 5000
-    )
-    public void onChange(String newLog) throws Exception {
-        Properties properties = new DefaultPropertiesConfigParse().parse(newLog);
-        for (Object t : properties.keySet()) {
-            String key = String.valueOf(t);
-            if (key.startsWith(LOGGER_TAG)) {
-                String strLevel = properties.getProperty(key, "info");
-                LogLevel level = LogLevel.valueOf(strLevel.toUpperCase());
-                loggingSystem.setLogLevel(key.replace(LOGGER_TAG, ""), level);
-                logger.info("{}:{}", key, strLevel);
-            }
-        }
-    }
+	@NacosConfigListener(dataId = "nacos.log", timeout = 5000)
+	public void onChange(String newLog) throws Exception {
+		Properties properties = new DefaultPropertiesConfigParse().parse(newLog);
+		for (Object t : properties.keySet()) {
+			String key = String.valueOf(t);
+			if (key.startsWith(LOGGER_TAG)) {
+				String strLevel = properties.getProperty(key, "info");
+				LogLevel level = LogLevel.valueOf(strLevel.toUpperCase());
+				loggingSystem.setLogLevel(key.replace(LOGGER_TAG, ""), level);
+				logger.info("{}:{}", key, strLevel);
+			}
+		}
+	}
 
-    @PostConstruct
-    public void printLogger() throws Exception{
-        Executors.newSingleThreadExecutor().submit(new Runnable() {
-            @Override
-            public void run() {
-                while (true) {
-                    try {
-                        TimeUnit.SECONDS.sleep(5);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    logger.info("我是info级别日志");
-                    logger.error("我是error级别日志");
-                    logger.warn("我是warn级别日志");
-                    logger.debug("我是debug级别日志");
-                }
-            }
-        });
-    }
+	@PostConstruct
+	public void printLogger() throws Exception {
+		Executors.newSingleThreadExecutor().submit(new Runnable() {
+			@Override
+			public void run() {
+				while (true) {
+					try {
+						TimeUnit.SECONDS.sleep(5);
+					}
+					catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+					logger.info("我是info级别日志");
+					logger.error("我是error级别日志");
+					logger.warn("我是warn级别日志");
+					logger.debug("我是debug级别日志");
+				}
+			}
+		});
+	}
 }

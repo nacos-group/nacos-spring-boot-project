@@ -14,25 +14,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alibaba.boot.nacos.config;
+package com.alibaba.boot.nacos.config.util;
 
-import com.alibaba.nacos.spring.context.annotation.config.EnableNacosConfig;
+import java.util.Properties;
+
+import org.springframework.beans.MutablePropertyValues;
+import org.springframework.boot.bind.RelaxedDataBinder;
 
 /**
- * Nacos Config Constants
- *
- * @author <a href="mailto:fangjian0423@gmail.com">Jim</a>
+ * @author <a href="mailto:liaochunyhm@live.com">liaochuntao</a>
+ * @since 0.1.4
  */
-public interface NacosConfigConstants {
+public final class BinderUtils {
 
-	String ENDPOINT_PREFIX = "nacos_config";
-
-	String ENABLED = EnableNacosConfig.CONFIG_PREFIX + "enabled";
-
-	String PREFIX = "nacos.config";
-
-	String NACOS_BOOTSTRAP = PREFIX + ".bootstrap.enable";
-
-	String NACOS_LOG_BOOTSTRAP = PREFIX + ".bootstrap.log.enable";
+	public static <T> T bind(T obj, String prefix, Properties properties) {
+		RelaxedDataBinder binder = new RelaxedDataBinder(obj, prefix);
+		binder.bind(new MutablePropertyValues(properties));
+		return obj;
+	}
 
 }

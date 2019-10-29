@@ -25,13 +25,13 @@ import com.alibaba.nacos.api.naming.pojo.Instance;
  */
 public class Register extends Instance {
 
-    private String groupName = Constants.DEFAULT_GROUP;
+	private String groupName = Constants.DEFAULT_GROUP;
 
-    public String getGroupName() {
-        return groupName;
-    }
+	public String getGroupName() {
+		return groupName;
+	}
 
-    public void setGroupName(String groupName) {
-        this.groupName = groupName;
-    }
+	public void setGroupName(String groupName) {
+		this.groupName = groupName;
+	}
 }

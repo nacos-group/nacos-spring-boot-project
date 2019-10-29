@@ -16,6 +16,11 @@
  */
 package com.alibaba.boot.nacos.config.autoconfigure;
 
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.Properties;
+
 import com.alibaba.boot.nacos.config.properties.NacosConfigProperties;
 import com.alibaba.boot.nacos.config.util.Function;
 import com.alibaba.boot.nacos.config.util.NacosConfigPropertiesUtils;
@@ -23,64 +28,97 @@ import com.alibaba.boot.nacos.config.util.NacosConfigUtils;
 import com.alibaba.nacos.api.NacosFactory;
 import com.alibaba.nacos.api.config.ConfigService;
 import com.alibaba.nacos.api.exception.NacosException;
+import com.alibaba.nacos.spring.factory.CacheableEventPublishingNacosServiceFactory;
+import com.alibaba.nacos.spring.util.NacosUtils;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.env.EnvironmentPostProcessor;
+import org.springframework.context.ApplicationContext;
 import org.springframework.core.Ordered;
 import org.springframework.core.env.ConfigurableEnvironment;
 
-import java.util.LinkedList;
-import java.util.Properties;
-
 /**
  * @author <a href="mailto:liaochunyhm@live.com">liaochuntao</a>
- * @since
+ * @since 0.2.3
  */
-public class NacosConfigEnvironmentProcessor implements EnvironmentPostProcessor, Ordered {
+public class NacosConfigEnvironmentProcessor
+		implements EnvironmentPostProcessor, Ordered {
 
-    private final LinkedList<NacosConfigUtils.DeferNacosPropertySource> deferPropertySources = new LinkedList<>();
+	private final Logger logger = LoggerFactory
+			.getLogger(NacosConfigEnvironmentProcessor.class);
 
-    private NacosConfigProperties nacosConfigProperties;
+	private final CacheableEventPublishingNacosServiceFactory nacosServiceFactory = CacheableEventPublishingNacosServiceFactory
+			.getSingleton();
+	private final LinkedList<NacosConfigUtils.DeferNacosPropertySource> deferPropertySources = new LinkedList<>();
+	private final Map<String, ConfigService> serviceCache = new HashMap<>(8);
 
-    private final Function<Properties, ConfigService> builder = new Function<Properties, ConfigService>() {
+	private NacosConfigProperties nacosConfigProperties;
 
-        @Override
-        public ConfigService apply(Properties input) {
-            try {
-                // TODO And prevent to create a large number of ConfigService optimization point is given
-                return NacosFactory.createConfigService(input);
-            } catch (NacosException e) {
-                throw new NacosBootConfigException("ConfigService can't be created with properties : " + input, e);
-            }
-        }
-    };
+	private final Function<Properties, ConfigService> builder = new Function<Properties, ConfigService>() {
 
-    @Override
-    public void postProcessEnvironment(ConfigurableEnvironment environment, SpringApplication application) {
-        application.addInitializers(new NacosConfigApplicationInitializer(this));
-        nacosConfigProperties = NacosConfigPropertiesUtils.buildNacosConfigProperties(environment);
-        if (enable()) {
-            System.out.println("[Nacos Config Boot] : The preload log configuration is enabled");
-            loadConfig(environment);
-        }
-    }
+		@Override
+		public ConfigService apply(Properties input) {
+			try {
+				final String key = NacosUtils.identify(input);
+				ConfigService service = serviceCache.get(key);
+				if (service != null) {
+					return serviceCache.get(key);
+				}
+				service = NacosFactory.createConfigService(input);
+				serviceCache.put(key, service);
+				return nacosServiceFactory.deferCreateService(service, input);
+			}
+			catch (NacosException e) {
+				throw new NacosBootConfigException(
+						"ConfigService can't be created with properties : " + input, e);
+			}
+		}
+	};
 
-    private void loadConfig(ConfigurableEnvironment environment) {
-        final NacosConfigUtils configUtils = new NacosConfigUtils(nacosConfigProperties, environment, builder);
-        configUtils.loadConfig();
-        // set defer nacosPropertySource
-        deferPropertySources.addAll(configUtils.getNacosPropertySources());
-    }
+	@Override
+	public void postProcessEnvironment(ConfigurableEnvironment environment,
+			SpringApplication application) {
+		application.addInitializers(new NacosConfigApplicationInitializer(this));
+		nacosConfigProperties = NacosConfigPropertiesUtils
+				.buildNacosConfigProperties(environment);
+		if (enable()) {
+			System.out.println(
+					"[Nacos Config Boot] : The preload log configuration is enabled");
+			loadConfig(environment);
+		}
+	}
 
-    boolean enable() {
-        return nacosConfigProperties != null && nacosConfigProperties.getBootstrap().isLogEnable();
-    }
+	private void loadConfig(ConfigurableEnvironment environment) {
+		final NacosConfigUtils configUtils = new NacosConfigUtils(nacosConfigProperties,
+				environment, builder);
+		configUtils.loadConfig();
+		// set defer nacosPropertySource
+		deferPropertySources.addAll(configUtils.getNacosPropertySources());
+	}
 
-    LinkedList<NacosConfigUtils.DeferNacosPropertySource> getDeferPropertySources() {
-        return deferPropertySources;
-    }
+	boolean enable() {
+		return nacosConfigProperties != null
+				&& nacosConfigProperties.getBootstrap().isLogEnable();
+	}
 
-    @Override
-    public int getOrder() {
-        return Ordered.LOWEST_PRECEDENCE;
-    }
+	LinkedList<NacosConfigUtils.DeferNacosPropertySource> getDeferPropertySources() {
+		return deferPropertySources;
+	}
+
+	void publishDeferService(ApplicationContext context) {
+		try {
+			nacosServiceFactory.publishDeferService(context);
+			serviceCache.clear();
+		}
+		catch (Exception e) {
+			logger.error("publish defer ConfigService has some error : {}", e);
+		}
+	}
+
+	@Override
+	public int getOrder() {
+		return Ordered.LOWEST_PRECEDENCE;
+	}
 }
