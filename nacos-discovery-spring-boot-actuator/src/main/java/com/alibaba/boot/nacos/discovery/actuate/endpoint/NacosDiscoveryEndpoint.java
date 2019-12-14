@@ -52,7 +52,7 @@ public class NacosDiscoveryEndpoint {
 
 	@ReadOperation
 	public Map<String, Object> invoke() {
-		Map<String, Object> result = new HashMap<>();
+		Map<String, Object> result = new HashMap<>(8);
 
 		result.put("nacosDiscoveryGlobalProperties",
 				PropertiesUtils.extractSafeProperties(applicationContext.getBean(

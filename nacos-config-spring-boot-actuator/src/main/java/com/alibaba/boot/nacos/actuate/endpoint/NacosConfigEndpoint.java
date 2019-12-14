@@ -55,11 +55,11 @@ public class NacosConfigEndpoint
 	@Autowired
 	private ApplicationContext applicationContext;
 
-	private Map<String, JSONObject> nacosConfigMetadataMap = new HashMap<>();
+	private Map<String, JSONObject> nacosConfigMetadataMap = new HashMap<>(8);
 
 	@ReadOperation
 	public Map<String, Object> invoke() {
-		Map<String, Object> result = new HashMap<>();
+		Map<String, Object> result = new HashMap<>(8);
 
 		if (!(ClassUtils.isAssignable(applicationContext.getEnvironment().getClass(),
 				ConfigurableEnvironment.class))) {

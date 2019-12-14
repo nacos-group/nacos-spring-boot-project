@@ -38,6 +38,7 @@ import org.springframework.context.ApplicationContext;
  * @see HealthIndicator
  */
 public class NacosConfigHealthIndicator extends AbstractHealthIndicator {
+
 	@Autowired
 	private ApplicationContext applicationContext;
 
