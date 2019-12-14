@@ -24,7 +24,7 @@ import com.alibaba.nacos.api.config.annotation.NacosConfigurationProperties;
 
 /**
  * @author <a href="mailto:liaochunyhm@live.com">liaochuntao</a>
- * @since
+ * @since 0.1.3
  */
 @NacosConfigurationProperties(dataId = "apple", type = ConfigType.YAML, ignoreNestedProperties = true)
 public class Apple {

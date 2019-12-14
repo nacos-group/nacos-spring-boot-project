@@ -18,7 +18,7 @@ package com.alibaba.boot.nacos.discovery.autoconfigure;
 
 /**
  * @author <a href="mailto:liaochunyhm@live.com">liaochuntao</a>
- * @since
+ * @since 0.1.4
  */
 public class AutoDeregisterException extends RuntimeException {
 

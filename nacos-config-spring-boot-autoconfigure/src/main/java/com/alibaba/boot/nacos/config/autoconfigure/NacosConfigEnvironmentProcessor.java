@@ -41,7 +41,7 @@ import org.springframework.core.env.ConfigurableEnvironment;
 
 /**
  * @author <a href="mailto:liaochunyhm@live.com">liaochuntao</a>
- * @since 0.2.3
+ * @since 0.1.3
  */
 public class NacosConfigEnvironmentProcessor
 		implements EnvironmentPostProcessor, Ordered {

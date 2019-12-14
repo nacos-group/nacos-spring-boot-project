@@ -62,7 +62,7 @@ public class NacosConfigEndpoint extends AbstractEndpoint<Map<String, Object>>
 
 	@Override
 	public Map<String, Object> invoke() {
-		Map<String, Object> result = new HashMap<>();
+		Map<String, Object> result = new HashMap<>(8);
 
 		if (!(ClassUtils.isAssignable(applicationContext.getEnvironment().getClass(),
 				ConfigurableEnvironment.class))) {

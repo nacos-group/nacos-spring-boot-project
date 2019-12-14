@@ -18,10 +18,16 @@ package com.alibaba.boot.nacos.config.util;
 
 /**
  * @author <a href="mailto:liaochunyhm@live.com">liaochuntao</a>
- * @since
+ * @since 0.1.4
  */
 public interface Function<F, T> {
 
+	/**
+	 * apply F to T
+	 *
+	 * @param input input
+	 * @return T
+	 */
 	T apply(F input);
 
 }

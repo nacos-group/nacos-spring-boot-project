@@ -33,7 +33,7 @@ import org.springframework.stereotype.Service;
 
 /**
  * @author <a href="mailto:liaochunyhm@live.com">liaochuntao</a>
- * @since
+ * @since 0.1.3
  */
 @Service
 public class PrintLogger {
