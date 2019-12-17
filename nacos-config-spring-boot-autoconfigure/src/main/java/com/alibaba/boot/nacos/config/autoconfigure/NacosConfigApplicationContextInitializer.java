@@ -82,6 +82,7 @@ public class NacosConfigApplicationContextInitializer
 
 			// If it opens the log level loading directly will cache
 			// DeferNacosPropertySource release
+
 			if (processor.enable()) {
 				configUtils
 						.addListenerIfAutoRefreshed(processor.getDeferPropertySources());

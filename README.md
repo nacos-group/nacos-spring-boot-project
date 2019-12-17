@@ -41,7 +41,7 @@ Nacos Spring Boot Project consist of two parts: `nacos-config-spring-boot` and `
 | -------------- | ------------- |
 | Java           | 1.7+         |
 | Spring Boot | 1.4.1.RELEASE         |
-| Nacos-Spring-Context | 0.3.1   |
+| Nacos-Spring-Context | 0.3.4   |
 
 
 ## Quick Start
