@@ -36,7 +36,7 @@ import org.springframework.util.Assert;
 @ConfigurationProperties(NacosConfigConstants.PREFIX)
 public class NacosConfigProperties {
 
-	private String serverAddr;
+	private String serverAddr = "127.0.0.1:8848";
 
 	private String contextPath;
 
@@ -231,9 +231,9 @@ public class NacosConfigProperties {
 
 	public static class Bootstrap {
 
-		private boolean enable;
+		private boolean enable = false;
 
-		private boolean logEnable;
+		private boolean logEnable = false;
 
 		public boolean isEnable() {
 			return enable;
@@ -254,7 +254,7 @@ public class NacosConfigProperties {
 
 	public static class Config {
 
-		private String serverAddr;
+		private String serverAddr = "127.0.0.1:8848";
 
 		private String endpoint;
 

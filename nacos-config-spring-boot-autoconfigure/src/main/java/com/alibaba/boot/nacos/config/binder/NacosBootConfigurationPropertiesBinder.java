@@ -31,7 +31,7 @@ import static com.alibaba.nacos.spring.util.NacosUtils.toProperties;
 
 /**
  * @author <a href="mailto:liaochunyhm@live.com">liaochuntao</a>
- * @since
+ * @since 0.1.2
  */
 public class NacosBootConfigurationPropertiesBinder
 		extends NacosConfigurationPropertiesBinder {

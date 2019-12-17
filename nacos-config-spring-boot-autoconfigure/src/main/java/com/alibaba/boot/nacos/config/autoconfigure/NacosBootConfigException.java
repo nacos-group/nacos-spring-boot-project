@@ -18,7 +18,7 @@ package com.alibaba.boot.nacos.config.autoconfigure;
 
 /**
  * @author <a href="mailto:liaochunyhm@live.com">liaochuntao</a>
- * @since
+ * @since 0.1.3
  */
 public class NacosBootConfigException extends RuntimeException {
 

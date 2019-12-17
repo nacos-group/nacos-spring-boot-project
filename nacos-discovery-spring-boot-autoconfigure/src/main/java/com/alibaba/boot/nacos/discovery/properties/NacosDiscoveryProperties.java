@@ -30,7 +30,7 @@ import org.springframework.util.Assert;
 @ConfigurationProperties(NacosDiscoveryConstants.PREFIX)
 public class NacosDiscoveryProperties {
 
-	private String serverAddr;
+	private String serverAddr = "127.0.0.1:8848";
 
 	private String contextPath;
 
