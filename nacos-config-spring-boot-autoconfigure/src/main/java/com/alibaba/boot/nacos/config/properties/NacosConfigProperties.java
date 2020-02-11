@@ -80,7 +80,6 @@ public class NacosConfigProperties {
 	@NestedConfigurationProperty
 	private Bootstrap bootstrap = new Bootstrap();
 
-
 	public String getUsername() {
 		return username;
 	}
