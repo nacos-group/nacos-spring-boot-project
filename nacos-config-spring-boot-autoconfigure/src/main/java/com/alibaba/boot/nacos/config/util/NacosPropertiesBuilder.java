@@ -33,7 +33,7 @@ public class NacosPropertiesBuilder {
     public static Properties buildNacosProperties(Environment environment, String serverAddr, String namespaceId,
                                                   String endpoint, String secretKey, String accessKey, String ramRoleName,
                                                   String configLongPollTimeout, String configRetryTimeout, String maxRetry,
-                                                  boolean enableRemoteSyncConfig) {
+                                                  boolean enableRemoteSyncConfig, String username,String password) {
 
         Properties properties = new Properties();
         if (StringUtils.isNotEmpty(serverAddr)) {
@@ -63,6 +63,12 @@ public class NacosPropertiesBuilder {
         }
         if (StringUtils.isNotEmpty(maxRetry)) {
             properties.put(PropertyKeyConst.MAX_RETRY, maxRetry);
+        }
+        if (StringUtils.isNotBlank(username)){
+            properties.put(PropertyKeyConst.USERNAME,username);
+        }
+        if (StringUtils.isNotBlank(password)){
+            properties.put(PropertyKeyConst.PASSWORD,password);
         }
         properties.put(PropertyKeyConst.ENABLE_REMOTE_SYNC_CONFIG,
                 String.valueOf(enableRemoteSyncConfig));
