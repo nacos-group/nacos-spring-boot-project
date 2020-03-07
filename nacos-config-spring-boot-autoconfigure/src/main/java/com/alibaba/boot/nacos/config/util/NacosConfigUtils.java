@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Properties;
 import java.util.function.Function;
 
@@ -68,8 +69,15 @@ public class NacosConfigUtils {
                     globalProperties, config.getType());
             sources.addAll(elements);
         }
-        for (NacosPropertySource propertySource : sources) {
-            mutablePropertySources.addLast(propertySource);
+
+        if (nacosConfigProperties.isRemoteFirst()) {
+            for (ListIterator<NacosPropertySource> itr = sources.listIterator(sources.size()); itr.hasPrevious();) {
+                mutablePropertySources.addFirst(itr.previous());
+            }
+        } else {
+            for (NacosPropertySource propertySource : sources) {
+                mutablePropertySources.addLast(propertySource);
+            }
         }
     }
 
