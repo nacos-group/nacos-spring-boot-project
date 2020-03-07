@@ -25,6 +25,10 @@ import org.springframework.boot.context.properties.bind.Bindable;
 import org.springframework.boot.context.properties.bind.Binder;
 import org.springframework.core.ResolvableType;
 import org.springframework.core.env.ConfigurableEnvironment;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
+
+import java.util.Objects;
 
 /**
  * Springboot used to own property binding configured binding
@@ -37,15 +41,59 @@ public class NacosConfigPropertiesUtils {
 	private static final Logger logger = LoggerFactory
 			.getLogger(NacosConfigPropertiesUtils.class);
 
-	public static NacosConfigProperties buildNacosConfigProperties(
-			ConfigurableEnvironment environment) {
-		NacosConfigProperties nacosConfigProperties = new NacosConfigProperties();
-		Binder binder = Binder.get(environment);
-		ResolvableType type = ResolvableType.forClass(NacosConfigProperties.class);
-		Bindable<?> target = Bindable.of(type).withExistingValue(nacosConfigProperties);
-		binder.bind(NacosConfigConstants.PREFIX, target);
-		logger.info("nacosConfigProperties : {}", nacosConfigProperties);
-		return nacosConfigProperties;
-	}
+    public static NacosConfigProperties buildNacosConfigProperties(
+            ConfigurableEnvironment environment) {
+        NacosConfigProperties nacosConfigProperties = new NacosConfigProperties();
+        Binder binder = Binder.get(environment);
+        ResolvableType type = ResolvableType.forClass(NacosConfigProperties.class);
+        Bindable<?> target = Bindable.of(type).withExistingValue(nacosConfigProperties);
+        binder.bind(NacosConfigConstants.PREFIX, target);
+        //extConfig继承mainConfig的参数设置(除dataId和dataIds)
+        if (!CollectionUtils.isEmpty(nacosConfigProperties.getExtConfig())) {
+            nacosConfigProperties.getExtConfig().forEach(ext -> {
+                if (StringUtils.isEmpty(ext.getServerAddr())) {
+                    ext.setServerAddr(nacosConfigProperties.getServerAddr());
+                }
+                if (StringUtils.isEmpty(ext.getEndpoint())) {
+                    ext.setEndpoint(nacosConfigProperties.getEndpoint());
+                }
+                if (StringUtils.isEmpty(ext.getNamespace())) {
+                    ext.setNamespace(nacosConfigProperties.getNamespace());
+                }
+                if (StringUtils.isEmpty(ext.getAccessKey())) {
+                    ext.setAccessKey(nacosConfigProperties.getAccessKey());
+                }
+                if (StringUtils.isEmpty(ext.getSecretKey())) {
+                    ext.setSecretKey(nacosConfigProperties.getSecretKey());
+                }
+                if (StringUtils.isEmpty(ext.getRamRoleName())) {
+                    ext.setRamRoleName(nacosConfigProperties.getRamRoleName());
+                }
+                if (StringUtils.isEmpty(ext.getGroup())) {
+                    ext.setGroup(nacosConfigProperties.getGroup());
+                }
+                if (Objects.isNull(ext.getType())) {
+                    ext.setType(nacosConfigProperties.getType());
+                }
+                if (StringUtils.isEmpty(ext.getMaxRetry())) {
+                    ext.setMaxRetry(nacosConfigProperties.getMaxRetry());
+                }
+                if (StringUtils.isEmpty(ext.getConfigLongPollTimeout())) {
+                    ext.setConfigLongPollTimeout(nacosConfigProperties.getConfigLongPollTimeout());
+                }
+                if (StringUtils.isEmpty(ext.getConfigRetryTime())) {
+                    ext.setConfigRetryTime(nacosConfigProperties.getConfigRetryTime());
+                }
+                if (Objects.isNull(ext.getAutoRefresh())) {
+                    ext.setAutoRefresh(nacosConfigProperties.isAutoRefresh());
+                }
+                if (Objects.isNull(ext.getEnableRemoteSyncConfig())) {
+                    ext.setEnableRemoteSyncConfig(nacosConfigProperties.isEnableRemoteSyncConfig());
+                }
+            });
+        }
+        logger.info("nacosConfigProperties : {}", nacosConfigProperties);
+        return nacosConfigProperties;
+    }
 
 }

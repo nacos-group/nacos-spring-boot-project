@@ -92,7 +92,7 @@ public class NacosConfigUtils {
                 config.getServerAddr(), config.getNamespace(), config.getEndpoint(),
                 config.getSecretKey(), config.getAccessKey(), config.getRamRoleName(),
                 config.getConfigLongPollTimeout(), config.getConfigRetryTime(),
-                config.getMaxRetry(), config.isEnableRemoteSyncConfig());
+                config.getMaxRetry(), config.getEnableRemoteSyncConfig());
         NacosPropertiesBuilder.merge(sub, globalProperties);
         return sub;
     }
@@ -128,7 +128,7 @@ public class NacosConfigUtils {
             dataIds.add(config.getDataId());
         }
         final String groupName = environment.resolvePlaceholders(config.getGroup());
-        final boolean isAutoRefresh = config.isAutoRefresh();
+        final boolean isAutoRefresh = config.getAutoRefresh();
         return new ArrayList<>(Arrays.asList(reqNacosConfig(subConfigProperties,
                 dataIds.toArray(new String[0]), groupName, type, isAutoRefresh)));
     }

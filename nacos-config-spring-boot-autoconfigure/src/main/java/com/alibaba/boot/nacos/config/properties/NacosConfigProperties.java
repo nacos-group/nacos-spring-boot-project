@@ -280,9 +280,9 @@ public class NacosConfigProperties {
 
 		private String configRetryTime;
 
-		private boolean autoRefresh = false;
+		private Boolean autoRefresh;
 
-		private boolean enableRemoteSyncConfig = false;
+		private Boolean enableRemoteSyncConfig;
 
 		public String getServerAddr() {
 			return serverAddr;
@@ -388,19 +388,19 @@ public class NacosConfigProperties {
 			this.configRetryTime = configRetryTime;
 		}
 
-		public boolean isAutoRefresh() {
+		public Boolean getAutoRefresh() {
 			return autoRefresh;
 		}
 
-		public void setAutoRefresh(boolean autoRefresh) {
+		public void setAutoRefresh(Boolean autoRefresh) {
 			this.autoRefresh = autoRefresh;
 		}
 
-		public boolean isEnableRemoteSyncConfig() {
+		public Boolean getEnableRemoteSyncConfig() {
 			return enableRemoteSyncConfig;
 		}
 
-		public void setEnableRemoteSyncConfig(boolean enableRemoteSyncConfig) {
+		public void setEnableRemoteSyncConfig(Boolean enableRemoteSyncConfig) {
 			this.enableRemoteSyncConfig = enableRemoteSyncConfig;
 		}
 	}
