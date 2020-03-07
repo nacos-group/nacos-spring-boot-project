@@ -229,6 +229,32 @@ public class NacosConfigProperties {
 		this.bootstrap = bootstrap;
 	}
 
+	@Override
+	public String toString() {
+		final StringBuffer sb = new StringBuffer("NacosConfigProperties{");
+		sb.append("serverAddr='").append(serverAddr).append('\'');
+		sb.append(", contextPath='").append(contextPath).append('\'');
+		sb.append(", encode='").append(encode).append('\'');
+		sb.append(", endpoint='").append(endpoint).append('\'');
+		sb.append(", namespace='").append(namespace).append('\'');
+		sb.append(", accessKey='").append(accessKey).append('\'');
+		sb.append(", secretKey='").append(secretKey).append('\'');
+		sb.append(", ramRoleName='").append(ramRoleName).append('\'');
+		sb.append(", autoRefresh=").append(autoRefresh);
+		sb.append(", dataId='").append(dataId).append('\'');
+		sb.append(", dataIds='").append(dataIds).append('\'');
+		sb.append(", group='").append(group).append('\'');
+		sb.append(", type=").append(type);
+		sb.append(", maxRetry='").append(maxRetry).append('\'');
+		sb.append(", configLongPollTimeout='").append(configLongPollTimeout).append('\'');
+		sb.append(", configRetryTime='").append(configRetryTime).append('\'');
+		sb.append(", enableRemoteSyncConfig=").append(enableRemoteSyncConfig);
+		sb.append(", extConfig=").append(extConfig);
+		sb.append(", bootstrap=").append(bootstrap);
+		sb.append('}');
+		return sb.toString();
+	}
+
 	public static class Bootstrap {
 
 		private boolean enable;
@@ -249,6 +275,15 @@ public class NacosConfigProperties {
 
 		public void setLogEnable(boolean logEnable) {
 			this.logEnable = logEnable;
+		}
+
+		@Override
+		public String toString() {
+			final StringBuffer sb = new StringBuffer("Bootstrap{");
+			sb.append("enable=").append(enable);
+			sb.append(", logEnable=").append(logEnable);
+			sb.append('}');
+			return sb.toString();
 		}
 	}
 
@@ -402,6 +437,28 @@ public class NacosConfigProperties {
 
 		public void setEnableRemoteSyncConfig(boolean enableRemoteSyncConfig) {
 			this.enableRemoteSyncConfig = enableRemoteSyncConfig;
+		}
+
+		@Override
+		public String toString() {
+			final StringBuffer sb = new StringBuffer("Config{");
+			sb.append("serverAddr='").append(serverAddr).append('\'');
+			sb.append(", endpoint='").append(endpoint).append('\'');
+			sb.append(", namespace='").append(namespace).append('\'');
+			sb.append(", accessKey='").append(accessKey).append('\'');
+			sb.append(", secretKey='").append(secretKey).append('\'');
+			sb.append(", ramRoleName='").append(ramRoleName).append('\'');
+			sb.append(", dataId='").append(dataId).append('\'');
+			sb.append(", dataIds='").append(dataIds).append('\'');
+			sb.append(", group='").append(group).append('\'');
+			sb.append(", type=").append(type);
+			sb.append(", maxRetry='").append(maxRetry).append('\'');
+			sb.append(", configLongPollTimeout='").append(configLongPollTimeout).append('\'');
+			sb.append(", configRetryTime='").append(configRetryTime).append('\'');
+			sb.append(", autoRefresh=").append(autoRefresh);
+			sb.append(", enableRemoteSyncConfig=").append(enableRemoteSyncConfig);
+			sb.append('}');
+			return sb.toString();
 		}
 	}
 }
