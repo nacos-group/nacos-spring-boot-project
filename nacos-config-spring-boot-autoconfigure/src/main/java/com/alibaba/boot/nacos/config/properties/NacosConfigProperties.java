@@ -70,11 +70,32 @@ public class NacosConfigProperties {
 
 	private boolean enableRemoteSyncConfig = false;
 
+	private String username;
+
+	private String password;
+
 	@JSONField(serialize = false)
 	private List<Config> extConfig = new ArrayList<>();
 
 	@NestedConfigurationProperty
 	private Bootstrap bootstrap = new Bootstrap();
+
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
 
 	public String getServerAddr() {
 		return serverAddr;
@@ -289,7 +310,7 @@ public class NacosConfigProperties {
 
 	public static class Config {
 
-		private String serverAddr = "127.0.0.1:8848";
+		private String serverAddr;
 
 		private String endpoint;
 
@@ -318,6 +339,26 @@ public class NacosConfigProperties {
 		private boolean autoRefresh = false;
 
 		private boolean enableRemoteSyncConfig = false;
+
+		private String username;
+
+		private String password;
+
+		public String getUsername() {
+			return username;
+		}
+
+		public void setUsername(String username) {
+			this.username = username;
+		}
+
+		public String getPassword() {
+			return password;
+		}
+
+		public void setPassword(String password) {
+			this.password = password;
+		}
 
 		public String getServerAddr() {
 			return serverAddr;
