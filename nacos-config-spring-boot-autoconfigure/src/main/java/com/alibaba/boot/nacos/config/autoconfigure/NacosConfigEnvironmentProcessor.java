@@ -18,7 +18,7 @@ package com.alibaba.boot.nacos.config.autoconfigure;
 
 import com.alibaba.boot.nacos.config.properties.NacosConfigProperties;
 import com.alibaba.boot.nacos.config.util.NacosConfigPropertiesUtils;
-import com.alibaba.boot.nacos.config.util.NacosConfigUtils;
+import com.alibaba.boot.nacos.config.util.NacosConfigLoader;
 import com.alibaba.nacos.api.NacosFactory;
 import com.alibaba.nacos.api.config.ConfigService;
 import com.alibaba.nacos.api.exception.NacosException;
@@ -56,7 +56,7 @@ public class NacosConfigEnvironmentProcessor
 
     private final Map<String, ConfigService> serviceCache = new HashMap<>(8);
 
-    private final LinkedList<NacosConfigUtils.DeferNacosPropertySource> deferPropertySources = new LinkedList<>();
+    private final LinkedList<NacosConfigLoader.DeferNacosPropertySource> deferPropertySources = new LinkedList<>();
 
     // Because ApplicationContext has not been injected at preload time, need to manually cache the created Service to prevent duplicate creation
 
@@ -90,11 +90,11 @@ public class NacosConfigEnvironmentProcessor
     }
 
     private void loadConfig(ConfigurableEnvironment environment) {
-        NacosConfigUtils configUtils = new NacosConfigUtils(nacosConfigProperties,
+        NacosConfigLoader configLoader = new NacosConfigLoader(nacosConfigProperties,
                 environment, builder);
-        configUtils.loadConfig();
+        configLoader.loadConfig();
         // set defer NacosPropertySource
-        deferPropertySources.addAll(configUtils.getNacosPropertySources());
+        deferPropertySources.addAll(configLoader.getNacosPropertySources());
     }
 
     boolean enable() {
@@ -102,13 +102,15 @@ public class NacosConfigEnvironmentProcessor
                 && nacosConfigProperties.getBootstrap().isLogEnable();
     }
 
-    LinkedList<NacosConfigUtils.DeferNacosPropertySource> getDeferPropertySources() {
+    LinkedList<NacosConfigLoader.DeferNacosPropertySource> getDeferPropertySources() {
         return deferPropertySources;
     }
 
+    // Do not set the minimum priority for future expansion needs
+
     @Override
     public int getOrder() {
-        return Ordered.LOWEST_PRECEDENCE;
+        return Ordered.LOWEST_PRECEDENCE - 5;
     }
 
     void publishDeferService(ApplicationContext context) {

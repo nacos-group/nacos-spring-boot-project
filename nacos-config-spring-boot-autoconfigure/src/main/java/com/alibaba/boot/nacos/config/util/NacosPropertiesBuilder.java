@@ -37,32 +37,32 @@ public class NacosPropertiesBuilder {
 
         Properties properties = new Properties();
         if (StringUtils.isNotEmpty(serverAddr)) {
-            properties.put(PropertyKeyConst.SERVER_ADDR, serverAddr);
+            properties.put(PropertyKeyConst.SERVER_ADDR, environment.resolvePlaceholders(serverAddr));
         }
         if (StringUtils.isNotEmpty(namespaceId)) {
-            properties.put(PropertyKeyConst.NAMESPACE, namespaceId);
+            properties.put(PropertyKeyConst.NAMESPACE, environment.resolvePlaceholders(namespaceId));
         }
         if (StringUtils.isNotEmpty(endpoint)) {
-            properties.put(PropertyKeyConst.ENDPOINT, endpoint);
+            properties.put(PropertyKeyConst.ENDPOINT, environment.resolvePlaceholders(endpoint));
         }
         if (StringUtils.isNotEmpty(secretKey)) {
-            properties.put(PropertyKeyConst.SECRET_KEY, secretKey);
+            properties.put(PropertyKeyConst.SECRET_KEY, environment.resolvePlaceholders(secretKey));
         }
         if (StringUtils.isNotEmpty(accessKey)) {
-            properties.put(PropertyKeyConst.ACCESS_KEY, accessKey);
+            properties.put(PropertyKeyConst.ACCESS_KEY, environment.resolvePlaceholders(accessKey));
         }
         if (StringUtils.isNoneEmpty(ramRoleName)) {
-            properties.put(PropertyKeyConst.RAM_ROLE_NAME, ramRoleName);
+            properties.put(PropertyKeyConst.RAM_ROLE_NAME, environment.resolvePlaceholders(ramRoleName));
         }
         if (StringUtils.isNotEmpty(configLongPollTimeout)) {
             properties.put(PropertyKeyConst.CONFIG_LONG_POLL_TIMEOUT,
-                    configLongPollTimeout);
+                    environment.resolvePlaceholders(configLongPollTimeout));
         }
         if (StringUtils.isNotEmpty(configRetryTimeout)) {
-            properties.put(PropertyKeyConst.CONFIG_RETRY_TIME, configRetryTimeout);
+            properties.put(PropertyKeyConst.CONFIG_RETRY_TIME, environment.resolvePlaceholders(configRetryTimeout));
         }
         if (StringUtils.isNotEmpty(maxRetry)) {
-            properties.put(PropertyKeyConst.MAX_RETRY, maxRetry);
+            properties.put(PropertyKeyConst.MAX_RETRY, environment.resolvePlaceholders(maxRetry));
         }
         properties.put(PropertyKeyConst.ENABLE_REMOTE_SYNC_CONFIG,
                 String.valueOf(enableRemoteSyncConfig));
