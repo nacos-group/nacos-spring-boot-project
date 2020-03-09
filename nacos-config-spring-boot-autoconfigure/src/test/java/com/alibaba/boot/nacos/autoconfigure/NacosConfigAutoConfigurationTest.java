@@ -63,9 +63,9 @@ public class NacosConfigAutoConfigurationTest {
 		Assert.assertEquals("localhost", nacosConfigProperties.getServerAddr());
 	}
 
-	@Test(expected = NoSuchBeanDefinitionException.class)
+	@Test
 	public void testNacosConfigGlobalBean() {
-		Assert.assertNull(applicationContext
+		Assert.assertNotNull(applicationContext
 				.getBean(NacosBeanUtils.GLOBAL_NACOS_PROPERTIES_BEAN_NAME));
 	}
 
