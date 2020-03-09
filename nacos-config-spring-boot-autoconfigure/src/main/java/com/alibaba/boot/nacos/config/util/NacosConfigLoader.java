@@ -41,16 +41,16 @@ import static com.alibaba.nacos.spring.util.NacosUtils.buildDefaultPropertySourc
  * @author <a href="mailto:liaochunyhm@live.com">liaochuntao</a>
  * @since 0.1.3
  */
-public class NacosConfigUtils {
+public class NacosConfigLoader {
 
-	private final Logger logger = LoggerFactory.getLogger(NacosConfigUtils.class);
+	private final Logger logger = LoggerFactory.getLogger(NacosConfigLoader.class);
 
 	private final NacosConfigProperties nacosConfigProperties;
 	private final ConfigurableEnvironment environment;
 	private Function<Properties, ConfigService> builder;
 	private List<DeferNacosPropertySource> nacosPropertySources = new LinkedList<>();
 
-	public NacosConfigUtils(NacosConfigProperties nacosConfigProperties,
+	public NacosConfigLoader(NacosConfigProperties nacosConfigProperties,
 			ConfigurableEnvironment environment,
 			Function<Properties, ConfigService> builder) {
 		this.nacosConfigProperties = nacosConfigProperties;

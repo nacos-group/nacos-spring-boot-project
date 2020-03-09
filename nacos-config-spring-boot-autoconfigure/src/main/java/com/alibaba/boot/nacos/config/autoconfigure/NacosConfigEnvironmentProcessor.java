@@ -24,7 +24,7 @@ import java.util.Properties;
 import com.alibaba.boot.nacos.config.properties.NacosConfigProperties;
 import com.alibaba.boot.nacos.config.util.Function;
 import com.alibaba.boot.nacos.config.util.NacosConfigPropertiesUtils;
-import com.alibaba.boot.nacos.config.util.NacosConfigUtils;
+import com.alibaba.boot.nacos.config.util.NacosConfigLoader;
 import com.alibaba.nacos.api.NacosFactory;
 import com.alibaba.nacos.api.config.ConfigService;
 import com.alibaba.nacos.api.exception.NacosException;
@@ -51,7 +51,7 @@ public class NacosConfigEnvironmentProcessor
 
 	private final CacheableEventPublishingNacosServiceFactory nacosServiceFactory = CacheableEventPublishingNacosServiceFactory
 			.getSingleton();
-	private final LinkedList<NacosConfigUtils.DeferNacosPropertySource> deferPropertySources = new LinkedList<>();
+	private final LinkedList<NacosConfigLoader.DeferNacosPropertySource> deferPropertySources = new LinkedList<>();
 	private final Map<String, ConfigService> serviceCache = new HashMap<>(8);
 
 	private NacosConfigProperties nacosConfigProperties;
@@ -91,7 +91,7 @@ public class NacosConfigEnvironmentProcessor
 	}
 
 	private void loadConfig(ConfigurableEnvironment environment) {
-		final NacosConfigUtils configUtils = new NacosConfigUtils(nacosConfigProperties,
+		final NacosConfigLoader configUtils = new NacosConfigLoader(nacosConfigProperties,
 				environment, builder);
 		configUtils.loadConfig();
 		// set defer nacosPropertySource
@@ -103,7 +103,7 @@ public class NacosConfigEnvironmentProcessor
 				&& nacosConfigProperties.getBootstrap().isLogEnable();
 	}
 
-	LinkedList<NacosConfigUtils.DeferNacosPropertySource> getDeferPropertySources() {
+	LinkedList<NacosConfigLoader.DeferNacosPropertySource> getDeferPropertySources() {
 		return deferPropertySources;
 	}
 
@@ -119,6 +119,6 @@ public class NacosConfigEnvironmentProcessor
 
 	@Override
 	public int getOrder() {
-		return Ordered.LOWEST_PRECEDENCE;
+		return Ordered.LOWEST_PRECEDENCE - 5;
 	}
 }

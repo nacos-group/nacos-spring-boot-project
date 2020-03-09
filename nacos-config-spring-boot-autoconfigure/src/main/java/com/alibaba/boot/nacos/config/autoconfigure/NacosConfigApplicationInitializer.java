@@ -21,7 +21,7 @@ import java.util.Properties;
 import com.alibaba.boot.nacos.config.properties.NacosConfigProperties;
 import com.alibaba.boot.nacos.config.util.Function;
 import com.alibaba.boot.nacos.config.util.NacosConfigPropertiesUtils;
-import com.alibaba.boot.nacos.config.util.NacosConfigUtils;
+import com.alibaba.boot.nacos.config.util.NacosConfigLoader;
 import com.alibaba.nacos.api.config.ConfigService;
 import com.alibaba.nacos.api.exception.NacosException;
 import com.alibaba.nacos.spring.factory.CacheableEventPublishingNacosServiceFactory;
@@ -80,7 +80,7 @@ public class NacosConfigApplicationInitializer
 					}
 				}
 			};
-			final NacosConfigUtils configUtils = new NacosConfigUtils(
+			final NacosConfigLoader configUtils = new NacosConfigLoader(
 					nacosConfigProperties, environment, builder);
 			if (processor.enable()) {
 				configUtils
