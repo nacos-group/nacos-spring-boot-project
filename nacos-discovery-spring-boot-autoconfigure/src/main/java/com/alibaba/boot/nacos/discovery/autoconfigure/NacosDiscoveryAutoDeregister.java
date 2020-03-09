@@ -49,7 +49,7 @@ public class NacosDiscoveryAutoDeregister
 	private final NacosDiscoveryProperties discoveryProperties;
 	private final WebServer webServer;
 
-	@Value("${spring.application.name:spring.application.name}")
+	@Value("${spring.application.name:}")
 	private String applicationName;
 
 	public NacosDiscoveryAutoDeregister(NacosDiscoveryProperties discoveryProperties,
@@ -74,15 +74,20 @@ public class NacosDiscoveryAutoDeregister
 			register.setPort(webServer.getPort());
 		}
 
-		String serviceName = StringUtils.isEmpty(register.getServiceName())
-				? applicationName
-				: register.getServiceName();
+		String serviceName = register.getServiceName();
+
+		if (StringUtils.isEmpty(serviceName)){
+			if (StringUtils.isEmpty(applicationName)){
+				throw new AutoDeregisterException("serviceName notNull");
+			}
+			serviceName = applicationName;
+		}
 
 		try {
 			namingService.deregisterInstance(serviceName, register.getGroupName(),
 					register);
 			logger.info("Finished auto deregister service : {}, ip : {}, port : {}",
-					register.getServiceName(), register.getIp(), register.getPort());
+					serviceName, register.getIp(), register.getPort());
 		}
 		catch (NacosException e) {
 			throw new AutoDeregisterException(e);
