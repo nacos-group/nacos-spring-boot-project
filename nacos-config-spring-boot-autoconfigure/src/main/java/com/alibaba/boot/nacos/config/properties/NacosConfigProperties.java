@@ -80,7 +80,6 @@ public class NacosConfigProperties {
 	@NestedConfigurationProperty
 	private Bootstrap bootstrap = new Bootstrap();
 
-
 	public String getUsername() {
 		return username;
 	}
@@ -494,7 +493,8 @@ public class NacosConfigProperties {
 			sb.append(", group='").append(group).append('\'');
 			sb.append(", type=").append(type);
 			sb.append(", maxRetry='").append(maxRetry).append('\'');
-			sb.append(", configLongPollTimeout='").append(configLongPollTimeout).append('\'');
+			sb.append(", configLongPollTimeout='").append(configLongPollTimeout)
+					.append('\'');
 			sb.append(", configRetryTime='").append(configRetryTime).append('\'');
 			sb.append(", autoRefresh=").append(autoRefresh);
 			sb.append(", enableRemoteSyncConfig=").append(enableRemoteSyncConfig);
