@@ -63,7 +63,7 @@ public class NacosConfigPropertiesUtils {
 		catch (Exception e) {
 			throw new RuntimeException(e);
 		}
-		logger.info("nacosConfigProperties : {}", bean);
+		logger.debug("nacosConfigProperties : {}", bean);
 		return bean;
 	}
 

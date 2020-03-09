@@ -91,11 +91,11 @@ public class NacosConfigEnvironmentProcessor
 	}
 
 	private void loadConfig(ConfigurableEnvironment environment) {
-		final NacosConfigLoader configUtils = new NacosConfigLoader(nacosConfigProperties,
+		final NacosConfigLoader configLoader = new NacosConfigLoader(nacosConfigProperties,
 				environment, builder);
-		configUtils.loadConfig();
+		configLoader.loadConfig();
 		// set defer nacosPropertySource
-		deferPropertySources.addAll(configUtils.getNacosPropertySources());
+		deferPropertySources.addAll(configLoader.getNacosPropertySources());
 	}
 
 	boolean enable() {

@@ -25,9 +25,11 @@ import com.alibaba.boot.nacos.config.util.NacosConfigLoader;
 import com.alibaba.nacos.api.config.ConfigService;
 import com.alibaba.nacos.api.exception.NacosException;
 import com.alibaba.nacos.spring.factory.CacheableEventPublishingNacosServiceFactory;
+import com.alibaba.nacos.spring.util.NacosBeanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.env.ConfigurableEnvironment;
@@ -48,6 +50,24 @@ public class NacosConfigApplicationInitializer
 
 	private NacosConfigProperties nacosConfigProperties;
 
+	private final CacheableEventPublishingNacosServiceFactory singleton = CacheableEventPublishingNacosServiceFactory
+			.getSingleton();
+
+	private final Function<Properties, ConfigService> builder = new Function<Properties, ConfigService>() {
+		@Override
+		public ConfigService apply(Properties input) {
+			try {
+				return singleton.createConfigService(input);
+			}
+			catch (NacosException e) {
+				throw new NacosBootConfigException(
+						"ConfigService can't be created with properties : "
+								+ input,
+						e);
+			}
+		}
+	};
+
 	public NacosConfigApplicationInitializer(
 			NacosConfigEnvironmentProcessor configEnvironmentProcessor) {
 		this.processor = configEnvironmentProcessor;
@@ -55,42 +75,35 @@ public class NacosConfigApplicationInitializer
 
 	@Override
 	public void initialize(ConfigurableApplicationContext context) {
-		final CacheableEventPublishingNacosServiceFactory singleton = CacheableEventPublishingNacosServiceFactory
-				.getSingleton();
+
 		singleton.setApplicationContext(context);
 		environment = context.getEnvironment();
 		nacosConfigProperties = NacosConfigPropertiesUtils
 				.buildNacosConfigProperties(environment);
-		processor.publishDeferService(context);
+		final NacosConfigLoader configLoader = new NacosConfigLoader(
+				nacosConfigProperties, environment, builder);
 		if (!enable()) {
 			logger.info("[Nacos Config Boot] : The preload configuration is not enabled");
 		}
 		else {
-			final Function<Properties, ConfigService> builder = new Function<Properties, ConfigService>() {
-				@Override
-				public ConfigService apply(Properties input) {
-					try {
-						return singleton.createConfigService(input);
-					}
-					catch (NacosException e) {
-						throw new NacosBootConfigException(
-								"ConfigService can't be created with properties : "
-										+ input,
-								e);
-					}
-				}
-			};
-			final NacosConfigLoader configUtils = new NacosConfigLoader(
-					nacosConfigProperties, environment, builder);
 			if (processor.enable()) {
-				configUtils
+				processor.publishDeferService(context);
+				configLoader
 						.addListenerIfAutoRefreshed(processor.getDeferPropertySources());
 			}
 			else {
-				configUtils.loadConfig();
-				configUtils.addListenerIfAutoRefreshed();
+				configLoader.loadConfig();
+				configLoader.addListenerIfAutoRefreshed();
 			}
 		}
+
+		// Register global Nacos configuration metadata information
+
+		final ConfigurableListableBeanFactory factory = context.getBeanFactory();
+		if (!factory.containsSingleton(NacosBeanUtils.GLOBAL_NACOS_PROPERTIES_BEAN_NAME)) {
+			factory.registerSingleton(NacosBeanUtils.GLOBAL_NACOS_PROPERTIES_BEAN_NAME, configLoader.buildGlobalNacosProperties());
+		}
+
 	}
 
 	private boolean enable() {

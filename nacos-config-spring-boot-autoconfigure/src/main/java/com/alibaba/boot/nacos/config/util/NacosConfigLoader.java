@@ -73,8 +73,9 @@ public class NacosConfigLoader {
 		}
 	}
 
-	private Properties buildGlobalNacosProperties() {
+	public Properties buildGlobalNacosProperties() {
 		return NacosPropertiesBuilder.buildNacosProperties(
+				environment,
 				nacosConfigProperties.getServerAddr(),
 				nacosConfigProperties.getNamespace(), nacosConfigProperties.getEndpoint(),
 				nacosConfigProperties.getSecretKey(),
@@ -92,12 +93,13 @@ public class NacosConfigLoader {
 		return getProperties(globalProperties, config);
 	}
 
-	private static Properties getProperties(Properties globalProperties,
+	private Properties getProperties(Properties globalProperties,
 			NacosConfigProperties.Config config) {
 		if (StringUtils.isEmpty(config.getServerAddr())) {
 			return globalProperties;
 		}
 		Properties sub = NacosPropertiesBuilder.buildNacosProperties(
+				environment,
 				config.getServerAddr(), config.getNamespace(), config.getEndpoint(),
 				config.getSecretKey(), config.getAccessKey(), config.getRamRoleName(),
 				config.getConfigLongPollTimeout(), config.getConfigRetryTime(),
