@@ -36,9 +36,6 @@ import static com.alibaba.nacos.spring.util.NacosUtils.toProperties;
 public class NacosBootConfigurationPropertiesBinder
 		extends NacosConfigurationPropertiesBinder {
 
-	private final Logger logger = LoggerFactory
-			.getLogger(NacosBootConfigurationPropertiesBinder.class);
-
 	private ConfigurableApplicationContext context;
 
 	public NacosBootConfigurationPropertiesBinder(

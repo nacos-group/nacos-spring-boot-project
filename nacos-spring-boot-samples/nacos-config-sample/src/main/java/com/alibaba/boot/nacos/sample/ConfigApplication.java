@@ -16,11 +16,17 @@
  */
 package com.alibaba.boot.nacos.sample;
 
+import com.alibaba.nacos.api.annotation.NacosInjected;
+import com.alibaba.nacos.api.annotation.NacosProperties;
+import com.alibaba.nacos.api.config.ConfigService;
 import com.alibaba.nacos.api.config.annotation.NacosConfigListener;
 import com.alibaba.nacos.api.config.annotation.NacosValue;
+import com.alibaba.nacos.spring.context.annotation.EnableNacos;
+import com.alibaba.nacos.spring.context.annotation.config.EnableNacosConfig;
 import com.alibaba.nacos.spring.context.annotation.config.NacosPropertySource;
 import com.alibaba.nacos.spring.context.annotation.config.NacosPropertySources;
 
+import com.alibaba.nacos.spring.context.annotation.discovery.EnableNacosDiscovery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -38,6 +44,7 @@ import static org.springframework.core.env.StandardEnvironment.SYSTEM_PROPERTIES
  * @author <a href="mailto:fangjian0423@gmail.com">Jim</a>
  */
 @SpringBootApplication
+@EnableNacos(globalProperties = @NacosProperties(username = "nacos", password = "nacos"))
 @NacosPropertySources(value = {
 		@NacosPropertySource(dataId = "people", groupId = "DEVELOP", autoRefreshed = true),
 		@NacosPropertySource(name = "custom", dataId = ConfigApplication.DATA_ID, groupId = "ALIBABA", first = true, before = SYSTEM_PROPERTIES_PROPERTY_SOURCE_NAME, after = SYSTEM_ENVIRONMENT_PROPERTY_SOURCE_NAME) })
@@ -93,6 +100,9 @@ public class ConfigApplication {
 
 		@Autowired
 		private Foo foo;
+
+		@NacosInjected(properties = @NacosProperties(username = "nacos", password = "nacos"))
+		private ConfigService configService;
 
 		@Override
 		public void run(String... args) throws Exception {

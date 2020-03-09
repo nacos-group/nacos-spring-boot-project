@@ -41,16 +41,16 @@ import static com.alibaba.nacos.spring.util.NacosUtils.buildDefaultPropertySourc
  * @author <a href="mailto:liaochunyhm@live.com">liaochuntao</a>
  * @since 0.1.3
  */
-public class NacosConfigUtils {
+public class NacosConfigLoader {
 
-	private final Logger logger = LoggerFactory.getLogger(NacosConfigUtils.class);
+	private final Logger logger = LoggerFactory.getLogger(NacosConfigLoader.class);
 
 	private final NacosConfigProperties nacosConfigProperties;
 	private final ConfigurableEnvironment environment;
 	private Function<Properties, ConfigService> builder;
 	private List<DeferNacosPropertySource> nacosPropertySources = new LinkedList<>();
 
-	public NacosConfigUtils(NacosConfigProperties nacosConfigProperties,
+	public NacosConfigLoader(NacosConfigProperties nacosConfigProperties,
 			ConfigurableEnvironment environment,
 			Function<Properties, ConfigService> builder) {
 		this.nacosConfigProperties = nacosConfigProperties;
@@ -73,8 +73,9 @@ public class NacosConfigUtils {
 		}
 	}
 
-	private Properties buildGlobalNacosProperties() {
+	public Properties buildGlobalNacosProperties() {
 		return NacosPropertiesBuilder.buildNacosProperties(
+				environment,
 				nacosConfigProperties.getServerAddr(),
 				nacosConfigProperties.getNamespace(), nacosConfigProperties.getEndpoint(),
 				nacosConfigProperties.getSecretKey(),
@@ -92,12 +93,13 @@ public class NacosConfigUtils {
 		return getProperties(globalProperties, config);
 	}
 
-	private static Properties getProperties(Properties globalProperties,
+	private Properties getProperties(Properties globalProperties,
 			NacosConfigProperties.Config config) {
 		if (StringUtils.isEmpty(config.getServerAddr())) {
 			return globalProperties;
 		}
 		Properties sub = NacosPropertiesBuilder.buildNacosProperties(
+				environment,
 				config.getServerAddr(), config.getNamespace(), config.getEndpoint(),
 				config.getSecretKey(), config.getAccessKey(), config.getRamRoleName(),
 				config.getConfigLongPollTimeout(), config.getConfigRetryTime(),

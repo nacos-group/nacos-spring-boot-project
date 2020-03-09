@@ -19,14 +19,22 @@ package com.alibaba.boot.nacos.sample;
 import java.util.List;
 import java.util.Map;
 
+import com.alibaba.nacos.api.annotation.NacosProperties;
 import com.alibaba.nacos.api.config.ConfigType;
 import com.alibaba.nacos.api.config.annotation.NacosConfigurationProperties;
+import com.alibaba.nacos.spring.context.annotation.config.NacosPropertySource;
 
 /**
  * @author <a href="mailto:liaochunyhm@live.com">liaochuntao</a>
  * @since 0.1.3
  */
-@NacosConfigurationProperties(dataId = "apple", type = ConfigType.YAML, ignoreNestedProperties = true)
+@NacosPropertySource(dataId = "", groupId = "", properties = @NacosProperties(
+		username = "nacos",
+		password = "nacos"
+))
+@NacosConfigurationProperties(dataId = "apple", type = ConfigType.YAML, ignoreNestedProperties = true,
+	properties = @NacosProperties(username = "nacos", password = "nacos")
+)
 public class Apple {
 
 	private List<String> list;

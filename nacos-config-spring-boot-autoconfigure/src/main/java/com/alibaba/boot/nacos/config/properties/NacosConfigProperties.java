@@ -443,5 +443,36 @@ public class NacosConfigProperties {
 		public void setEnableRemoteSyncConfig(boolean enableRemoteSyncConfig) {
 			this.enableRemoteSyncConfig = enableRemoteSyncConfig;
 		}
+
+		@Override
+		public String toString() {
+			return "Config{" + "serverAddr='" + serverAddr + '\'' + ", endpoint='"
+					+ endpoint + '\'' + ", namespace='" + namespace + '\''
+					+ ", accessKey='" + accessKey + '\'' + ", secretKey='" + secretKey
+					+ '\'' + ", ramRoleName='" + ramRoleName + '\'' + ", dataId='"
+					+ dataId + '\'' + ", dataIds='" + dataIds + '\'' + ", group='" + group
+					+ '\'' + ", type=" + type + ", maxRetry='" + maxRetry + '\''
+					+ ", configLongPollTimeout='" + configLongPollTimeout + '\''
+					+ ", configRetryTime='" + configRetryTime + '\'' + ", autoRefresh="
+					+ autoRefresh + ", enableRemoteSyncConfig=" + enableRemoteSyncConfig
+					+ ", username='" + username + '\'' + ", password='" + password + '\''
+					+ '}';
+		}
+	}
+
+	@Override
+	public String toString() {
+		return "NacosConfigProperties{" + "serverAddr='" + serverAddr + '\''
+				+ ", contextPath='" + contextPath + '\'' + ", encode='" + encode + '\''
+				+ ", endpoint='" + endpoint + '\'' + ", namespace='" + namespace + '\''
+				+ ", accessKey='" + accessKey + '\'' + ", secretKey='" + secretKey + '\''
+				+ ", ramRoleName='" + ramRoleName + '\'' + ", autoRefresh=" + autoRefresh
+				+ ", dataId='" + dataId + '\'' + ", dataIds='" + dataIds + '\''
+				+ ", group='" + group + '\'' + ", type=" + type + ", maxRetry='"
+				+ maxRetry + '\'' + ", configLongPollTimeout='" + configLongPollTimeout
+				+ '\'' + ", configRetryTime='" + configRetryTime + '\''
+				+ ", enableRemoteSyncConfig=" + enableRemoteSyncConfig + ", username='"
+				+ username + '\'' + ", password='" + password + '\'' + ", extConfig="
+				+ extConfig + ", bootstrap=" + bootstrap + '}';
 	}
 }
