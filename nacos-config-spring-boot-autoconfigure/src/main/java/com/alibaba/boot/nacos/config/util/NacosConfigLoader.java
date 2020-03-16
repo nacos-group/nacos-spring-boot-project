@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Properties;
 
 import com.alibaba.boot.nacos.config.properties.NacosConfigProperties;
@@ -34,6 +35,7 @@ import org.slf4j.LoggerFactory;
 
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.MutablePropertySources;
+import org.springframework.core.env.StandardEnvironment;
 
 import static com.alibaba.nacos.spring.util.NacosUtils.buildDefaultPropertySourceName;
 
@@ -68,8 +70,15 @@ public class NacosConfigLoader {
 					globalProperties, config.getType());
 			sources.addAll(sources.size(), elements);
 		}
-		for (NacosPropertySource propertySource : sources) {
-			mutablePropertySources.addLast(propertySource);
+		if (nacosConfigProperties.isRemoteFirst()) {
+			for (ListIterator<NacosPropertySource> itr = sources.listIterator(sources.size()); itr.hasPrevious();) {
+				mutablePropertySources.addAfter(
+						StandardEnvironment.SYSTEM_PROPERTIES_PROPERTY_SOURCE_NAME, itr.previous());
+			}
+		} else {
+			for (NacosPropertySource propertySource : sources) {
+				mutablePropertySources.addLast(propertySource);
+			}
 		}
 	}
 
