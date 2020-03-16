@@ -74,7 +74,7 @@ public class NacosConfigLoader {
 		if (nacosConfigProperties.isRemoteFirst()) {
 			for (ListIterator<NacosPropertySource> itr = sources.listIterator(sources.size()); itr.hasPrevious();) {
 				mutablePropertySources.addAfter(
-						StandardEnvironment.SYSTEM_PROPERTIES_PROPERTY_SOURCE_NAME, itr.previous());
+						StandardEnvironment.SYSTEM_ENVIRONMENT_PROPERTY_SOURCE_NAME, itr.previous());
 			}
 		} else {
 			for (NacosPropertySource propertySource : sources) {
