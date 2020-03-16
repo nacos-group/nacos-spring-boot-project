@@ -74,6 +74,8 @@ public class NacosConfigProperties {
 
 	private String password;
 
+	private boolean remoteFirst = false;
+
 	@JSONField(serialize = false)
 	private List<Config> extConfig = new ArrayList<>();
 
@@ -231,6 +233,14 @@ public class NacosConfigProperties {
 
 	public void setEnableRemoteSyncConfig(boolean enableRemoteSyncConfig) {
 		this.enableRemoteSyncConfig = enableRemoteSyncConfig;
+	}
+
+	public boolean isRemoteFirst() {
+		return remoteFirst;
+	}
+
+	public void setRemoteFirst(boolean remoteFirst) {
+		this.remoteFirst = remoteFirst;
 	}
 
 	public List<Config> getExtConfig() {
