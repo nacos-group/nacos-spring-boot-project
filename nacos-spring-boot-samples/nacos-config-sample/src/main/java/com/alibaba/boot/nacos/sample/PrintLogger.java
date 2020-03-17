@@ -45,7 +45,7 @@ public class PrintLogger {
 	@Autowired
 	private LoggingSystem loggingSystem;
 
-	@NacosConfigListener(dataId = "nacos.log", timeout = 5000)
+	@NacosConfigListener(dataId = "${nacos.example.listener.data-id}", timeout = 5000)
 	public void onChange(String newLog) throws Exception {
 		Properties properties = new DefaultPropertiesConfigParse().parse(newLog);
 		for (Object t : properties.keySet()) {
