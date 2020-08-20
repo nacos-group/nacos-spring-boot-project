@@ -14,13 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.alibaba.boot.nacos.actuate.health;
 
 import java.util.Properties;
 
 import com.alibaba.boot.nacos.common.PropertiesUtils;
-import com.alibaba.fastjson.JSON;
 import com.alibaba.nacos.api.config.ConfigService;
+import com.alibaba.nacos.common.utils.JacksonUtils;
 import com.alibaba.nacos.spring.factory.CacheableEventPublishingNacosServiceFactory;
 import com.alibaba.nacos.spring.factory.NacosServiceFactory;
 import com.alibaba.nacos.spring.metadata.NacosServiceMetaData;
@@ -32,35 +33,32 @@ import org.springframework.boot.actuate.health.HealthIndicator;
 import org.springframework.context.ApplicationContext;
 
 /**
- * Nacos Config {@link HealthIndicator}
+ * Nacos Config {@link HealthIndicator}.
  *
  * @author <a href="mailto:fangjian0423@gmail.com">Jim</a>
  * @see HealthIndicator
  */
 public class NacosConfigHealthIndicator extends AbstractHealthIndicator {
-
-	@Autowired
-	private ApplicationContext applicationContext;
-
-	private static final String UP_STATUS = "up";
-
-	@Override
-	protected void doHealthCheck(Health.Builder builder) throws Exception {
-		builder.up();
-		NacosServiceFactory nacosServiceFactory = CacheableEventPublishingNacosServiceFactory
-				.getSingleton();
-		for (ConfigService configService : nacosServiceFactory.getConfigServices()) {
-			if (configService instanceof NacosServiceMetaData) {
-				NacosServiceMetaData nacosServiceMetaData = (NacosServiceMetaData) configService;
-				Properties properties = nacosServiceMetaData.getProperties();
-				builder.withDetail(
-						JSON.toJSONString(
-								PropertiesUtils.extractSafeProperties(properties)),
-						configService.getServerStatus());
-			}
-			if (!configService.getServerStatus().toLowerCase().equals(UP_STATUS)) {
-				builder.down();
-			}
-		}
-	}
+    
+    @Autowired
+    private ApplicationContext applicationContext;
+    
+    private static final String UP_STATUS = "up";
+    
+    @Override
+    protected void doHealthCheck(Health.Builder builder) throws Exception {
+        builder.up();
+        NacosServiceFactory nacosServiceFactory = CacheableEventPublishingNacosServiceFactory.getSingleton();
+        for (ConfigService configService : nacosServiceFactory.getConfigServices()) {
+            if (configService instanceof NacosServiceMetaData) {
+                NacosServiceMetaData nacosServiceMetaData = (NacosServiceMetaData) configService;
+                Properties properties = nacosServiceMetaData.getProperties();
+                builder.withDetail(JacksonUtils.toJson(PropertiesUtils.extractSafeProperties(properties)),
+                        configService.getServerStatus());
+            }
+            if (!configService.getServerStatus().toLowerCase().equals(UP_STATUS)) {
+                builder.down();
+            }
+        }
+    }
 }

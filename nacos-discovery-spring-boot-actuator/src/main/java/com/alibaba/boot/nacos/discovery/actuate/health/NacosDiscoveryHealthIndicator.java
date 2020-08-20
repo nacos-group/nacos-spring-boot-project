@@ -14,13 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.alibaba.boot.nacos.discovery.actuate.health;
 
 import java.util.Properties;
 
 import com.alibaba.boot.nacos.common.PropertiesUtils;
-import com.alibaba.fastjson.JSON;
 import com.alibaba.nacos.api.naming.NamingService;
+import com.alibaba.nacos.common.utils.JacksonUtils;
 import com.alibaba.nacos.spring.factory.CacheableEventPublishingNacosServiceFactory;
 import com.alibaba.nacos.spring.factory.NacosServiceFactory;
 import com.alibaba.nacos.spring.metadata.NacosServiceMetaData;
@@ -32,35 +33,32 @@ import org.springframework.boot.actuate.health.HealthIndicator;
 import org.springframework.context.ApplicationContext;
 
 /**
- * Nacos Discovery {@link HealthIndicator}
+ * Nacos Discovery {@link HealthIndicator}.
  *
  * @author <a href="mailto:fangjian0423@gmail.com">Jim</a>
  * @see HealthIndicator
  */
 public class NacosDiscoveryHealthIndicator extends AbstractHealthIndicator {
-
-	@Autowired
-	private ApplicationContext applicationContext;
-
-	private static final String UP_STATUS = "up";
-
-	@Override
-	protected void doHealthCheck(Health.Builder builder) throws Exception {
-		builder.up();
-		NacosServiceFactory nacosServiceFactory = CacheableEventPublishingNacosServiceFactory
-				.getSingleton();
-		for (NamingService namingService : nacosServiceFactory.getNamingServices()) {
-			if (namingService instanceof NacosServiceMetaData) {
-				NacosServiceMetaData nacosServiceMetaData = (NacosServiceMetaData) namingService;
-				Properties properties = nacosServiceMetaData.getProperties();
-				builder.withDetail(
-						JSON.toJSONString(
-								PropertiesUtils.extractSafeProperties(properties)),
-						namingService.getServerStatus());
-			}
-			if (!namingService.getServerStatus().equalsIgnoreCase(UP_STATUS)) {
-				builder.down();
-			}
-		}
-	}
+    
+    @Autowired
+    private ApplicationContext applicationContext;
+    
+    private static final String UP_STATUS = "up";
+    
+    @Override
+    protected void doHealthCheck(Health.Builder builder) throws Exception {
+        builder.up();
+        NacosServiceFactory nacosServiceFactory = CacheableEventPublishingNacosServiceFactory.getSingleton();
+        for (NamingService namingService : nacosServiceFactory.getNamingServices()) {
+            if (namingService instanceof NacosServiceMetaData) {
+                NacosServiceMetaData nacosServiceMetaData = (NacosServiceMetaData) namingService;
+                Properties properties = nacosServiceMetaData.getProperties();
+                builder.withDetail(JacksonUtils.toJson(PropertiesUtils.extractSafeProperties(properties)),
+                        namingService.getServerStatus());
+            }
+            if (!namingService.getServerStatus().equalsIgnoreCase(UP_STATUS)) {
+                builder.down();
+            }
+        }
+    }
 }

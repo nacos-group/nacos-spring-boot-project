@@ -14,6 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.alibaba.boot.nacos.actuate.endpoint;
 
 import java.lang.reflect.Method;
@@ -23,7 +24,6 @@ import java.util.Properties;
 
 import com.alibaba.boot.nacos.common.PropertiesUtils;
 import com.alibaba.boot.nacos.config.NacosConfigConstants;
-import com.alibaba.fastjson.JSONObject;
 import com.alibaba.nacos.api.config.annotation.NacosConfigListener;
 import com.alibaba.nacos.api.config.annotation.NacosConfigurationProperties;
 import com.alibaba.nacos.spring.context.event.config.NacosConfigMetadataEvent;
@@ -43,92 +43,84 @@ import org.springframework.core.type.AnnotationMetadata;
 import static com.alibaba.nacos.spring.util.NacosBeanUtils.CONFIG_GLOBAL_NACOS_PROPERTIES_BEAN_NAME;
 
 /**
- * Actuator {@link Endpoint} to expose Nacos Config Meta Data
+ * Actuator {@link Endpoint} to expose Nacos Config Meta Data.
  *
  * @author <a href="mailto:fangjian0423@gmail.com">Jim</a>
  * @see Endpoint
  */
 @Endpoint(id = NacosConfigConstants.ENDPOINT_PREFIX)
-public class NacosConfigEndpoint
-		implements ApplicationListener<NacosConfigMetadataEvent> {
-
-	@Autowired
-	private ApplicationContext applicationContext;
-
-	private Map<String, JSONObject> nacosConfigMetadataMap = new HashMap<>(8);
-
-	@ReadOperation
-	public Map<String, Object> invoke() {
-		Map<String, Object> result = new HashMap<>(8);
-
-		if (!(ClassUtils.isAssignable(applicationContext.getEnvironment().getClass(),
-				ConfigurableEnvironment.class))) {
-			result.put("error", "environment type not match ConfigurableEnvironment: "
-					+ applicationContext.getEnvironment().getClass().getName());
-		}
-		else {
-
-			result.put("nacosConfigMetadata", nacosConfigMetadataMap.values());
-
-			result.put("nacosConfigGlobalProperties",
-					PropertiesUtils.extractSafeProperties(applicationContext.getBean(
-							CONFIG_GLOBAL_NACOS_PROPERTIES_BEAN_NAME, Properties.class)));
-		}
-
-		return result;
-	}
-
-	@Override
-	public void onApplicationEvent(NacosConfigMetadataEvent event) {
-		String key = buildMetadataKey(event);
-		if (StringUtils.isNotEmpty(key) && !nacosConfigMetadataMap.containsKey(key)) {
-			JSONObject jsonObject = new JSONObject();
-			jsonObject.put("groupId", event.getGroupId());
-			jsonObject.put("dataId", event.getDataId());
-			if (ClassUtils.isAssignable(event.getSource().getClass(),
-					AnnotationMetadata.class)) {
-				jsonObject.put("origin", "NacosPropertySource");
-				jsonObject.put("target",
-						((AnnotationMetadata) event.getSource()).getClassName());
-			}
-			else if (ClassUtils.isAssignable(event.getSource().getClass(),
-					NacosConfigListener.class)) {
-				jsonObject.put("origin", "NacosConfigListener");
-				Method configListenerMethod = (Method) event.getAnnotatedElement();
-				jsonObject.put("target",
-						configListenerMethod.getDeclaringClass().getName() + ":"
-								+ configListenerMethod.toString());
-			}
-			else if (ClassUtils.isAssignable(event.getSource().getClass(),
-					NacosConfigurationProperties.class)) {
-				jsonObject.put("origin", "NacosConfigurationProperties");
-				jsonObject.put("target", event.getBeanType().getName());
-			}
-			else if (ClassUtils.isAssignable(event.getSource().getClass(),
-					Element.class)) {
-				jsonObject.put("origin", "NacosPropertySource");
-				jsonObject.put("target", event.getXmlResource().toString());
-			}
-			else {
-				throw new RuntimeException("unknown NacosConfigMetadataEvent");
-			}
-			nacosConfigMetadataMap.put(key, jsonObject);
-		}
-	}
-
-	private String buildMetadataKey(NacosConfigMetadataEvent event) {
-		if (event.getXmlResource() != null) {
-			return event.getGroupId() + NacosUtils.SEPARATOR + event.getDataId()
-					+ NacosUtils.SEPARATOR + event.getXmlResource();
-		}
-		else {
-			if (event.getBeanType() == null && event.getAnnotatedElement() == null) {
-				return StringUtils.EMPTY;
-			}
-			return event.getGroupId() + NacosUtils.SEPARATOR + event.getDataId()
-					+ NacosUtils.SEPARATOR + event.getBeanType() + NacosUtils.SEPARATOR
-					+ event.getAnnotatedElement();
-		}
-	}
-
+public class NacosConfigEndpoint implements ApplicationListener<NacosConfigMetadataEvent> {
+    
+    @Autowired
+    private ApplicationContext applicationContext;
+    
+    private Map<String, Map<String, Object>> nacosConfigMetadataMap = new HashMap<>(8);
+    
+    /**
+     * invoke.
+     * @author klw(213539@qq.com)
+     * @Date 2020/8/20 12:56
+     * @param:
+     * @return java.util.Map
+     */
+    @ReadOperation
+    public Map<String, Object> invoke() {
+        Map<String, Object> result = new HashMap<>(8);
+        
+        if (!(ClassUtils.isAssignable(applicationContext.getEnvironment().getClass(), ConfigurableEnvironment.class))) {
+            result.put("error",
+                    "environment type not match ConfigurableEnvironment: " + applicationContext.getEnvironment()
+                            .getClass().getName());
+        } else {
+            
+            result.put("nacosConfigMetadata", nacosConfigMetadataMap.values());
+            
+            result.put("nacosConfigGlobalProperties", PropertiesUtils.extractSafeProperties(
+                    applicationContext.getBean(CONFIG_GLOBAL_NACOS_PROPERTIES_BEAN_NAME, Properties.class)));
+        }
+        
+        return result;
+    }
+    
+    @Override
+    public void onApplicationEvent(NacosConfigMetadataEvent event) {
+        String key = buildMetadataKey(event);
+        if (StringUtils.isNotEmpty(key) && !nacosConfigMetadataMap.containsKey(key)) {
+            Map<String, Object> jsonObject = new HashMap<>(16);
+            jsonObject.put("groupId", event.getGroupId());
+            jsonObject.put("dataId", event.getDataId());
+            if (ClassUtils.isAssignable(event.getSource().getClass(), AnnotationMetadata.class)) {
+                jsonObject.put("origin", "NacosPropertySource");
+                jsonObject.put("target", ((AnnotationMetadata) event.getSource()).getClassName());
+            } else if (ClassUtils.isAssignable(event.getSource().getClass(), NacosConfigListener.class)) {
+                jsonObject.put("origin", "NacosConfigListener");
+                Method configListenerMethod = (Method) event.getAnnotatedElement();
+                jsonObject.put("target",
+                        configListenerMethod.getDeclaringClass().getName() + ":" + configListenerMethod.toString());
+            } else if (ClassUtils.isAssignable(event.getSource().getClass(), NacosConfigurationProperties.class)) {
+                jsonObject.put("origin", "NacosConfigurationProperties");
+                jsonObject.put("target", event.getBeanType().getName());
+            } else if (ClassUtils.isAssignable(event.getSource().getClass(), Element.class)) {
+                jsonObject.put("origin", "NacosPropertySource");
+                jsonObject.put("target", event.getXmlResource().toString());
+            } else {
+                throw new RuntimeException("unknown NacosConfigMetadataEvent");
+            }
+            nacosConfigMetadataMap.put(key, jsonObject);
+        }
+    }
+    
+    private String buildMetadataKey(NacosConfigMetadataEvent event) {
+        if (event.getXmlResource() != null) {
+            return event.getGroupId() + NacosUtils.SEPARATOR + event.getDataId() + NacosUtils.SEPARATOR + event
+                    .getXmlResource();
+        } else {
+            if (event.getBeanType() == null && event.getAnnotatedElement() == null) {
+                return StringUtils.EMPTY;
+            }
+            return event.getGroupId() + NacosUtils.SEPARATOR + event.getDataId() + NacosUtils.SEPARATOR + event
+                    .getBeanType() + NacosUtils.SEPARATOR + event.getAnnotatedElement();
+        }
+    }
+    
 }
