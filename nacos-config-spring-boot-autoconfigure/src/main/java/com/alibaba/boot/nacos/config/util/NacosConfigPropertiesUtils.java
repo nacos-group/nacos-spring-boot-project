@@ -17,7 +17,9 @@
 package com.alibaba.boot.nacos.config.util;
 
 import java.lang.reflect.Field;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
@@ -56,7 +58,7 @@ public class NacosConfigPropertiesUtils {
 				environment);
 
 		try {
-			Properties properties = new Properties();
+			Map<String, Object> properties = new HashMap<>();
 			properties.putAll(task.call());
 			BinderUtils.bind(bean, NacosConfigConstants.PREFIX, properties);
 		}

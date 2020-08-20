@@ -16,6 +16,7 @@
  */
 package com.alibaba.boot.nacos.config.util;
 
+import java.util.Map;
 import java.util.Properties;
 
 import org.springframework.beans.MutablePropertyValues;
@@ -27,7 +28,7 @@ import org.springframework.boot.bind.RelaxedDataBinder;
  */
 public final class BinderUtils {
 
-	public static <T> T bind(T obj, String prefix, Properties properties) {
+	public static <T> T bind(T obj, String prefix, Map<String, Object> properties) {
 		RelaxedDataBinder binder = new RelaxedDataBinder(obj, prefix);
 		binder.bind(new MutablePropertyValues(properties));
 		return obj;

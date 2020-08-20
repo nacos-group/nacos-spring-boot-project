@@ -23,7 +23,6 @@ import java.util.Properties;
 
 import com.alibaba.boot.nacos.common.PropertiesUtils;
 import com.alibaba.boot.nacos.config.NacosConfigConstants;
-import com.alibaba.fastjson.JSONObject;
 import com.alibaba.nacos.api.config.annotation.NacosConfigListener;
 import com.alibaba.nacos.api.config.annotation.NacosConfigurationProperties;
 import com.alibaba.nacos.spring.context.event.config.NacosConfigMetadataEvent;
@@ -54,7 +53,7 @@ public class NacosConfigEndpoint extends AbstractEndpoint<Map<String, Object>>
 	@Autowired
 	private ApplicationContext applicationContext;
 
-	private Map<String, JSONObject> nacosConfigMetadataMap = new HashMap<>();
+	private Map<String, Map<String, Object>> nacosConfigMetadataMap = new HashMap<>();
 
 	public NacosConfigEndpoint() {
 		super(NacosConfigConstants.ENDPOINT_PREFIX);
@@ -85,7 +84,7 @@ public class NacosConfigEndpoint extends AbstractEndpoint<Map<String, Object>>
 	public void onApplicationEvent(NacosConfigMetadataEvent event) {
 		String key = buildMetadataKey(event);
 		if (StringUtils.isNotEmpty(key) && !nacosConfigMetadataMap.containsKey(key)) {
-			JSONObject jsonObject = new JSONObject();
+				Map<String, Object> jsonObject = new HashMap<>();
 			jsonObject.put("groupId", event.getGroupId());
 			jsonObject.put("dataId", event.getDataId());
 			if (ClassUtils.isAssignable(event.getSource().getClass(),

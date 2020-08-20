@@ -16,6 +16,7 @@
  */
 package com.alibaba.boot.nacos.config.binder;
 
+import java.util.Map;
 import java.util.Properties;
 
 import com.alibaba.boot.nacos.config.util.BinderUtils;
@@ -48,7 +49,7 @@ public class NacosBootConfigurationPropertiesBinder
 	protected void doBind(Object bean, String beanName, String dataId, String groupId,
 			String configType, NacosConfigurationProperties properties, String content,
 			ConfigService configService) {
-		Properties prop = toProperties(dataId, groupId, content, configType);
+		Map<String, Object> prop = toProperties(dataId, groupId, content, configType);
 		BinderUtils.bind(bean, properties.prefix(), prop);
 		publishBoundEvent(bean, beanName, dataId, groupId, properties, content,
 				configService);

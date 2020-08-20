@@ -16,14 +16,15 @@
  */
 package com.alibaba.boot.nacos.discovery.actuate.endpoint;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
 import com.alibaba.boot.nacos.common.PropertiesUtils;
 import com.alibaba.boot.nacos.discovery.NacosDiscoveryConstants;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 import com.alibaba.nacos.api.naming.NamingService;
 import com.alibaba.nacos.spring.factory.CacheableEventPublishingNacosServiceFactory;
 import com.alibaba.nacos.spring.factory.NacosServiceFactory;
@@ -63,11 +64,11 @@ public class NacosDiscoveryEndpoint extends AbstractEndpoint<Map<String, Object>
 
 		NacosServiceFactory nacosServiceFactory = CacheableEventPublishingNacosServiceFactory
 				.getSingleton();
-		;
-
-		JSONArray array = new JSONArray();
-		for (NamingService namingService : nacosServiceFactory.getNamingServices()) {
-			JSONObject jsonObject = new JSONObject();
+			
+		Collection<NamingService> namingServiceList = nacosServiceFactory.getNamingServices();
+		List<Map<String, Object>> array = new ArrayList<>(namingServiceList.size());
+		for (NamingService namingService : namingServiceList) {
+				Map<String, Object> jsonObject = new HashMap<>();
 			try {
 				jsonObject.put("servicesOfServer",
 						namingService.getServicesOfServer(0, PAGE_SIZE));
