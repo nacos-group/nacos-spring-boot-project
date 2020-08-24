@@ -39,26 +39,29 @@ import org.springframework.context.ApplicationContext;
  * @see HealthIndicator
  */
 public class NacosDiscoveryHealthIndicator extends AbstractHealthIndicator {
-    
-    @Autowired
-    private ApplicationContext applicationContext;
-    
-    private static final String UP_STATUS = "up";
-    
-    @Override
-    protected void doHealthCheck(Health.Builder builder) throws Exception {
-        builder.up();
-        NacosServiceFactory nacosServiceFactory = CacheableEventPublishingNacosServiceFactory.getSingleton();
-        for (NamingService namingService : nacosServiceFactory.getNamingServices()) {
-            if (namingService instanceof NacosServiceMetaData) {
-                NacosServiceMetaData nacosServiceMetaData = (NacosServiceMetaData) namingService;
-                Properties properties = nacosServiceMetaData.getProperties();
-                builder.withDetail(JacksonUtils.toJson(PropertiesUtils.extractSafeProperties(properties)),
-                        namingService.getServerStatus());
-            }
-            if (!namingService.getServerStatus().equalsIgnoreCase(UP_STATUS)) {
-                builder.down();
-            }
-        }
-    }
+
+	@Autowired
+	private ApplicationContext applicationContext;
+
+	private static final String UP_STATUS = "up";
+
+	@Override
+	protected void doHealthCheck(Health.Builder builder) throws Exception {
+		builder.up();
+		NacosServiceFactory nacosServiceFactory = CacheableEventPublishingNacosServiceFactory
+				.getSingleton();
+		for (NamingService namingService : nacosServiceFactory.getNamingServices()) {
+			if (namingService instanceof NacosServiceMetaData) {
+				NacosServiceMetaData nacosServiceMetaData = (NacosServiceMetaData) namingService;
+				Properties properties = nacosServiceMetaData.getProperties();
+				builder.withDetail(
+						JacksonUtils.toJson(
+								PropertiesUtils.extractSafeProperties(properties)),
+						namingService.getServerStatus());
+			}
+			if (!namingService.getServerStatus().equalsIgnoreCase(UP_STATUS)) {
+				builder.down();
+			}
+		}
+	}
 }

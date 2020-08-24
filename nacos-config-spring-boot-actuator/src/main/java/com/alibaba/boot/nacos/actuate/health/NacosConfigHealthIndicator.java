@@ -39,26 +39,29 @@ import org.springframework.context.ApplicationContext;
  * @see HealthIndicator
  */
 public class NacosConfigHealthIndicator extends AbstractHealthIndicator {
-    
-    @Autowired
-    private ApplicationContext applicationContext;
-    
-    private static final String UP_STATUS = "up";
-    
-    @Override
-    protected void doHealthCheck(Health.Builder builder) throws Exception {
-        builder.up();
-        NacosServiceFactory nacosServiceFactory = CacheableEventPublishingNacosServiceFactory.getSingleton();
-        for (ConfigService configService : nacosServiceFactory.getConfigServices()) {
-            if (configService instanceof NacosServiceMetaData) {
-                NacosServiceMetaData nacosServiceMetaData = (NacosServiceMetaData) configService;
-                Properties properties = nacosServiceMetaData.getProperties();
-                builder.withDetail(JacksonUtils.toJson(PropertiesUtils.extractSafeProperties(properties)),
-                        configService.getServerStatus());
-            }
-            if (!configService.getServerStatus().toLowerCase().equals(UP_STATUS)) {
-                builder.down();
-            }
-        }
-    }
+
+	@Autowired
+	private ApplicationContext applicationContext;
+
+	private static final String UP_STATUS = "up";
+
+	@Override
+	protected void doHealthCheck(Health.Builder builder) throws Exception {
+		builder.up();
+		NacosServiceFactory nacosServiceFactory = CacheableEventPublishingNacosServiceFactory
+				.getSingleton();
+		for (ConfigService configService : nacosServiceFactory.getConfigServices()) {
+			if (configService instanceof NacosServiceMetaData) {
+				NacosServiceMetaData nacosServiceMetaData = (NacosServiceMetaData) configService;
+				Properties properties = nacosServiceMetaData.getProperties();
+				builder.withDetail(
+						JacksonUtils.toJson(
+								PropertiesUtils.extractSafeProperties(properties)),
+						configService.getServerStatus());
+			}
+			if (!configService.getServerStatus().toLowerCase().equals(UP_STATUS)) {
+				builder.down();
+			}
+		}
+	}
 }
