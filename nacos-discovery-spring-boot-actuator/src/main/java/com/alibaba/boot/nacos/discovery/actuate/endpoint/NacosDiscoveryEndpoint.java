@@ -22,13 +22,14 @@ import java.util.Properties;
 
 import com.alibaba.boot.nacos.common.PropertiesUtils;
 import com.alibaba.boot.nacos.discovery.NacosDiscoveryConstants;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 import com.alibaba.nacos.api.naming.NamingService;
+import com.alibaba.nacos.common.utils.JacksonUtils;
 import com.alibaba.nacos.spring.factory.CacheableEventPublishingNacosServiceFactory;
 import com.alibaba.nacos.spring.factory.NacosServiceFactory;
 import com.alibaba.nacos.spring.util.NacosUtils;
 
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.endpoint.annotation.Endpoint;
 import org.springframework.boot.actuate.endpoint.annotation.ReadOperation;
@@ -61,13 +62,13 @@ public class NacosDiscoveryEndpoint {
 		NacosServiceFactory nacosServiceFactory = CacheableEventPublishingNacosServiceFactory
 				.getSingleton();
 
-		JSONArray array = new JSONArray();
+		ArrayNode array = JacksonUtils.createEmptyArrayNode();
 		for (NamingService namingService : nacosServiceFactory.getNamingServices()) {
-			JSONObject jsonObject = new JSONObject();
+			ObjectNode jsonObject = JacksonUtils.createEmptyJsonNode();
 			try {
-				jsonObject.put("servicesOfServer",
+				jsonObject.putPOJO("servicesOfServer",
 						namingService.getServicesOfServer(0, PAGE_SIZE));
-				jsonObject.put("subscribeServices", namingService.getSubscribeServices());
+				jsonObject.putPOJO("subscribeServices", namingService.getSubscribeServices());
 				array.add(jsonObject);
 			}
 			catch (Exception e) {
