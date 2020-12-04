@@ -16,18 +16,15 @@
  */
 package com.alibaba.boot.nacos.config.binder;
 
-import java.util.Properties;
-
 import com.alibaba.boot.nacos.config.util.BinderUtils;
 import com.alibaba.nacos.api.config.ConfigService;
 import com.alibaba.nacos.api.config.annotation.NacosConfigurationProperties;
 import com.alibaba.nacos.spring.context.properties.config.NacosConfigurationPropertiesBinder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import com.alibaba.nacos.spring.util.NacosUtils;
 import org.springframework.context.ConfigurableApplicationContext;
 
-import static com.alibaba.nacos.spring.util.NacosUtils.toProperties;
+import java.util.Map;
+
 
 /**
  * @author <a href="mailto:liaochunyhm@live.com">liaochuntao</a>
@@ -48,7 +45,7 @@ public class NacosBootConfigurationPropertiesBinder
 	protected void doBind(Object bean, String beanName, String dataId, String groupId,
 			String configType, NacosConfigurationProperties properties, String content,
 			ConfigService configService) {
-		Properties prop = toProperties(dataId, groupId, content, configType);
+		Map<String, Object> prop = NacosUtils.toProperties(dataId, groupId, content, configType);
 		BinderUtils.bind(bean, properties.prefix(), prop);
 		publishBoundEvent(bean, beanName, dataId, groupId, properties, content,
 				configService);

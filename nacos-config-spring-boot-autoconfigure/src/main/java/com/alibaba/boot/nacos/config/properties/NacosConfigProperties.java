@@ -16,17 +16,16 @@
 
 package com.alibaba.boot.nacos.config.properties;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.alibaba.boot.nacos.config.NacosConfigConstants;
-import com.alibaba.fastjson.annotation.JSONField;
 import com.alibaba.nacos.api.common.Constants;
 import com.alibaba.nacos.api.config.ConfigType;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
 import org.springframework.util.Assert;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * {@link ConfigurationProperties} for configuring Nacos Config.
@@ -76,7 +75,7 @@ public class NacosConfigProperties {
 
 	private boolean remoteFirst = false;
 
-	@JSONField(serialize = false)
+	@JsonIgnore
 	private List<Config> extConfig = new ArrayList<>();
 
 	@NestedConfigurationProperty

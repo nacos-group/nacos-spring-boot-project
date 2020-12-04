@@ -16,20 +16,18 @@
  */
 package com.alibaba.boot.nacos.sample;
 
-import java.util.Properties;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
-
-import javax.annotation.PostConstruct;
-
 import com.alibaba.nacos.api.config.annotation.NacosConfigListener;
 import com.alibaba.nacos.spring.util.parse.DefaultPropertiesConfigParse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.boot.logging.LogLevel;
 import org.springframework.boot.logging.LoggingSystem;
 import org.springframework.stereotype.Service;
+
+import javax.annotation.PostConstruct;
+import java.util.Map;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author <a href="mailto:liaochunyhm@live.com">liaochuntao</a>
@@ -46,11 +44,14 @@ public class PrintLogger {
 
 	@NacosConfigListener(dataId = "nacos.log", timeout = 5000)
 	public void onChange(String newLog) throws Exception {
-		Properties properties = new DefaultPropertiesConfigParse().parse(newLog);
+		Map<String, Object> properties = new DefaultPropertiesConfigParse().parse(newLog);
 		for (Object t : properties.keySet()) {
 			String key = String.valueOf(t);
 			if (key.startsWith(LOGGER_TAG)) {
-				String strLevel = properties.getProperty(key, "info");
+				String strLevel = (String) properties.get(key);
+				if (strLevel == null) {
+					strLevel = "info";
+				}
 				LogLevel level = LogLevel.valueOf(strLevel.toUpperCase());
 				loggingSystem.setLogLevel(key.replace(LOGGER_TAG, ""), level);
 				logger.info("{}:{}", key, strLevel);
