@@ -20,6 +20,7 @@ import com.alibaba.nacos.api.annotation.NacosInjected;
 import com.alibaba.nacos.api.common.Constants;
 import com.alibaba.nacos.api.config.ConfigService;
 import com.alibaba.nacos.api.config.annotation.NacosValue;
+import com.alibaba.nacos.spring.context.annotation.config.EnableNacosConfig;
 import com.alibaba.nacos.spring.context.annotation.config.NacosPropertySource;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,9 +43,10 @@ import static org.springframework.core.env.StandardEnvironment.SYSTEM_PROPERTIES
 @SpringBootApplication
 @NacosPropertySource(name = "custom", dataId = ConfigApplication.DATA_ID, first = true, before = SYSTEM_PROPERTIES_PROPERTY_SOURCE_NAME, after = SYSTEM_ENVIRONMENT_PROPERTY_SOURCE_NAME)
 @EnableScheduling
+@EnableNacosConfig(readConfigTypeFromDataId = false)
 public class ConfigApplication {
 
-	public static final String content = "dept: Aliware\ngroup: Alibaba";
+	public static final String content = "dept=Aliware\ngroup=Alibaba";
 
 	public static final String DATA_ID = "test";
 
