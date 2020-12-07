@@ -18,7 +18,7 @@
     <parent>
         <artifactId>nacos-spring-boot-parent</artifactId>
         <groupId>com.alibaba.boot</groupId>
-        <version>0.2.7</version>
+        <version>${revision}</version>
         <relativePath>../nacos-spring-boot-parent/pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
