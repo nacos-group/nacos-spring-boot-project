@@ -26,7 +26,7 @@ Nacos Spring Boot Project consist of two parts: `nacos-config-spring-boot` and `
 
 ## Dependencies & Compatibility
 
-**master branch**
+**Version: 0.2.x / 2.x.x ( branch master )**
 
 | Dependencies   | Compatibility |
 | -------------- | ------------- |
@@ -35,7 +35,7 @@ Nacos Spring Boot Project consist of two parts: `nacos-config-spring-boot` and `
 | Nacos-Spring-Context | 1.0.0   |
 
 
-**1.x branch**
+**Version: 0.1.x / 1.x.x ( branch: 1.x )**
 
 | Dependencies   | Compatibility |
 | -------------- | ------------- |
