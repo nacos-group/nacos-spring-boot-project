@@ -18,6 +18,7 @@ package com.alibaba.boot.nacos.sample;
 
 import com.alibaba.nacos.api.annotation.NacosInjected;
 import com.alibaba.nacos.api.annotation.NacosProperties;
+import com.alibaba.nacos.api.common.Constants;
 import com.alibaba.nacos.api.config.ConfigService;
 import com.alibaba.nacos.api.config.annotation.NacosConfigListener;
 import com.alibaba.nacos.api.config.annotation.NacosValue;
@@ -26,7 +27,6 @@ import com.alibaba.nacos.spring.context.annotation.config.EnableNacosConfig;
 import com.alibaba.nacos.spring.context.annotation.config.NacosPropertySource;
 import com.alibaba.nacos.spring.context.annotation.config.NacosPropertySources;
 
-import com.alibaba.nacos.spring.context.annotation.discovery.EnableNacosDiscovery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -46,16 +46,28 @@ import static org.springframework.core.env.StandardEnvironment.SYSTEM_PROPERTIES
 @SpringBootApplication
 @EnableNacos(globalProperties = @NacosProperties(username = "nacos", password = "nacos"))
 @NacosPropertySources(value = {
-		@NacosPropertySource(dataId = "people", groupId = "DEVELOP", autoRefreshed = true),
+		@NacosPropertySource(dataId = "people.yaml", groupId = ConfigApplication.GROUP_ID, autoRefreshed = true),
 		@NacosPropertySource(name = "custom", dataId = ConfigApplication.DATA_ID, groupId = "ALIBABA", first = true, before = SYSTEM_PROPERTIES_PROPERTY_SOURCE_NAME, after = SYSTEM_ENVIRONMENT_PROPERTY_SOURCE_NAME) })
+@EnableNacosConfig(readConfigTypeFromDataId = false)
 public class ConfigApplication {
-
-	public static final String DATA_ID = "boot-test";
+	
+	public static final String content = "dept=Aliware\ngroup=Alibaba";
+	
+	public static final String DATA_ID = "boot-test.properties";
+	
+	public static final String GROUP_ID = "DEVELOP";
 
 	public static void main(String[] args) {
 		SpringApplication.run(ConfigApplication.class, args);
 	}
-
+	
+	@Bean
+	@Order(Ordered.LOWEST_PRECEDENCE)
+	public CommandLineRunner firstCommandLineRunner() {
+		return new FirstCommandLineRunner();
+	}
+	
+	
 	@Bean
 	@Order(Ordered.LOWEST_PRECEDENCE - 1)
 	public CommandLineRunner secondCommandLineRunner() {
@@ -89,7 +101,26 @@ public class ConfigApplication {
 		}
 
 	}
-
+	
+	public static class FirstCommandLineRunner implements CommandLineRunner {
+		
+		@NacosInjected
+		private ConfigService configService;
+		
+		@Override
+		public void run(String... args) throws Exception {
+			if (configService.publishConfig(DATA_ID, ConfigApplication.GROUP_ID, content)) {
+				Thread.sleep(200);
+				System.out.println("First runner success: " + configService
+						.getConfig(DATA_ID, ConfigApplication.GROUP_ID, 5000));
+			}
+			else {
+				System.out.println("First runner error: publish config error");
+			}
+		}
+	}
+	
+	
 	public static class SecondCommandLineRunner implements CommandLineRunner {
 
 		@NacosValue("${dept:unknown}")
