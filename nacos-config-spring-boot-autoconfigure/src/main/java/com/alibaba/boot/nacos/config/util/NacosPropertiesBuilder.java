@@ -57,7 +57,7 @@ public class NacosPropertiesBuilder {
 			properties.put(PropertyKeyConst.ACCESS_KEY,
 					environment.resolvePlaceholders(accessKey));
 		}
-		if (StringUtils.isNoneEmpty(ramRoleName)) {
+		if (StringUtils.isNotEmpty(ramRoleName)) {
 			properties.put(PropertyKeyConst.RAM_ROLE_NAME,
 					environment.resolvePlaceholders(ramRoleName));
 		}
