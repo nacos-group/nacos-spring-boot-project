@@ -36,7 +36,7 @@ public class TestController {
 	@NacosValue(value = "${people.enable:bbbbb}", autoRefreshed = true)
 	private String enable;
 
-	@Value("${people.enable}")
+	@Value("${people.enable:}")
 	private String springEnable;
 
 	@Autowired
