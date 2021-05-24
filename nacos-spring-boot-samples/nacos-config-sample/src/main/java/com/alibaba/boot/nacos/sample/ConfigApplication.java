@@ -48,7 +48,7 @@ import static org.springframework.core.env.StandardEnvironment.SYSTEM_PROPERTIES
 @NacosPropertySources(value = {
 		@NacosPropertySource(dataId = "people.yaml", groupId = ConfigApplication.GROUP_ID, autoRefreshed = true),
 		@NacosPropertySource(name = "custom", dataId = ConfigApplication.DATA_ID, groupId = "ALIBABA", first = true, before = SYSTEM_PROPERTIES_PROPERTY_SOURCE_NAME, after = SYSTEM_ENVIRONMENT_PROPERTY_SOURCE_NAME) })
-@EnableNacosConfig(readConfigTypeFromDataId = false)
+@EnableNacosConfig
 public class ConfigApplication {
 	
 	public static final String content = "dept=Aliware\ngroup=Alibaba";
