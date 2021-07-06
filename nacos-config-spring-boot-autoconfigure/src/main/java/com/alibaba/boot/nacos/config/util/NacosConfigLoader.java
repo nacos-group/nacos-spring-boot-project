@@ -144,7 +144,7 @@ public class NacosConfigLoader {
 				config);
 		ArrayList<String> dataIds = new ArrayList<>();
 		if (StringUtils.isEmpty(config.getDataId())) {
-			final String ids = environment.resolvePlaceholders(config.getDataId());
+			final String ids = environment.resolvePlaceholders(config.getDataIds());
 			dataIds.addAll(Arrays.asList(ids.split(",")));
 		}
 		else {
