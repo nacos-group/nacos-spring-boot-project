@@ -51,8 +51,9 @@
         <dependency>
             <groupId>com.alibaba.nacos</groupId>
             <artifactId>nacos-client</artifactId>
-            <version>1.4.2</version>
+            <version>${nacos.version}</version>
         </dependency>
+        
         
         <dependency>
             <groupId>com.alibaba.boot</groupId>
