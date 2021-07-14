@@ -57,18 +57,18 @@ public class NacosBootConfigurationPropertiesBinder
 	protected void doBind(Object bean, String beanName, String dataId, String groupId,
 			String configType, NacosConfigurationProperties properties, String content,
 			ConfigService configService) {
-		String name = "nacos-bootstrap-" + beanName;
-		NacosPropertySource propertySource = new NacosPropertySource(name, dataId,
-				groupId, content, configType);
-		environment.getPropertySources().addLast(propertySource);
-		Binder binder = Binder.get(environment);
-		ResolvableType type = getBeanType(bean, beanName);
-		Bindable<?> target = Bindable.of(type).withExistingValue(bean);
-		binder.bind(properties.prefix(), target);
-		publishBoundEvent(bean, beanName, dataId, groupId, properties, content,
-				configService);
-		publishMetadataEvent(bean, beanName, dataId, groupId, properties);
-		environment.getPropertySources().remove(name);
+		synchronized (this) {
+			String name = "nacos-bootstrap-" + beanName;
+			NacosPropertySource propertySource = new NacosPropertySource(name, dataId, groupId, content, configType);
+			environment.getPropertySources().addLast(propertySource);
+			Binder binder = Binder.get(environment);
+			ResolvableType type = getBeanType(bean, beanName);
+			Bindable<?> target = Bindable.of(type).withExistingValue(bean);
+			binder.bind(properties.prefix(), target);
+			publishBoundEvent(bean, beanName, dataId, groupId, properties, content, configService);
+			publishMetadataEvent(bean, beanName, dataId, groupId, properties);
+			environment.getPropertySources().remove(name);
+		}
 	}
 
 	private ResolvableType getBeanType(Object bean, String beanName) {
