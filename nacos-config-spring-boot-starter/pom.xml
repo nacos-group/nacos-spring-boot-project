@@ -41,6 +41,18 @@
         <dependency>
             <groupId>com.alibaba.nacos</groupId>
             <artifactId>nacos-spring-context</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.alibaba.nacos</groupId>
+                    <artifactId>nacos-client</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+    
+        <dependency>
+            <groupId>com.alibaba.nacos</groupId>
+            <artifactId>nacos-client</artifactId>
+            <version>${nacos.version}</version>
         </dependency>
 
         <dependency>

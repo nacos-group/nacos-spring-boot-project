@@ -45,11 +45,13 @@ public class NacosBootConfigurationPropertiesBinder
 	protected void doBind(Object bean, String beanName, String dataId, String groupId,
 			String configType, NacosConfigurationProperties properties, String content,
 			ConfigService configService) {
-		Map<String, Object> prop = NacosUtils.toProperties(dataId, groupId, content, configType);
-		BinderUtils.bind(bean, properties.prefix(), prop);
-		publishBoundEvent(bean, beanName, dataId, groupId, properties, content,
-				configService);
-		publishMetadataEvent(bean, beanName, dataId, groupId, properties);
+		synchronized (this) {
+			Map<String, Object> prop = NacosUtils.toProperties(dataId, groupId, content, configType);
+			BinderUtils.bind(bean, properties.prefix(), prop);
+			publishBoundEvent(bean, beanName, dataId, groupId, properties, content,
+					configService);
+			publishMetadataEvent(bean, beanName, dataId, groupId, properties);
+		}
 	}
 
 }
