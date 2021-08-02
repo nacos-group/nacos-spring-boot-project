@@ -13,3 +13,6 @@ jdk:
   - openjdk8
 
 script:
+cache:
+  directories:
+  - $HOME/.m2
