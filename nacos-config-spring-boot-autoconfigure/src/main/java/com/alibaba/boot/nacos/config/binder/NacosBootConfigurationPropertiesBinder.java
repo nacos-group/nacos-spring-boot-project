@@ -16,21 +16,20 @@
  */
 package com.alibaba.boot.nacos.config.binder;
 
-import java.lang.reflect.Method;
-
 import com.alibaba.nacos.api.config.ConfigService;
 import com.alibaba.nacos.api.config.annotation.NacosConfigurationProperties;
 import com.alibaba.nacos.spring.context.properties.config.NacosConfigurationPropertiesBinder;
 import com.alibaba.nacos.spring.core.env.NacosPropertySource;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import org.springframework.boot.context.properties.ConfigurationBeanFactoryMetadata;
+import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
+import org.springframework.beans.factory.support.RootBeanDefinition;
 import org.springframework.boot.context.properties.bind.Bindable;
 import org.springframework.boot.context.properties.bind.Binder;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.ResolvableType;
 import org.springframework.core.env.StandardEnvironment;
+
+import java.lang.reflect.Method;
 
 /**
  * @author <a href="mailto:liaochunyhm@live.com">liaochuntao</a>
@@ -39,18 +38,13 @@ import org.springframework.core.env.StandardEnvironment;
 public class NacosBootConfigurationPropertiesBinder
 		extends NacosConfigurationPropertiesBinder {
 
-	private final Logger logger = LoggerFactory
-			.getLogger(NacosBootConfigurationPropertiesBinder.class);
-
-	private ConfigurationBeanFactoryMetadata beanFactoryMetadata;
-	private StandardEnvironment environment = new StandardEnvironment();
+	private final ConfigurableListableBeanFactory beanFactory;
+	private final StandardEnvironment environment = new StandardEnvironment();
 
 	public NacosBootConfigurationPropertiesBinder(
 			ConfigurableApplicationContext applicationContext) {
 		super(applicationContext);
-		this.beanFactoryMetadata = applicationContext.getBean(
-				ConfigurationBeanFactoryMetadata.BEAN_NAME,
-				ConfigurationBeanFactoryMetadata.class);
+		this.beanFactory = applicationContext.getBeanFactory();
 	}
 
 	@Override
@@ -72,11 +66,21 @@ public class NacosBootConfigurationPropertiesBinder
 	}
 
 	private ResolvableType getBeanType(Object bean, String beanName) {
-		Method factoryMethod = this.beanFactoryMetadata.findFactoryMethod(beanName);
+		Method factoryMethod = this.findFactoryMethod(beanName);
 		if (factoryMethod != null) {
 			return ResolvableType.forMethodReturnType(factoryMethod);
 		}
 		return ResolvableType.forClass(bean.getClass());
+	}
+
+	public Method findFactoryMethod(String beanName) {
+		if (beanFactory.containsBeanDefinition(beanName)) {
+			BeanDefinition beanDefinition = beanFactory.getMergedBeanDefinition(beanName);
+			if (beanDefinition instanceof RootBeanDefinition) {
+				return ((RootBeanDefinition) beanDefinition).getResolvedFactoryMethod();
+			}
+		}
+		return null;
 	}
 
 }
