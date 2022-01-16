@@ -22,6 +22,7 @@ import com.alibaba.nacos.api.config.ConfigService;
 import com.alibaba.nacos.api.config.annotation.NacosConfigurationProperties;
 import com.alibaba.nacos.spring.context.properties.config.NacosConfigurationPropertiesBinder;
 import com.alibaba.nacos.spring.core.env.NacosPropertySource;
+import com.alibaba.nacos.spring.util.ObjectUtils;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.support.RootBeanDefinition;
@@ -56,6 +57,7 @@ public class NacosBootConfigurationPropertiesBinder
 			String name = "nacos-bootstrap-" + beanName;
 			NacosPropertySource propertySource = new NacosPropertySource(name, dataId, groupId, content, configType);
 			environment.getPropertySources().addLast(propertySource);
+			ObjectUtils.cleanMapOrCollectionField(bean);
 			Binder binder = Binder.get(environment);
 			ResolvableType type = getBeanType(bean, beanName);
 			Bindable<?> target = Bindable.of(type).withExistingValue(bean);
