@@ -52,7 +52,7 @@
         <maven-release-plugin.version>2.5.3</maven-release-plugin.version>
         <maven-surefire-plugin.version>2.19.1</maven-surefire-plugin.version>
         <maven-deploy-plugin.version>2.8.2</maven-deploy-plugin.version>
-        <nacos.version>2.0.2</nacos.version>
+        <nacos.version>2.0.4</nacos.version>
     </properties>
 
     <dependencyManagement>
