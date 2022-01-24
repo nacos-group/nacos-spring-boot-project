@@ -33,6 +33,7 @@ import org.springframework.boot.logging.LoggingSystem;
 import org.springframework.stereotype.Service;
 
 /**
+ * print logger
  * @author <a href="mailto:liaochunyhm@live.com">liaochuntao</a>
  * @since
  */
