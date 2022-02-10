@@ -90,6 +90,7 @@ public class LogAutoFreshProcess {
                 writeLogFile(content, dataId);
                 System.setProperty(LoggingApplicationListener.CONFIG_PROPERTY, LOG_CACHE_BASE + File.separator + dataId);
                 registerListener(configService, dataId, groupName);
+                return;
             }
         }
     }
