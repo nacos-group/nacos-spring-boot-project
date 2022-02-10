@@ -18,7 +18,7 @@ package com.alibaba.boot.nacos.config.util.log;
 
 
 import com.alibaba.boot.nacos.config.properties.NacosConfigProperties;
-import com.alibaba.boot.nacos.config.util.NacosPropertiesBuilder;
+import com.alibaba.boot.nacos.config.util.NacosConfigLoader;
 import com.alibaba.nacos.api.common.Constants;
 import com.alibaba.nacos.api.config.ConfigService;
 import com.alibaba.nacos.api.config.listener.AbstractListener;
@@ -55,6 +55,10 @@ public class LogAutoFreshProcess {
 
     private final ConfigurableEnvironment environment;
 
+    private final NacosConfigLoader nacosConfigLoader;
+
+    private final Function<Properties, ConfigService> builder;
+
     private static final List<String> LOG_DATA_ID = new ArrayList<>();
 
     private static final String LOG_CACHE_BASE = System.getProperty("JM.SNAPSHOT.PATH", System.getProperty("user.home")) + File.separator + "nacos"
@@ -65,16 +69,22 @@ public class LogAutoFreshProcess {
         LOG_DATA_ID.add("log4j2.xml");
     }
 
-    public LogAutoFreshProcess(ConfigurableEnvironment environment, NacosConfigProperties nacosConfigProperties) {
-        this.nacosConfigProperties = nacosConfigProperties;
-        this.environment = environment;
+    public static LogAutoFreshProcess build(ConfigurableEnvironment environment, NacosConfigProperties nacosConfigProperties, NacosConfigLoader nacosConfigLoader, Function<Properties, ConfigService> builder) {
+        return new LogAutoFreshProcess(environment, nacosConfigProperties, nacosConfigLoader, builder);
     }
 
-    public void process(Function<Properties, ConfigService> builder) {
+    private LogAutoFreshProcess(ConfigurableEnvironment environment, NacosConfigProperties nacosConfigProperties, NacosConfigLoader nacosConfigLoader, Function<Properties, ConfigService> builder) {
+        this.nacosConfigProperties = nacosConfigProperties;
+        this.environment = environment;
+        this.nacosConfigLoader = nacosConfigLoader;
+        this.builder = builder;
+    }
+
+    public void process() {
         final String groupName = environment
                 .resolvePlaceholders(nacosConfigProperties.getGroup());
+        ConfigService configService = builder.apply(nacosConfigLoader.getGlobalProperties());
         for (String dataId : LOG_DATA_ID) {
-            ConfigService configService = builder.apply(buildGlobalNacosProperties());
             String content = NacosUtils.getContent(configService, dataId, groupName);
             if (StringUtils.isNotBlank(content)) {
                 writeLogFile(content, dataId);
@@ -82,20 +92,6 @@ public class LogAutoFreshProcess {
                 registerListener(configService, dataId, groupName);
             }
         }
-    }
-
-    public Properties buildGlobalNacosProperties() {
-        return NacosPropertiesBuilder.buildNacosProperties(environment,
-                nacosConfigProperties.getServerAddr(),
-                nacosConfigProperties.getNamespace(), nacosConfigProperties.getEndpoint(),
-                nacosConfigProperties.getSecretKey(),
-                nacosConfigProperties.getAccessKey(),
-                nacosConfigProperties.getRamRoleName(),
-                nacosConfigProperties.getConfigLongPollTimeout(),
-                nacosConfigProperties.getConfigRetryTime(),
-                nacosConfigProperties.getMaxRetry(),
-                nacosConfigProperties.isEnableRemoteSyncConfig(),
-                nacosConfigProperties.getUsername(), nacosConfigProperties.getPassword());
     }
 
     private void registerListener(ConfigService configService, String dataId, String groupName) {

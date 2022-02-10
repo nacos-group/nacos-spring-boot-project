@@ -21,6 +21,7 @@ import java.util.function.Function;
 
 import com.alibaba.boot.nacos.config.properties.NacosConfigProperties;
 import com.alibaba.boot.nacos.config.util.NacosConfigLoader;
+import com.alibaba.boot.nacos.config.util.NacosConfigLoaderFactory;
 import com.alibaba.boot.nacos.config.util.NacosConfigPropertiesUtils;
 import com.alibaba.nacos.api.config.ConfigService;
 import com.alibaba.nacos.api.exception.NacosException;
@@ -69,7 +70,7 @@ public class NacosConfigApplicationContextInitializer
 		environment = context.getEnvironment();
 		nacosConfigProperties = NacosConfigPropertiesUtils
 				.buildNacosConfigProperties(environment);
-		final NacosConfigLoader configLoader = new NacosConfigLoader(
+		final NacosConfigLoader configLoader = NacosConfigLoaderFactory.getSingleton(
 				nacosConfigProperties, environment, builder);
 		if (!enable()) {
 			logger.info("[Nacos Config Boot] : The preload configuration is not enabled");
@@ -94,7 +95,7 @@ public class NacosConfigApplicationContextInitializer
 		if (!factory
 				.containsSingleton(NacosBeanUtils.GLOBAL_NACOS_PROPERTIES_BEAN_NAME)) {
 			factory.registerSingleton(NacosBeanUtils.GLOBAL_NACOS_PROPERTIES_BEAN_NAME,
-					configLoader.buildGlobalNacosProperties());
+					configLoader.getGlobalProperties());
 		}
 	}
 

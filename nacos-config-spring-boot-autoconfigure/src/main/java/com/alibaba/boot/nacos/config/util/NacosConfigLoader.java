@@ -49,20 +49,22 @@ public class NacosConfigLoader {
 	private final Logger logger = LoggerFactory.getLogger(NacosConfigLoader.class);
 
 	private final NacosConfigProperties nacosConfigProperties;
+
+	private final Properties globalProperties;
+
 	private final ConfigurableEnvironment environment;
 	private Function<Properties, ConfigService> builder;
 	private List<DeferNacosPropertySource> nacosPropertySources = new LinkedList<>();
-
 	public NacosConfigLoader(NacosConfigProperties nacosConfigProperties,
 			ConfigurableEnvironment environment,
 			Function<Properties, ConfigService> builder) {
 		this.nacosConfigProperties = nacosConfigProperties;
 		this.environment = environment;
 		this.builder = builder;
+		globalProperties=buildGlobalNacosProperties();
 	}
 
 	public void loadConfig() {
-		Properties globalProperties = buildGlobalNacosProperties();
 		MutablePropertySources mutablePropertySources = environment.getPropertySources();
 		List<NacosPropertySource> sources = reqGlobalNacosConfig(globalProperties,
 				nacosConfigProperties.getType());
@@ -192,6 +194,11 @@ public class NacosConfigLoader {
 
 	public List<DeferNacosPropertySource> getNacosPropertySources() {
 		return nacosPropertySources;
+	}
+
+
+	public Properties getGlobalProperties() {
+		return globalProperties;
 	}
 
 	// Delay Nacos configuration data source object, used for log level of loading time,

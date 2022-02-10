@@ -24,6 +24,7 @@ import java.util.function.Function;
 
 import com.alibaba.boot.nacos.config.properties.NacosConfigProperties;
 import com.alibaba.boot.nacos.config.util.NacosConfigLoader;
+import com.alibaba.boot.nacos.config.util.NacosConfigLoaderFactory;
 import com.alibaba.boot.nacos.config.util.NacosConfigPropertiesUtils;
 import com.alibaba.boot.nacos.config.util.log.LogAutoFreshProcess;
 import com.alibaba.nacos.api.NacosFactory;
@@ -82,7 +83,8 @@ public class NacosConfigEnvironmentProcessor
 		application.addInitializers(new NacosConfigApplicationContextInitializer(this));
 		nacosConfigProperties = NacosConfigPropertiesUtils
 				.buildNacosConfigProperties(environment);
-		new LogAutoFreshProcess(environment,nacosConfigProperties).process( builder);
+        NacosConfigLoader nacosConfigLoader = NacosConfigLoaderFactory.getSingleton(nacosConfigProperties, environment, builder);
+        LogAutoFreshProcess.build(environment, nacosConfigProperties, nacosConfigLoader, builder).process();
 		if (enable()) {
 			System.out.println(
 					"[Nacos Config Boot] : The preload log configuration is enabled");
