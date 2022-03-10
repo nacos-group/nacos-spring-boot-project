@@ -60,7 +60,7 @@ public class NacosConfigProperties {
 
 	private String group = Constants.DEFAULT_GROUP;
 
-	private ConfigType type;
+	private ConfigType type = ConfigType.PROPERTIES;
 
 	private String maxRetry;
 
