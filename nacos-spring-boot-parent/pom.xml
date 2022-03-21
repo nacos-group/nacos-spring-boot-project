@@ -35,7 +35,7 @@
         <java.target.version>1.8</java.target.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <spring-boot.version>2.0.3.RELEASE</spring-boot.version>
+        <spring-boot.version>2.6.3</spring-boot.version>
         <nacos-spring-context.version>1.1.1</nacos-spring-context.version>
         <!-- Build args -->
         <argline>-server -Xms256m -Xmx512m -XX:PermSize=64m -XX:MaxPermSize=128m -Dfile.encoding=UTF-8
@@ -169,6 +169,16 @@
         </pluginRepository>
     </pluginRepositories>
 
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>compile</scope>
+            <optional>true</optional>
+        </dependency>
+    </dependencies>
+    
     <build>
         <!-- Used for packaging NOTICE & LICENSE to each sub-module jar-->
         <resources>
