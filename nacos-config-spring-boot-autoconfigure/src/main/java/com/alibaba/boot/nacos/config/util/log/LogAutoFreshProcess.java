@@ -14,8 +14,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alibaba.boot.nacos.config.util.log;
 
+package com.alibaba.boot.nacos.config.util.log;
 
 import com.alibaba.boot.nacos.config.properties.NacosConfigProperties;
 import com.alibaba.boot.nacos.config.util.NacosConfigLoader;
@@ -25,12 +25,16 @@ import com.alibaba.nacos.api.config.listener.AbstractListener;
 import com.alibaba.nacos.api.exception.NacosException;
 import com.alibaba.nacos.client.config.utils.ConcurrentDiskUtil;
 import com.alibaba.nacos.client.config.utils.JvmUtil;
+import com.alibaba.nacos.client.logging.NacosLogging;
 import com.alibaba.nacos.client.utils.LogUtils;
 import com.alibaba.nacos.common.utils.IoUtils;
 import com.alibaba.nacos.common.utils.StringUtils;
 import com.alibaba.nacos.spring.util.NacosUtils;
 import org.slf4j.Logger;
 import org.springframework.boot.context.logging.LoggingApplicationListener;
+import org.springframework.boot.logging.LoggingInitializationContext;
+import org.springframework.boot.logging.LoggingSystem;
+import org.springframework.boot.logging.LoggingSystemFactory;
 import org.springframework.core.env.ConfigurableEnvironment;
 
 import java.io.File;
@@ -41,11 +45,13 @@ import java.util.Properties;
 import java.util.function.Function;
 
 /**
- * 1. Get the log configuration content through globalproperties
- * 2. Write the configuration content to the local directory and log it through logging. The config parameter sets the log file path
- * 3. Register a listener to listen for changes in log configuration. If changes are made, write them to the local directory specified in the previous step
+ * Start:
+ * Step 1: get the log XML configuration from the configuration center
+ * Step 2: modify the springboot log configuration path
+ * Modifying log configuration during operation:
+ * Clean up the configuration through LoggingSystem and reload the configuration.
  *
- * @author hujun
+ * @author <a href="mailto:hujun3@xiaomi.com">hujun</a>
  */
 public class LogAutoFreshProcess {
 
@@ -101,19 +107,17 @@ public class LogAutoFreshProcess {
                 @Override
                 public void receiveConfigInfo(String configInfo) {
                     if (StringUtils.isNotBlank(configInfo)) {
-                        writeLogFile(configInfo, dataId);
+                        File file = writeLogFile(configInfo, dataId);
+                        reloadConfig(file);
                     }
                 }
             });
         } catch (NacosException e) {
-            throw new RuntimeException(
-                    "ConfigService can't add Listener with dataId : " + dataId,
-                    e);
+            throw new RuntimeException("ConfigService can't add Listener with dataId : " + dataId, e);
         }
-
     }
 
-    private void writeLogFile(String content, String dataId) {
+    private File writeLogFile(String content, String dataId) {
         File file = new File(LOG_CACHE_BASE, dataId);
         File parentFile = file.getParentFile();
         if (!parentFile.exists()) {
@@ -129,8 +133,18 @@ public class LogAutoFreshProcess {
                 IoUtils.writeStringToFile(file, content, Constants.ENCODE);
             }
         } catch (IOException e) {
-            throw new RuntimeException(
-                    "write log file fail");
+            throw new RuntimeException("write log file fail");
         }
+        return file;
     }
+
+    private void reloadConfig(File file) {
+        LoggingSystem loggingSystem = LoggingSystemFactory.fromSpringFactories()
+                .getLoggingSystem(this.getClass().getClassLoader());
+        loggingSystem.cleanUp();
+        loggingSystem.initialize(new LoggingInitializationContext(environment),
+                file == null ? null : file.getAbsolutePath(), null);
+        NacosLogging.getInstance().loadConfiguration();
+    }
+
 }
