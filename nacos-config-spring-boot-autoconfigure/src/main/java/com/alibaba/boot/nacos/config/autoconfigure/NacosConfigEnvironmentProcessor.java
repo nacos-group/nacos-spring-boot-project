@@ -81,14 +81,14 @@ public class NacosConfigEnvironmentProcessor
 	public void postProcessEnvironment(ConfigurableEnvironment environment,
 			SpringApplication application) {
 		application.addInitializers(new NacosConfigApplicationContextInitializer(this));
+		nacosConfigProperties = NacosConfigPropertiesUtils
+				.buildNacosConfigProperties(environment);
 		if (enable()) {
-			nacosConfigProperties = NacosConfigPropertiesUtils
-					.buildNacosConfigProperties(environment);
-			NacosConfigLoader nacosConfigLoader = NacosConfigLoaderFactory.getSingleton(nacosConfigProperties, environment, builder);
-			LogAutoFreshProcess.build(environment, nacosConfigProperties, nacosConfigLoader, builder).process();
 			System.out.println(
 					"[Nacos Config Boot] : The preload log configuration is enabled");
 			loadConfig(environment);
+			NacosConfigLoader nacosConfigLoader = NacosConfigLoaderFactory.getSingleton(nacosConfigProperties, environment, builder);
+			LogAutoFreshProcess.build(environment, nacosConfigProperties, nacosConfigLoader, builder).process();
 		}
 	}
 
