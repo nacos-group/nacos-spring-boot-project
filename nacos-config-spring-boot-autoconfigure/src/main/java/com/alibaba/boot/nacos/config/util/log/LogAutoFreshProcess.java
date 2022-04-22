@@ -25,12 +25,15 @@ import com.alibaba.nacos.api.config.listener.AbstractListener;
 import com.alibaba.nacos.api.exception.NacosException;
 import com.alibaba.nacos.client.config.utils.ConcurrentDiskUtil;
 import com.alibaba.nacos.client.config.utils.JvmUtil;
+import com.alibaba.nacos.client.logging.NacosLogging;
 import com.alibaba.nacos.client.utils.LogUtils;
 import com.alibaba.nacos.common.utils.IoUtils;
 import com.alibaba.nacos.common.utils.StringUtils;
 import com.alibaba.nacos.spring.util.NacosUtils;
 import org.slf4j.Logger;
-import org.springframework.boot.context.logging.LoggingApplicationListener;
+import org.springframework.boot.logging.LoggingInitializationContext;
+import org.springframework.boot.logging.LoggingSystem;
+import org.springframework.boot.logging.LoggingSystemFactory;
 import org.springframework.core.env.ConfigurableEnvironment;
 
 import java.io.File;
@@ -88,7 +91,7 @@ public class LogAutoFreshProcess {
             String content = NacosUtils.getContent(configService, dataId, groupName);
             if (StringUtils.isNotBlank(content)) {
                 writeLogFile(content, dataId);
-                System.setProperty(LoggingApplicationListener.CONFIG_PROPERTY, LOG_CACHE_BASE + File.separator + dataId);
+                loadConfig(dataId,content);
                 registerListener(configService, dataId, groupName);
                 return;
             }
@@ -102,6 +105,7 @@ public class LogAutoFreshProcess {
                 public void receiveConfigInfo(String configInfo) {
                     if (StringUtils.isNotBlank(configInfo)) {
                         writeLogFile(configInfo, dataId);
+                        loadConfig(dataId,configInfo);
                     }
                 }
             });
@@ -113,7 +117,7 @@ public class LogAutoFreshProcess {
 
     }
 
-    private void writeLogFile(String content, String dataId) {
+    private File writeLogFile(String content, String dataId) {
         File file = new File(LOG_CACHE_BASE, dataId);
         File parentFile = file.getParentFile();
         if (!parentFile.exists()) {
@@ -132,5 +136,15 @@ public class LogAutoFreshProcess {
             throw new RuntimeException(
                     "write log file fail");
         }
+        return file;
+    }
+    
+    private void loadConfig(String dataId, String content) {
+        File file = writeLogFile(content, dataId);
+        LoggingSystem loggingSystem = LoggingSystemFactory.fromSpringFactories()
+                .getLoggingSystem(this.getClass().getClassLoader());
+        loggingSystem.cleanUp();
+        loggingSystem.initialize(new LoggingInitializationContext(environment), file.getAbsolutePath(), null);
+        NacosLogging.getInstance().loadConfiguration();
     }
 }
