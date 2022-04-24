@@ -36,7 +36,6 @@ import org.springframework.boot.logging.LoggingInitializationContext;
 import org.springframework.boot.logging.LoggingSystem;
 import org.springframework.boot.logging.LoggingSystemFactory;
 import org.springframework.core.env.ConfigurableEnvironment;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
