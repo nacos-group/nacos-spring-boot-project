@@ -146,6 +146,7 @@ public class LogAutoFreshProcess {
         LoggingSystem loggingSystem = LoggingSystemFactory.fromSpringFactories()
                 .getLoggingSystem(this.getClass().getClassLoader());
         loggingSystem.cleanUp();
+        loggingSystem.getSystemProperties(environment).apply();
         loggingSystem.initialize(new LoggingInitializationContext(environment),
                 file == null ? null : file.getAbsolutePath(), null);
         NacosLogging.getInstance().loadConfiguration();
