@@ -122,7 +122,7 @@ public class NacosConfigEnvironmentProcessor
 			serviceCache.clear();
 		}
 		catch (Exception e) {
-			logger.error("publish defer ConfigService has some error : {}", e);
+			logger.error("publish defer ConfigService has some error", e);
 		}
 	}
 }
