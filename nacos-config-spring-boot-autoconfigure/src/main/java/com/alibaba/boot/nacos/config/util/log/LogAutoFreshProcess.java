@@ -32,6 +32,7 @@ import com.alibaba.nacos.common.utils.IoUtils;
 import com.alibaba.nacos.common.utils.StringUtils;
 import com.alibaba.nacos.spring.util.NacosUtils;
 import org.slf4j.Logger;
+import org.springframework.boot.context.logging.LoggingApplicationListener;
 import org.springframework.boot.logging.LoggingInitializationContext;
 import org.springframework.boot.logging.LoggingSystem;
 import org.springframework.boot.logging.LoggingSystemFactory;
@@ -94,14 +95,12 @@ public class LogAutoFreshProcess {
         for (String dataId : LOG_DATA_ID) {
             String content = NacosUtils.getContent(configService, dataId, groupName);
             if (StringUtils.isNotBlank(content)) {
-                File file = writeLogFile(content, dataId);
-                loadConfig(file);
+                writeLogFile(content, dataId);
+                System.setProperty(LoggingApplicationListener.CONFIG_PROPERTY, LOG_CACHE_BASE + File.separator + dataId);
                 registerListener(configService, dataId, groupName);
                 return;
             }
         }
-        //加载properties中的log配置
-        loadConfig(null);
     }
     
     private void registerListener(ConfigService configService, String dataId, String groupName) {
@@ -111,7 +110,7 @@ public class LogAutoFreshProcess {
                 public void receiveConfigInfo(String configInfo) {
                     if (StringUtils.isNotBlank(configInfo)) {
                         File file = writeLogFile(configInfo, dataId);
-                        loadConfig(file);
+                        reloadConfig(file);
                     }
                 }
             });
@@ -142,13 +141,13 @@ public class LogAutoFreshProcess {
         return file;
     }
     
-    private void loadConfig(File file) {
+    private void reloadConfig(File file) {
         LoggingSystem loggingSystem = LoggingSystemFactory.fromSpringFactories()
                 .getLoggingSystem(this.getClass().getClassLoader());
         loggingSystem.cleanUp();
-        loggingSystem.getSystemProperties(environment).apply();
         loggingSystem.initialize(new LoggingInitializationContext(environment),
                 file == null ? null : file.getAbsolutePath(), null);
         NacosLogging.getInstance().loadConfiguration();
     }
+    
 }

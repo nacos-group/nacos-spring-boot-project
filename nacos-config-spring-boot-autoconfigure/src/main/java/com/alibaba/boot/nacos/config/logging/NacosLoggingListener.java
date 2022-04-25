@@ -17,6 +17,8 @@
 package com.alibaba.boot.nacos.config.logging;
 
 
+import com.alibaba.boot.nacos.config.properties.NacosConfigProperties;
+import com.alibaba.boot.nacos.config.util.NacosConfigPropertiesUtils;
 import com.alibaba.nacos.client.logging.NacosLogging;
 import org.springframework.boot.context.event.ApplicationEnvironmentPreparedEvent;
 import org.springframework.context.ApplicationEvent;
@@ -43,12 +45,18 @@ public class NacosLoggingListener implements GenericApplicationListener {
 	
 	@Override
 	public boolean supportsSourceType(Class<?> aClass) {
-		return false;
+		return true;
 	}
 	
 	@Override
 	public void onApplicationEvent(ApplicationEvent applicationEvent) {
-		NacosLogging.getInstance().loadConfiguration();
+		//如果开启了托管日志，加载完用户日志配置之后在加载一次自己的日志配置
+		ApplicationEnvironmentPreparedEvent applicationEnvironmentPreparedEvent = (ApplicationEnvironmentPreparedEvent) applicationEvent;
+		NacosConfigProperties nacosConfigProperties = NacosConfigPropertiesUtils.buildNacosConfigProperties(
+				applicationEnvironmentPreparedEvent.getEnvironment());
+		if(nacosConfigProperties.getBootstrap().isLogEnable()){
+			NacosLogging.getInstance().loadConfiguration();
+		}
 	}
 
 	@Override
