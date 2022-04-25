@@ -29,7 +29,7 @@ import java.util.function.Function;
  */
 public class NacosConfigLoaderFactory {
 
-    private volatile static NacosConfigLoader nacosConfigLoader;
+    private static volatile NacosConfigLoader nacosConfigLoader;
 
     public static NacosConfigLoader getSingleton(NacosConfigProperties nacosConfigProperties,
                                                  ConfigurableEnvironment environment,
