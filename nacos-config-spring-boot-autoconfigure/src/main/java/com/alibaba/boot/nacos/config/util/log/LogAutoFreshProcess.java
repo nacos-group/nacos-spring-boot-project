@@ -36,6 +36,7 @@ import org.springframework.boot.logging.LoggingInitializationContext;
 import org.springframework.boot.logging.LoggingSystem;
 import org.springframework.boot.logging.LoggingSystemFactory;
 import org.springframework.core.env.ConfigurableEnvironment;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -49,6 +50,7 @@ import java.util.function.Function;
  * Step 2: modify the springboot log configuration path
  * Modifying log configuration during operation:
  * Clean up the configuration through LoggingSystem and reload the configuration.
+ *
  * @author <a href="mailto:hujun3@xiaomi.com">hujun</a>
  */
 public class LogAutoFreshProcess {
@@ -113,9 +115,8 @@ public class LogAutoFreshProcess {
         } catch (NacosException e) {
             throw new RuntimeException("ConfigService can't add Listener with dataId : " + dataId, e);
         }
-        
     }
-    
+
     private File writeLogFile(String content, String dataId) {
         File file = new File(LOG_CACHE_BASE, dataId);
         File parentFile = file.getParentFile();
@@ -136,7 +137,7 @@ public class LogAutoFreshProcess {
         }
         return file;
     }
-    
+
     private void reloadConfig(File file) {
         LoggingSystem loggingSystem = LoggingSystemFactory.fromSpringFactories()
                 .getLoggingSystem(this.getClass().getClassLoader());
@@ -145,5 +146,5 @@ public class LogAutoFreshProcess {
                 file == null ? null : file.getAbsolutePath(), null);
         NacosLogging.getInstance().loadConfiguration();
     }
-    
+
 }
