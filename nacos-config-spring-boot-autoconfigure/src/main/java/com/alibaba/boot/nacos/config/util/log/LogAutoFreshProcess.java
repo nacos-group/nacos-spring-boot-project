@@ -107,8 +107,8 @@ public class LogAutoFreshProcess {
                 @Override
                 public void receiveConfigInfo(String configInfo) {
                     if (StringUtils.isNotBlank(configInfo)) {
-                        File file = writeLogFile(configInfo, dataId);
-                        reloadConfig(file);
+                        writeLogFile(configInfo, dataId);
+                        reloadConfig(LOG_CACHE_BASE + File.separator + dataId);
                     }
                 }
             });
@@ -117,7 +117,7 @@ public class LogAutoFreshProcess {
         }
     }
 
-    private File writeLogFile(String content, String dataId) {
+    private void writeLogFile(String content, String dataId) {
         File file = new File(LOG_CACHE_BASE, dataId);
         File parentFile = file.getParentFile();
         if (!parentFile.exists()) {
@@ -135,15 +135,14 @@ public class LogAutoFreshProcess {
         } catch (IOException e) {
             throw new RuntimeException("write log file fail");
         }
-        return file;
     }
 
-    private void reloadConfig(File file) {
+    private void reloadConfig(String logPath) {
         LoggingSystem loggingSystem = LoggingSystemFactory.fromSpringFactories()
                 .getLoggingSystem(this.getClass().getClassLoader());
         loggingSystem.cleanUp();
         loggingSystem.initialize(new LoggingInitializationContext(environment),
-                file == null ? null : file.getAbsolutePath(), null);
+                logPath, null);
         NacosLogging.getInstance().loadConfiguration();
     }
 
