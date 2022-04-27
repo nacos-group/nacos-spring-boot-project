@@ -50,7 +50,7 @@ public class NacosLoggingListener implements GenericApplicationListener {
 	
 	@Override
 	public void onApplicationEvent(ApplicationEvent applicationEvent) {
-		//如果开启了托管日志，加载完用户日志配置之后在加载一次自己的日志配置
+		//If the managed log is enabled, load your own log configuration after loading the user log configuration
 		ApplicationEnvironmentPreparedEvent applicationEnvironmentPreparedEvent = (ApplicationEnvironmentPreparedEvent) applicationEvent;
 		NacosConfigProperties nacosConfigProperties = NacosConfigPropertiesUtils.buildNacosConfigProperties(
 				applicationEnvironmentPreparedEvent.getEnvironment());
