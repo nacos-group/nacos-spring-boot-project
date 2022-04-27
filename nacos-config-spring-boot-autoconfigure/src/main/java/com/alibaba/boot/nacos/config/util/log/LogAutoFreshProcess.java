@@ -17,7 +17,6 @@
 
 package com.alibaba.boot.nacos.config.util.log;
 
-
 import com.alibaba.boot.nacos.config.properties.NacosConfigProperties;
 import com.alibaba.boot.nacos.config.util.NacosConfigLoader;
 import com.alibaba.nacos.api.common.Constants;
@@ -45,52 +44,49 @@ import java.util.Properties;
 import java.util.function.Function;
 
 /**
- * 1. Get the log configuration content through globalproperties 2. Write the configuration content to the local
- * directory and log it through logging. The config parameter sets the log file path 3. Register a listener to listen
- * for changes in log configuration. If changes are made, write them to the local directory specified in the previous
- * step
- *
- * @author hujun
+ * Start:
+ * Step 1: get the log XML configuration from the configuration center
+ * Step 2: modify the springboot log configuration path
+ * Modifying log configuration during operation:
+ * Clean up the configuration through LoggingSystem and reload the configuration.
+ * @author <a href="mailto:hujun3@xiaomi.com">hujun</a>
  */
 public class LogAutoFreshProcess {
-    
+
     private static final Logger LOGGER = LogUtils.logger(LogAutoFreshProcess.class);
-    
+
     private final NacosConfigProperties nacosConfigProperties;
-    
+
     private final ConfigurableEnvironment environment;
-    
+
     private final NacosConfigLoader nacosConfigLoader;
-    
+
     private final Function<Properties, ConfigService> builder;
-    
+
     private static final List<String> LOG_DATA_ID = new ArrayList<>();
-    
-    private static final String LOG_CACHE_BASE =
-            System.getProperty("JM.SNAPSHOT.PATH", System.getProperty("user.home")) + File.separator + "nacos"
-                    + File.separator + "logConfig";
-    
+
+    private static final String LOG_CACHE_BASE = System.getProperty("JM.SNAPSHOT.PATH", System.getProperty("user.home")) + File.separator + "nacos"
+            + File.separator + "logConfig";
+
     static {
         LOG_DATA_ID.add("logback.xml");
         LOG_DATA_ID.add("log4j2.xml");
     }
-    
-    public static LogAutoFreshProcess build(ConfigurableEnvironment environment,
-            NacosConfigProperties nacosConfigProperties, NacosConfigLoader nacosConfigLoader,
-            Function<Properties, ConfigService> builder) {
+
+    public static LogAutoFreshProcess build(ConfigurableEnvironment environment, NacosConfigProperties nacosConfigProperties, NacosConfigLoader nacosConfigLoader, Function<Properties, ConfigService> builder) {
         return new LogAutoFreshProcess(environment, nacosConfigProperties, nacosConfigLoader, builder);
     }
-    
-    private LogAutoFreshProcess(ConfigurableEnvironment environment, NacosConfigProperties nacosConfigProperties,
-            NacosConfigLoader nacosConfigLoader, Function<Properties, ConfigService> builder) {
+
+    private LogAutoFreshProcess(ConfigurableEnvironment environment, NacosConfigProperties nacosConfigProperties, NacosConfigLoader nacosConfigLoader, Function<Properties, ConfigService> builder) {
         this.nacosConfigProperties = nacosConfigProperties;
         this.environment = environment;
         this.nacosConfigLoader = nacosConfigLoader;
         this.builder = builder;
     }
-    
+
     public void process() {
-        final String groupName = environment.resolvePlaceholders(nacosConfigProperties.getGroup());
+        final String groupName = environment
+                .resolvePlaceholders(nacosConfigProperties.getGroup());
         ConfigService configService = builder.apply(nacosConfigLoader.getGlobalProperties());
         for (String dataId : LOG_DATA_ID) {
             String content = NacosUtils.getContent(configService, dataId, groupName);
@@ -102,7 +98,7 @@ public class LogAutoFreshProcess {
             }
         }
     }
-    
+
     private void registerListener(ConfigService configService, String dataId, String groupName) {
         try {
             configService.addListener(dataId, groupName, new AbstractListener() {
