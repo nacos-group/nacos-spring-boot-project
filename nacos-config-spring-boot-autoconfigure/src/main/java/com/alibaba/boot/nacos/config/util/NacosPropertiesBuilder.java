@@ -37,53 +37,27 @@ public class NacosPropertiesBuilder {
 			String configRetryTimeout, String maxRetry, boolean enableRemoteSyncConfig,
 			String username, String password) {
 		Properties properties = new Properties();
-		if (StringUtils.isNotEmpty(serverAddr)) {
-			properties.put(PropertyKeyConst.SERVER_ADDR,
-					environment.resolvePlaceholders(serverAddr));
-		}
-		if (StringUtils.isNotEmpty(namespaceId)) {
-			properties.put(PropertyKeyConst.NAMESPACE,
-					environment.resolvePlaceholders(namespaceId));
-		}
-		if (StringUtils.isNotEmpty(endpoint)) {
-			properties.put(PropertyKeyConst.ENDPOINT,
-					environment.resolvePlaceholders(endpoint));
-		}
-		if (StringUtils.isNotEmpty(secretKey)) {
-			properties.put(PropertyKeyConst.SECRET_KEY,
-					environment.resolvePlaceholders(secretKey));
-		}
-		if (StringUtils.isNotEmpty(accessKey)) {
-			properties.put(PropertyKeyConst.ACCESS_KEY,
-					environment.resolvePlaceholders(accessKey));
-		}
-		if (StringUtils.isNotEmpty(ramRoleName)) {
-			properties.put(PropertyKeyConst.RAM_ROLE_NAME,
-					environment.resolvePlaceholders(ramRoleName));
-		}
-		if (StringUtils.isNotEmpty(configLongPollTimeout)) {
-			properties.put(PropertyKeyConst.CONFIG_LONG_POLL_TIMEOUT,
-					environment.resolvePlaceholders(configLongPollTimeout));
-		}
-		if (StringUtils.isNotEmpty(configRetryTimeout)) {
-			properties.put(PropertyKeyConst.CONFIG_RETRY_TIME,
-					environment.resolvePlaceholders(configRetryTimeout));
-		}
-		if (StringUtils.isNotEmpty(maxRetry)) {
-			properties.put(PropertyKeyConst.MAX_RETRY,
-					environment.resolvePlaceholders(maxRetry));
-		}
-		if (StringUtils.isNotBlank(username)) {
-			properties.put(PropertyKeyConst.USERNAME,
-					environment.resolvePlaceholders(username));
-		}
-		if (StringUtils.isNotBlank(password)) {
-			properties.put(PropertyKeyConst.PASSWORD,
-					environment.resolvePlaceholders(password));
-		}
+		processPropertiesData(properties,environment,serverAddr,PropertyKeyConst.SERVER_ADDR);
+		processPropertiesData(properties,environment,namespaceId,PropertyKeyConst.NAMESPACE);
+		processPropertiesData(properties,environment,endpoint,PropertyKeyConst.ENDPOINT);
+		processPropertiesData(properties,environment,secretKey,PropertyKeyConst.SECRET_KEY);
+		processPropertiesData(properties,environment,accessKey,PropertyKeyConst.ACCESS_KEY);
+		processPropertiesData(properties,environment,ramRoleName,PropertyKeyConst.RAM_ROLE_NAME);
+		processPropertiesData(properties,environment,configLongPollTimeout,PropertyKeyConst.CONFIG_LONG_POLL_TIMEOUT);
+		processPropertiesData(properties,environment,configRetryTimeout,PropertyKeyConst.CONFIG_RETRY_TIME);
+		processPropertiesData(properties,environment,maxRetry,PropertyKeyConst.MAX_RETRY);
+		processPropertiesData(properties,environment,username,PropertyKeyConst.USERNAME);
+		processPropertiesData(properties,environment,password,PropertyKeyConst.PASSWORD);
+		
 		properties.put(PropertyKeyConst.ENABLE_REMOTE_SYNC_CONFIG,
 				String.valueOf(enableRemoteSyncConfig));
 		return properties;
+	}
+	
+	private static void processPropertiesData(Properties properties,Environment environment,String keyword,String key) {
+		if (StringUtils.isNotBlank(keyword)) {
+			properties.put(key ,environment.resolvePlaceholders(keyword));
+		}
 	}
 
 	public static void merge(Properties targetProperties, Properties sourceProperties) {
