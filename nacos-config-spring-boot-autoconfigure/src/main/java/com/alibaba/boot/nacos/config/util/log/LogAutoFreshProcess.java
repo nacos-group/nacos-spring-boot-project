@@ -46,8 +46,8 @@ import java.util.function.Function;
 
 /**
  * Start:
- * Step 1: get the log XML configuration from the configuration center
- * Step 2: modify the springboot log configuration path
+ * Step1: get the log XML configuration from the configuration center
+ * Step2: modify the springboot log configuration path
  * Modifying log configuration during operation:
  * Clean up the configuration through LoggingSystem and reload the configuration.
  *
