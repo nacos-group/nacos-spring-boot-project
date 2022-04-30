@@ -115,7 +115,7 @@ public class NacosConfigLoader {
 			ConfigType type) {
 		List<String> dataIds = new ArrayList<>();
 		// Loads all data-id information into the list in the list
-		if (StringUtils.isEmpty(nacosConfigProperties.getDataId())) {
+		if (!StringUtils.hasLength(nacosConfigProperties.getDataId())) {
 			final String ids = environment
 					.resolvePlaceholders(nacosConfigProperties.getDataIds());
 			dataIds.addAll(Arrays.asList(ids.split(",")));
@@ -136,7 +136,7 @@ public class NacosConfigLoader {
 		Properties subConfigProperties = buildSubNacosProperties(globalProperties,
 				config);
 		ArrayList<String> dataIds = new ArrayList<>();
-		if (StringUtils.isEmpty(config.getDataId())) {
+		if (!StringUtils.hasLength(config.getDataId())) {
 			final String ids = environment.resolvePlaceholders(config.getDataIds());
 			dataIds.addAll(Arrays.asList(ids.split(",")));
 		}
@@ -153,7 +153,7 @@ public class NacosConfigLoader {
 			String[] dataIds, String groupId, ConfigType type, boolean isAutoRefresh) {
 		final NacosPropertySource[] propertySources = new NacosPropertySource[dataIds.length];
 		for (int i = 0; i < dataIds.length; i++) {
-			if (StringUtils.isEmpty(dataIds[i])) {
+			if (!StringUtils.hasLength(dataIds[i])) {
 				continue;
 			}
 			// Remove excess Spaces
