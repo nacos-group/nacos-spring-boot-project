@@ -83,12 +83,12 @@ public class NacosConfigEnvironmentProcessor
 		application.addInitializers(new NacosConfigApplicationContextInitializer(this));
 		nacosConfigProperties = NacosConfigPropertiesUtils
 				.buildNacosConfigProperties(environment);
-        NacosConfigLoader nacosConfigLoader = NacosConfigLoaderFactory.getSingleton(nacosConfigProperties, environment, builder);
-        LogAutoFreshProcess.build(environment, nacosConfigProperties, nacosConfigLoader, builder).process();
 		if (enable()) {
 			System.out.println(
 					"[Nacos Config Boot] : The preload log configuration is enabled");
 			loadConfig(environment);
+			NacosConfigLoader nacosConfigLoader = NacosConfigLoaderFactory.getSingleton(nacosConfigProperties, environment, builder);
+			LogAutoFreshProcess.build(environment, nacosConfigProperties, nacosConfigLoader, builder).process();
 		}
 	}
 
