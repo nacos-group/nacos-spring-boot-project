@@ -14,9 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ablibaba.boot.nacos.support;
+package com.alibaba.boot.nacos.config.support;
 
+import com.alibaba.nacos.spring.core.env.AbstractNacosPropertySourceBuilder;
+import com.alibaba.nacos.spring.core.env.NacosPropertySource;
 import com.alibaba.nacos.spring.util.parse.DefaultYamlConfigParse;
+import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.env.EnvironmentPostProcessor;
 import org.springframework.core.env.ConfigurableEnvironment;
@@ -25,8 +28,16 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
- * @author yanglulu
- * @date 2022/1/20
+ * yaml multi profiles.
+ * <p>
+ * read nacos propertysource:
+ * <p>
+ * 1. {@link AbstractNacosPropertySourceBuilder#doBuild(String, BeanDefinition, Map)}<br/>
+ * 2. {@link NacosPropertySource#NacosPropertySource(String, String, String, String, String)}<br/>
+ * 3. {@link com.alibaba.nacos.spring.util.NacosUtils#toProperties(String, String, String, String)}<br/>
+ * 4. {@link com.alibaba.nacos.spring.util.ConfigParseUtils#toProperties(String, String, String, String)}<br/>
+ *
+ * @author <a href="mailto:yanglu_u@126.com">dbses</a>
  */
 public class MultiProfilesYamlConfigParseSupport extends DefaultYamlConfigParse implements EnvironmentPostProcessor {
 
