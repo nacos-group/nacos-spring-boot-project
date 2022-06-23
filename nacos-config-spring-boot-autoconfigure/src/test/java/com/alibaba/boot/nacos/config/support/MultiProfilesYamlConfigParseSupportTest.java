@@ -22,7 +22,10 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.core.env.Environment;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 /**
@@ -30,38 +33,130 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  *
  * @author <a href="mailto:yanglu_u@126.com">dbses</a>
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest(classes = {NacosConfigAutoConfiguration.class}, properties = {"spring.profiles.active=alpha"})
 public class MultiProfilesYamlConfigParseSupportTest {
 
-    private String content;
+    @RunWith(SpringJUnit4ClassRunner.class)
+    @ActiveProfiles({"alpha"})
+    @SpringBootTest(classes = {NacosConfigAutoConfiguration.class})
+    public static class OneProfiles {
 
-    @Before
-    public void setUp() {
-        content = "test1:\n" +
-                "  config: 2\n" +
-                "\n" +
-                "---\n" +
-                "spring:\n" +
-                "  profiles: alpha\n" +
-                "test1:\n" +
-                "  config: alpha\n" +
-                "\n" +
-                "---\n" +
-                "spring:\n" +
-                "  profiles: beta\n" +
-                "test1:\n" +
-                "  config: beta";
+        @Autowired
+        private Environment environment;
+
+        @Before
+        public void setUp() {
+            // because MultiProfilesYamlConfigParseSupport # postProcessEnvironment() run once,
+            // so it should set profilesArray before test
+            MultiProfilesYamlConfigParseSupport.setProfileArray(environment.getActiveProfiles());
+        }
+
+        @Test
+        public void oneProfiles_normal() {
+            String content = "test1:\n" +
+                             "  config: 2\n" +
+                             "\n" +
+                             "---\n" +
+                             "spring:\n" +
+                             "  profiles: alpha\n" +
+                             "test1:\n" +
+                             "  config: alpha\n" +
+                             "\n" +
+                             "---\n" +
+                             "spring:\n" +
+                             "  profiles: beta\n" +
+                             "test1:\n" +
+                             "  config: beta";
+            Assert.assertEquals(environment.getActiveProfiles()[0], "alpha");
+            Object result = ConfigParseUtils.toProperties("test.yaml", "test", content, "yaml")
+                    .get("test1.config");
+            Assert.assertEquals("alpha", result);
+        }
+
+        @Test
+        public void oneProfiles_when_content_profiles_isnull() {
+            String content = "test1:\n" +
+                             "  config: 2\n" +
+                             "\n" +
+                             "---\n" +
+                             "test1:\n" +
+                             "  config: alpha\n" +
+                             "\n" +
+                             "---\n" +
+                             "test1:\n" +
+                             "  config: beta";
+            Object result = ConfigParseUtils.toProperties("test.yaml", "test", content, "yaml")
+                    .get("test1.config");
+            Assert.assertEquals("beta", result);
+        }
     }
 
-    @Test
-    public void testParse() {
+    @RunWith(SpringJUnit4ClassRunner.class)
+    @ActiveProfiles({"alpha", "beta"})
+    @SpringBootTest(classes = {NacosConfigAutoConfiguration.class})
+    public static class TwoProfiles {
 
-        String dataId = "test.yaml";
-        String group = "test";
-        String type = "yaml";
+        @Autowired
+        private Environment environment;
 
-        Assert.assertEquals("alpha", ConfigParseUtils.toProperties(dataId, group, content, type).get("test1.config"));
+        @Before
+        public void setUp() {
+            MultiProfilesYamlConfigParseSupport.setProfileArray(environment.getActiveProfiles());
+        }
+
+        @Test
+        public void twoProfiles_normal() {
+            String content = "test1:\n" +
+                             "  config: 2\n" +
+                             "\n" +
+                             "---\n" +
+                             "spring:\n" +
+                             "  profiles: alpha\n" +
+                             "test1:\n" +
+                             "  config: alpha\n" +
+                             "\n" +
+                             "---\n" +
+                             "spring:\n" +
+                             "  profiles: beta\n" +
+                             "test1:\n" +
+                             "  config: beta";
+            Assert.assertEquals(environment.getActiveProfiles()[0], "alpha");
+            Assert.assertEquals(environment.getActiveProfiles()[1], "beta");
+            Object result = ConfigParseUtils.toProperties("test.yaml", "test", content, "yaml")
+                    .get("test1.config");
+            Assert.assertEquals("beta", result);
+        }
+
+    }
+
+    @RunWith(SpringJUnit4ClassRunner.class)
+    @SpringBootTest(classes = {NacosConfigAutoConfiguration.class})
+    public static class NoProfiles {
+
+        @Autowired
+        private Environment environment;
+
+        @Test
+        public void noProfiles_normal() {
+            String content = "test1:\n" +
+                             "  config: 2\n" +
+                             "\n" +
+                             "---\n" +
+                             "spring:\n" +
+                             "  profiles: default\n" +
+                             "test1:\n" +
+                             "  config: default\n" +
+                             "\n" +
+                             "---\n" +
+                             "spring:\n" +
+                             "  profiles: beta\n" +
+                             "test1:\n" +
+                             "  config: beta";
+            Assert.assertEquals(environment.getActiveProfiles().length, 0);
+            Object result = ConfigParseUtils.toProperties("test.yaml", "test", content, "yaml")
+                    .get("test1.config");
+            Assert.assertEquals("default", result);
+        }
+
     }
 
 }

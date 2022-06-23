@@ -19,6 +19,7 @@ package com.alibaba.boot.nacos.config.support;
 import com.alibaba.nacos.spring.core.env.AbstractNacosPropertySourceBuilder;
 import com.alibaba.nacos.spring.core.env.NacosPropertySource;
 import com.alibaba.nacos.spring.util.parse.DefaultYamlConfigParse;
+import jdk.nashorn.internal.objects.annotations.Setter;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.env.EnvironmentPostProcessor;
@@ -41,11 +42,18 @@ import java.util.concurrent.atomic.AtomicReference;
  */
 public class MultiProfilesYamlConfigParseSupport extends DefaultYamlConfigParse implements EnvironmentPostProcessor {
 
+    private static final String SPRING_PROFILES = "spring.profiles";
+
     private static String[] profileArray = {};
 
     @Override
     public void postProcessEnvironment(ConfigurableEnvironment environment, SpringApplication application) {
         String[] profiles = environment.getActiveProfiles();
+        // fall back to default profiles
+        if (profiles.length == 0) {
+            profiles = environment.getDefaultProfiles();
+        }
+        // set once
         if (profileArray.length == 0) {
             profileArray = profiles;
         }
@@ -55,17 +63,34 @@ public class MultiProfilesYamlConfigParseSupport extends DefaultYamlConfigParse 
     public Map<String, Object> parse(String configText) {
         final AtomicReference<Map<String, Object>> result = new AtomicReference<>();
         process(map -> {
+            // first block
             if (result.get() == null) {
                 result.set(map);
             } else {
-                for (String profile : profileArray) {
-                    if (profile.equals(map.get("spring.profiles"))) {
-                        result.get().putAll(map);
-                    }
-                }
+                setFromOtherBlock(result, map);
             }
         }, createYaml(), configText);
         return result.get();
+    }
+
+    private void setFromOtherBlock(AtomicReference<Map<String, Object>> result, Map<String, Object> map) {
+        if (map.get(SPRING_PROFILES) == null) {
+            result.get().putAll(map);
+            return;
+        }
+
+        for (String profile : profileArray) {
+            if (profile.equals(map.get(SPRING_PROFILES))) {
+                result.get().putAll(map);
+            }
+        }
+    }
+
+    /**
+     * for unit test
+     */
+    static void setProfileArray(String[] profiles) {
+        profileArray = profiles;
     }
 
 }
