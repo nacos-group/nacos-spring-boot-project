@@ -3,6 +3,7 @@ org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
 #org.springframework.context.ApplicationContextInitializer=\
 #  com.alibaba.boot.nacos.config.autoconfigure.NacosConfigApplicationContextInitializer
 org.springframework.boot.env.EnvironmentPostProcessor=\
-  com.alibaba.boot.nacos.config.autoconfigure.NacosConfigEnvironmentProcessor
+  com.alibaba.boot.nacos.config.autoconfigure.NacosConfigEnvironmentProcessor,\
+  com.alibaba.boot.nacos.config.support.MultiProfilesYamlConfigParseSupport
 org.springframework.context.ApplicationListener=\
   com.alibaba.boot.nacos.config.logging.NacosLoggingListener
