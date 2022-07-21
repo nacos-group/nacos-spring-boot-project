@@ -18,6 +18,7 @@ package com.alibaba.boot.nacos.config.properties;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import com.alibaba.boot.nacos.config.NacosConfigConstants;
 import com.alibaba.nacos.api.common.Constants;
@@ -267,8 +268,8 @@ public class NacosConfigProperties {
 		sb.append(", encode='").append(encode).append('\'');
 		sb.append(", endpoint='").append(endpoint).append('\'');
 		sb.append(", namespace='").append(namespace).append('\'');
-		sb.append(", accessKey='").append(accessKey).append('\'');
-		sb.append(", secretKey='").append(secretKey).append('\'');
+		sb.append(", accessKey='").append(Objects.isNull(accessKey) ? null : "******").append('\'');
+		sb.append(", secretKey='").append(Objects.isNull(secretKey) ? null : "******").append('\'');
 		sb.append(", ramRoleName='").append(ramRoleName).append('\'');
 		sb.append(", autoRefresh=").append(autoRefresh);
 		sb.append(", dataId='").append(dataId).append('\'');
@@ -495,8 +496,8 @@ public class NacosConfigProperties {
 			sb.append("serverAddr='").append(serverAddr).append('\'');
 			sb.append(", endpoint='").append(endpoint).append('\'');
 			sb.append(", namespace='").append(namespace).append('\'');
-			sb.append(", accessKey='").append(accessKey).append('\'');
-			sb.append(", secretKey='").append(secretKey).append('\'');
+			sb.append(", accessKey='").append(Objects.isNull(accessKey) ? null : "******").append('\'');
+			sb.append(", secretKey='").append(Objects.isNull(secretKey) ? null : "******").append('\'');
 			sb.append(", ramRoleName='").append(ramRoleName).append('\'');
 			sb.append(", dataId='").append(dataId).append('\'');
 			sb.append(", dataIds='").append(dataIds).append('\'');
