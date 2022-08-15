@@ -87,6 +87,9 @@ public class NacosConfigLoaderFactoryTest {
     public void getSingleton() {
         NacosConfigLoader singleton = NacosConfigLoaderFactory.getSingleton(nacosConfigProperties, environment,
                 builder);
-        Assert.assertNotNull(singleton);
+        NacosConfigLoader singleton2 = NacosConfigLoaderFactory.getSingleton(nacosConfigProperties, environment,
+                builder);
+        // Verify that it is the same object
+        Assert.assertEquals(singleton2, singleton);
     }
 }

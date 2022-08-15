@@ -26,6 +26,7 @@ import com.alibaba.nacos.api.config.ConfigType;
 import com.alibaba.nacos.api.exception.NacosException;
 import com.alibaba.nacos.client.config.NacosConfigService;
 import com.alibaba.nacos.client.utils.LogUtils;
+import com.alibaba.nacos.spring.core.env.NacosPropertySourcePostProcessor;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -37,7 +38,6 @@ import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
@@ -71,6 +71,8 @@ public class NacosConfigLoaderTest {
     
     private static final Logger LOGGER = LogUtils.logger(NacosConfigEnvironmentProcessorTest.class);
     
+    private NacosPropertySourcePostProcessor nacosPropertySourcePostProcessor;
+    
     @Before
     public void setup() {
         nacosConfigProperties = new NacosConfigProperties();
@@ -96,35 +98,21 @@ public class NacosConfigLoaderTest {
         };
         nacosPropertySources = new LinkedList<>();
         nacosConfigLoader = new NacosConfigLoader(nacosConfigProperties, environment, builder);
+        nacosPropertySourcePostProcessor = new NacosPropertySourcePostProcessor();
     }
-    
-    @Test
-    public void loadConfig() {
-        try {
-            nacosConfigLoader.loadConfig();
-        }catch (Exception e) {
-            LOGGER.error("error info: {}", e);
-        }
-    }
-   
+
     @Test
     public void buildGlobalNacosProperties() {
         Properties properties = nacosConfigLoader.buildGlobalNacosProperties();
+        LOGGER.info("buildGlobalNacosProperties properties : {}", properties);
         Assert.assertNotNull(properties);
+        Assert.assertEquals(properties.size(), 6);
     }
     
     @Test
     public void addListenerIfAutoRefreshed() {
-        try {
-            nacosConfigLoader.addListenerIfAutoRefreshed();
-        }catch (Exception e) {
-            Assert.assertNotNull(e);
-        }
-    }
-    
-    @Test
-    public void addListenerIfAutoRefreshed2() {
-        List<NacosConfigLoader.DeferNacosPropertySource> list = new ArrayList<>();
-        nacosConfigLoader.addListenerIfAutoRefreshed(new ArrayList<>());
+        nacosConfigLoader.addListenerIfAutoRefreshed();
+        List<NacosConfigLoader.DeferNacosPropertySource> propertySources = nacosConfigLoader.getNacosPropertySources();
+        Assert.assertEquals(propertySources.size(), 0);
     }
 }

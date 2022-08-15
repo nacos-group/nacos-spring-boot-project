@@ -23,11 +23,16 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.env.ConfigurableEnvironment;
+import org.springframework.core.env.MutablePropertySources;
+import org.springframework.core.env.PropertySources;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import java.util.Map;
 
 
 /**
@@ -54,11 +59,8 @@ public class AttributeExtractTaskTest {
     }
     
     @Test
-    public void call(){
-        try {
-            attributeExtractTask.call();
-        }catch (Exception e) {
-            Assert.assertNotNull(e);
-        }
+    public void call() throws Exception{
+        Map<String, String> map = attributeExtractTask.call();
+        Assert.assertEquals(map.size(), 0);
     }
 }

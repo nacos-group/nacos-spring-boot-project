@@ -39,16 +39,14 @@ public class NacosCharSequenceEditorTest {
     }
     @Test
     public void setValue() {
-        try {
-            nacosCharSequenceEditor.setValue("nacos");
-        }catch (Exception e) {
-            Assert.assertNotNull(e);
-        }
+        nacosCharSequenceEditor.setValue("nacosTest");
+        String asText = nacosCharSequenceEditor.getAsText();
+        Assert.assertEquals(asText,"nacosTest");
     }
     
     @Test
     public void getAsText() {
         String str = nacosCharSequenceEditor.getAsText();
-        Assert.assertNotNull(str);
+        Assert.assertEquals(str, "null");
     }
 }

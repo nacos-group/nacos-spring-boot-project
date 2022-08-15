@@ -33,15 +33,14 @@ public class NacosBootConfigExceptionTest {
     @Test
     public void getCons() {
         try {
-            testMethod();
+            testMethod("spring boot");
         }catch (Exception e) {
-            Assert.assertNotNull(e);
+            Assert.assertTrue(e instanceof NacosBootConfigException);
         }
     }
     
-    private  void testMethod(){
-        String str = "Spring Boot";
-        if (str.startsWith("Spring")) {
+    private  void testMethod(String str) {
+        if (str.startsWith("spring")) {
             throw new NacosBootConfigException(new Throwable());
         }
     }

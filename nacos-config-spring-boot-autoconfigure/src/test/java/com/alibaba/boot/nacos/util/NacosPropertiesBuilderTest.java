@@ -19,6 +19,7 @@ package com.alibaba.boot.nacos.util;
 
 import com.alibaba.boot.nacos.config.autoconfigure.NacosConfigAutoConfiguration;
 import com.alibaba.boot.nacos.config.util.NacosPropertiesBuilder;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.env.Environment;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import java.util.Properties;
 
 /**
  * @ClassName: NacosPropertiesBuilderTest
@@ -53,8 +56,10 @@ public class NacosPropertiesBuilderTest {
         String enableRemoteSyncConfig = "enableRemoteSyncConfig";
         String username = "nacos";
         String password = "password";
-        NacosPropertiesBuilder.buildNacosProperties(environment, serverAddr, namespaceId,secretKey,
-                "ak",ramRoleName,  configLongPollTimeout, configRetryTimeout,
-                maxRetry, enableRemoteSyncConfig, true,username, password);
+        Properties properties = NacosPropertiesBuilder.buildNacosProperties(environment, serverAddr, namespaceId, secretKey,
+                "ak", ramRoleName, configLongPollTimeout, configRetryTimeout, maxRetry, enableRemoteSyncConfig, true,
+                username, password);
+        Assert.assertEquals(properties.size(), 12);
+    
     }
 }

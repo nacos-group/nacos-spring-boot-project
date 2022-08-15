@@ -22,6 +22,9 @@ import com.alibaba.boot.nacos.config.autoconfigure.NacosConfigAutoConfiguration;
 import com.alibaba.boot.nacos.config.autoconfigure.NacosConfigBootBeanDefinitionRegistrar;
 import com.alibaba.boot.nacos.config.autoconfigure.NacosConfigEnvironmentProcessor;
 import com.alibaba.boot.nacos.config.properties.NacosConfigProperties;
+import com.alibaba.boot.nacos.config.util.NacosConfigLoader;
+import com.alibaba.boot.nacos.config.util.NacosConfigLoaderFactory;
+import com.alibaba.boot.nacos.config.util.NacosConfigPropertiesUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -64,6 +67,12 @@ public class NacosConfigApplicationContextInitializerTest {
     @Test
     public void initialize(){
         try {
+            nacosConfigProperties = NacosConfigPropertiesUtils
+                    .buildNacosConfigProperties(environment);
+            Assert.assertNotNull(nacosConfigProperties);
+            NacosConfigLoader singleton = NacosConfigLoaderFactory.getSingleton(nacosConfigProperties, environment,
+                    null);
+            Assert.assertNotNull(singleton);
             nacosConfigApplicationContextInitializer.initialize(context);
         }catch (Exception e) {
             Assert.assertNotNull(e);
