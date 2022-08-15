@@ -41,7 +41,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  * @ClassName: NacosConfigApplicationContextInitializerTest
  * @Author: ChenHao26
  * @Date: 2022/8/12 15:25
- * @Description: TODO
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @TestPropertySource(properties = { "nacos.config.server-addr=localhost" })

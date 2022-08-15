@@ -34,7 +34,6 @@ import java.util.Properties;
  * @ClassName: NacosPropertiesBuilderTest
  * @Author: ChenHao26
  * @Date: 2022/8/12 16:49
- * @Description: TODO
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @TestPropertySource(properties = { "nacos.config.server-addr=localhost" })

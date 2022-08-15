@@ -31,7 +31,6 @@ import java.lang.reflect.Type;
  * @ClassName: AttributeExtractTaskTest
  * @Author: ChenHao26
  * @Date: 2022/8/12 15:08
- * @Description: TODO
  */
 public class NacosLoggingListenerTest {
     @Autowired

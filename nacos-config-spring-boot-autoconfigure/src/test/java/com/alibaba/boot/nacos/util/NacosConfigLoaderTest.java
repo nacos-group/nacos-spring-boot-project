@@ -47,7 +47,6 @@ import java.util.function.Function;
  * @ClassName: NacosConfigLoaderTest
  * @Author: ChenHao26
  * @Date: 2022/8/12 16:12
- * @Description: TODO
  */
 
 @RunWith(SpringJUnit4ClassRunner.class)

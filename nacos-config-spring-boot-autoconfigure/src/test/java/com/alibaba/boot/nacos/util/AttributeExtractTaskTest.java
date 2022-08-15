@@ -40,7 +40,6 @@ import java.util.Map;
  * @ClassName: AttributeExtractTaskTest
  * @Author: ChenHao26
  * @Date: 2022/8/12 15:08
- * @Description: TODO
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @TestPropertySource(properties = { "nacos.config.server-addr=localhost" })

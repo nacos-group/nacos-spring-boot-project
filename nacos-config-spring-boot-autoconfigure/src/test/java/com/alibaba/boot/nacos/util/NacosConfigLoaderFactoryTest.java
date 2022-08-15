@@ -42,7 +42,6 @@ import java.util.function.Function;
  * @ClassName: NacosConfigLoaderFactoryTest
  * @Author: ChenHao26
  * @Date: 2022/8/12 16:42
- * @Description: TODO
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @TestPropertySource(properties = { "nacos.config.server-addr=localhost" })

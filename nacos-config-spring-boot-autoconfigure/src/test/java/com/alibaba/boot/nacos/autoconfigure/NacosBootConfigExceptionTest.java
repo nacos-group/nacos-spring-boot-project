@@ -26,7 +26,6 @@ import org.junit.Test;
  * @ClassName: NacosBootConfigExceptionTest
  * @Author: ChenHao26
  * @Date: 2022/8/12 15:56
- * @Description: TODO
  */
 public class NacosBootConfigExceptionTest {
     

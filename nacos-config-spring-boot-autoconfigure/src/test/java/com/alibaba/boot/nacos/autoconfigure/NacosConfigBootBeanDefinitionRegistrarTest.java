@@ -19,13 +19,11 @@ package com.alibaba.boot.nacos.autoconfigure;
 
 import com.alibaba.boot.nacos.config.autoconfigure.NacosConfigAutoConfiguration;
 import com.alibaba.boot.nacos.config.autoconfigure.NacosConfigBootBeanDefinitionRegistrar;
-import com.alibaba.boot.nacos.config.binder.NacosBootConfigurationPropertiesBinder;
 import com.alibaba.nacos.client.utils.LogUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
@@ -34,15 +32,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import static org.mockito.ArgumentMatchers.any;
-
-
 /**
  *  {@link NacosConfigBootBeanDefinitionRegistrar} Test
  * @ClassName: NacosConfigBootBeanDefinitionRegistrarTest
  * @Author: ChenHao26
  * @Date: 2022/8/12 15:38
- * @Description: TODO
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @TestPropertySource(properties = { "nacos.config.server-addr=localhost" })
