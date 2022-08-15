@@ -20,11 +20,16 @@ package com.alibaba.boot.nacos.autoconfigure;
 import com.alibaba.boot.nacos.config.autoconfigure.NacosConfigAutoConfiguration;
 import com.alibaba.boot.nacos.config.autoconfigure.NacosConfigEnvironmentProcessor;
 import com.alibaba.boot.nacos.config.binder.NacosBootConfigurationPropertiesBinder;
+import com.alibaba.boot.nacos.config.properties.NacosConfigProperties;
+import com.alibaba.boot.nacos.config.util.NacosConfigPropertiesUtils;
+import com.alibaba.nacos.client.config.NacosConfigService;
 import com.alibaba.nacos.client.utils.LogUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -52,6 +57,9 @@ public class NacosConfigEnvironmentProcessorTest {
     
     private static final Logger LOGGER = LogUtils.logger(NacosConfigEnvironmentProcessorTest.class);
     
+    @Mock
+    private NacosConfigProperties nacosConfigProperties;
+    
     @Before
     public void setup() {
         nacosConfigEnvironmentProcessor = new NacosConfigEnvironmentProcessor();
@@ -60,6 +68,9 @@ public class NacosConfigEnvironmentProcessorTest {
     @Test
     public void postProcessEnvironment() {
         try {
+            NacosConfigProperties nacosConfigProperties1 = NacosConfigPropertiesUtils.buildNacosConfigProperties(
+                    environment);
+            Assert.assertFalse(nacosConfigProperties1.isEnableRemoteSyncConfig());
             nacosConfigEnvironmentProcessor.postProcessEnvironment(environment, new SpringApplication());
         }catch (Exception e) {
             LOGGER.error("error info :{} ",e);
