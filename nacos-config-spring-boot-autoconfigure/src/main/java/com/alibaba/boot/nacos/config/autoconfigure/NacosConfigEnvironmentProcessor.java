@@ -102,7 +102,7 @@ public class NacosConfigEnvironmentProcessor
 
 	boolean enable() {
 		return nacosConfigProperties != null
-				&& nacosConfigProperties.getBootstrap().isLogEnable();
+				&& nacosConfigProperties.getBootstrap().isEnable();
 	}
 
 	LinkedList<NacosConfigLoader.DeferNacosPropertySource> getDeferPropertySources() {
