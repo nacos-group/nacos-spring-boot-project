@@ -118,7 +118,9 @@ public class NacosConfigLoader {
 		if (!StringUtils.hasLength(nacosConfigProperties.getDataId())) {
 			final String ids = environment
 					.resolvePlaceholders(nacosConfigProperties.getDataIds());
-			dataIds.addAll(Arrays.asList(ids.split(",")));
+			if(StringUtils.hasText(ids)){
+				dataIds.addAll(Arrays.asList(ids.split(",")));
+			}
 		}
 		else {
 			dataIds.add(nacosConfigProperties.getDataId());
