@@ -63,7 +63,7 @@ For more information about Nacos Spring, see [Nacos Spring Project](https://gith
 | nacos.config.remote-first         | prioritize using Nacos server configuration,optional values: true/false                               |
 | nacos.config.auto-refresh         | automatically refresh when the configuration of the nacos server changes ,optional values: true/false |
 | nacos.config.server-addr          | nacos server address                                                                                  |
-| nacos.config.data-ids             | set of configuration dataids that need to be monitored, multiple separated by commas                  |
+| nacos.config.data-ids             | configuration dataids that need to be monitored, multiple separated by commas                  |
 | nacos.config.namespace            | nacos namespace                                                                                       |
 | nacos.config.group                | nacos group                                                                                           |
 | nacos.config.username             | nacos username                                                                                        |
