@@ -25,6 +25,7 @@ import com.alibaba.boot.nacos.config.util.NacosConfigLoaderFactory;
 import com.alibaba.boot.nacos.config.util.NacosConfigPropertiesUtils;
 import com.alibaba.nacos.api.config.ConfigService;
 import com.alibaba.nacos.api.exception.NacosException;
+import com.alibaba.nacos.client.config.utils.SnapShotSwitch;
 import com.alibaba.nacos.spring.factory.CacheableEventPublishingNacosServiceFactory;
 import com.alibaba.nacos.spring.util.NacosBeanUtils;
 import org.slf4j.Logger;
@@ -72,6 +73,11 @@ public class NacosConfigApplicationContextInitializer
 				.buildNacosConfigProperties(environment);
 		final NacosConfigLoader configLoader = NacosConfigLoaderFactory.getSingleton(
 				nacosConfigProperties, environment, builder);
+
+		if (!processor.snapshotEnable()){
+			SnapShotSwitch.setIsSnapShot(false);
+		}
+
 		if (!enable()) {
 			logger.info("[Nacos Config Boot] : The preload configuration is not enabled");
 		}
