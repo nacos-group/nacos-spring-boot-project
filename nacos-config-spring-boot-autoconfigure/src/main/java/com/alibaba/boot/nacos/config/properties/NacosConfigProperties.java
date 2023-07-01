@@ -292,6 +292,8 @@ public class NacosConfigProperties {
 
 		private boolean logEnable;
 
+		private boolean snapshotEnable;
+
 		public boolean isEnable() {
 			return enable;
 		}
@@ -308,10 +310,19 @@ public class NacosConfigProperties {
 			this.logEnable = logEnable;
 		}
 
+		public boolean isSnapshotEnable() {
+			return snapshotEnable;
+		}
+
+		public void setSnapshotEnable(boolean snapshotEnable) {
+			this.snapshotEnable = snapshotEnable;
+		}
+
 		@Override
 		public String toString() {
 			final StringBuffer sb = new StringBuffer("Bootstrap{");
 			sb.append("enable=").append(enable);
+			sb.append(", snapshotEnable=").append(snapshotEnable);
 			sb.append(", logEnable=").append(logEnable);
 			sb.append('}');
 			return sb.toString();
