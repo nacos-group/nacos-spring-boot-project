@@ -34,7 +34,7 @@ public class NacosPropertiesBuilder {
 	public static Properties buildNacosProperties(Environment environment,
 			String serverAddr, String namespaceId, String endpoint, String secretKey,
 			String accessKey, String ramRoleName, String configLongPollTimeout,
-			String configRetryTimeout, String maxRetry, boolean enableRemoteSyncConfig,
+			String configRetryTimeout, String maxRetry,String contextPath, boolean enableRemoteSyncConfig,
 			String username, String password) {
 		Properties properties = new Properties();
 		processPropertiesData(properties,environment,serverAddr,PropertyKeyConst.SERVER_ADDR);
@@ -45,6 +45,7 @@ public class NacosPropertiesBuilder {
 		processPropertiesData(properties,environment,ramRoleName,PropertyKeyConst.RAM_ROLE_NAME);
 		processPropertiesData(properties,environment,configLongPollTimeout,PropertyKeyConst.CONFIG_LONG_POLL_TIMEOUT);
 		processPropertiesData(properties,environment,configRetryTimeout,PropertyKeyConst.CONFIG_RETRY_TIME);
+		processPropertiesData(properties,environment,contextPath,PropertyKeyConst.CONTEXT_PATH);
 		processPropertiesData(properties,environment,maxRetry,PropertyKeyConst.MAX_RETRY);
 		processPropertiesData(properties,environment,username,PropertyKeyConst.USERNAME);
 		processPropertiesData(properties,environment,password,PropertyKeyConst.PASSWORD);
