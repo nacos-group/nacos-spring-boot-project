@@ -16,7 +16,6 @@
  */
 package com.alibaba.boot.nacos.config.autoconfigure;
 
-import java.nio.charset.StandardCharsets;
 import java.util.Properties;
 import java.util.function.Function;
 
