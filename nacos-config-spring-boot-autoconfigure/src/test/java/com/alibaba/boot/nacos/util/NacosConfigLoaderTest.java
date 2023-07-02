@@ -56,7 +56,6 @@ public class NacosConfigLoaderTest {
     
     private NacosConfigLoader nacosConfigLoader;
     
-    
     private NacosConfigProperties nacosConfigProperties;
     
     private Properties globalProperties;
@@ -96,13 +95,13 @@ public class NacosConfigLoaderTest {
             }
         };
         nacosPropertySources = new LinkedList<>();
-        nacosConfigLoader = new NacosConfigLoader(nacosConfigProperties, builder);
+        nacosConfigLoader = new NacosConfigLoader(builder);
         nacosPropertySourcePostProcessor = new NacosPropertySourcePostProcessor();
     }
 
     @Test
     public void buildGlobalNacosProperties() {
-        Properties properties = nacosConfigLoader.buildGlobalNacosProperties(environment);
+        Properties properties = nacosConfigLoader.buildGlobalNacosProperties(environment, nacosConfigProperties);
         LOGGER.info("buildGlobalNacosProperties properties : {}", properties);
         Assert.assertNotNull(properties);
         Assert.assertEquals(properties.size(), 6);

@@ -56,11 +56,12 @@ public class NacosConfigEnvironmentProcessor
 			.getSingleton();
 	private final Map<String, ConfigService> serviceCache = new HashMap<>(8);
 	private final LinkedList<NacosConfigLoader.DeferNacosPropertySource> deferPropertySources = new LinkedList<>();
-	private NacosConfigProperties nacosConfigProperties = NacosConfigPropertiesUtils.getSingleton();
+
+	private NacosConfigProperties nacosConfigProperties;
 
 	// Because ApplicationContext has not been injected at preload time, need to manually
 	// cache the created Service to prevent duplicate creation
-	private Function<Properties, ConfigService> builder = properties -> {
+	private final Function<Properties, ConfigService> builder = properties -> {
 		try {
 			final String key = NacosUtils.identify(properties);
 			if (serviceCache.containsKey(key)) {
@@ -80,19 +81,19 @@ public class NacosConfigEnvironmentProcessor
 	@Override
 	public void postProcessEnvironment(ConfigurableEnvironment environment,
 			SpringApplication application) {
-		application.addInitializers(new NacosConfigApplicationContextInitializer(this, nacosConfigProperties));
-		NacosConfigPropertiesUtils.buildNacosConfigProperties(environment);
+		application.addInitializers(new NacosConfigApplicationContextInitializer(this));
+		nacosConfigProperties = NacosConfigPropertiesUtils.buildNacosConfigProperties(environment);
 		if (enable()) {
 			System.out.println(
 					"[Nacos Config Boot] : The preload log configuration is enabled");
-			NacosConfigLoader nacosConfigLoader = NacosConfigLoaderFactory.getSingleton(nacosConfigProperties, builder);
-			loadConfig(nacosConfigLoader, environment);
+			NacosConfigLoader nacosConfigLoader = NacosConfigLoaderFactory.getSingleton(builder);
+			loadConfig(nacosConfigLoader, environment, nacosConfigProperties);
 			LogAutoFreshProcess.build(environment, nacosConfigProperties, nacosConfigLoader, builder).process();
 		}
 	}
 
-	private void loadConfig(NacosConfigLoader configLoader, ConfigurableEnvironment environment) {
-		configLoader.loadConfig(environment);
+	private void loadConfig(NacosConfigLoader configLoader, ConfigurableEnvironment environment, NacosConfigProperties nacosConfigProperties) {
+		configLoader.loadConfig(environment, nacosConfigProperties);
 		// set defer NacosPropertySource
 		deferPropertySources.addAll(configLoader.getNacosPropertySources());
 	}

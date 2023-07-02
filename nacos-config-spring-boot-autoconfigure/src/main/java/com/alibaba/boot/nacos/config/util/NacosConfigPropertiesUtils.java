@@ -41,32 +41,9 @@ public class NacosConfigPropertiesUtils {
 	private static final Logger logger = LoggerFactory
 			.getLogger(NacosConfigPropertiesUtils.class);
 
-	private static volatile NacosConfigProperties nacosConfigProperties;
-
-	public static NacosConfigProperties getSingleton() {
-		if (nacosConfigProperties == null) {
-			synchronized (NacosConfigLoaderFactory.class) {
-				if (nacosConfigProperties == null) {
-					nacosConfigProperties = new NacosConfigProperties();
-				}
-			}
-		}
-		return nacosConfigProperties;
-	}
-
 	public static NacosConfigProperties buildNacosConfigProperties(
 			ConfigurableEnvironment environment) {
 		NacosConfigProperties nacosConfigProperties = new NacosConfigProperties();
-		Binder binder = Binder.get(environment);
-		ResolvableType type = ResolvableType.forClass(NacosConfigProperties.class);
-		Bindable<?> target = Bindable.of(type).withExistingValue(nacosConfigProperties);
-		binder.bind(NacosConfigConstants.PREFIX, target);
-		logger.info("nacosConfigProperties : {}", nacosConfigProperties);
-		return nacosConfigProperties;
-	}
-
-	public static NacosConfigProperties buildNacosConfigProperties(
-			ConfigurableEnvironment environment, NacosConfigProperties nacosConfigProperties) {
 		Binder binder = Binder.get(environment);
 		ResolvableType type = ResolvableType.forClass(NacosConfigProperties.class);
 		Bindable<?> target = Bindable.of(type).withExistingValue(nacosConfigProperties);

@@ -48,23 +48,19 @@ public class NacosConfigLoader {
 
 	private final Logger logger = LoggerFactory.getLogger(NacosConfigLoader.class);
 
-	private final NacosConfigProperties nacosConfigProperties;
-
 	private Properties globalProperties = new Properties();
 
 	private final Function<Properties, ConfigService> builder;
 	private final List<DeferNacosPropertySource> nacosPropertySources = new LinkedList<>();
-	public NacosConfigLoader(NacosConfigProperties nacosConfigProperties,
-			Function<Properties, ConfigService> builder) {
-		this.nacosConfigProperties = nacosConfigProperties;
+
+	public NacosConfigLoader(Function<Properties, ConfigService> builder) {
 		this.builder = builder;
 	}
 
-	public void loadConfig(ConfigurableEnvironment environment) {
-		globalProperties = buildGlobalNacosProperties(environment);
+	public void loadConfig(ConfigurableEnvironment environment, NacosConfigProperties nacosConfigProperties) {
+		globalProperties = buildGlobalNacosProperties(environment, nacosConfigProperties);
 		MutablePropertySources mutablePropertySources = environment.getPropertySources();
-		List<NacosPropertySource> sources = reqGlobalNacosConfig(environment, globalProperties,
-				nacosConfigProperties.getType());
+		List<NacosPropertySource> sources = reqGlobalNacosConfig(environment, globalProperties, nacosConfigProperties);
 		for (NacosConfigProperties.Config config : nacosConfigProperties.getExtConfig()) {
 			List<NacosPropertySource> elements = reqSubNacosConfig(environment, config,
 					globalProperties, config.getType());
@@ -82,7 +78,7 @@ public class NacosConfigLoader {
 		}
 	}
 
-	public Properties buildGlobalNacosProperties(ConfigurableEnvironment environment) {
+	public Properties buildGlobalNacosProperties(ConfigurableEnvironment environment, NacosConfigProperties nacosConfigProperties) {
 		return NacosPropertiesBuilder.buildNacosProperties(environment,
 				nacosConfigProperties.getServerAddr(),
 				nacosConfigProperties.getNamespace(), nacosConfigProperties.getEndpoint(),
@@ -109,7 +105,7 @@ public class NacosConfigLoader {
 	}
 
 	private List<NacosPropertySource> reqGlobalNacosConfig(ConfigurableEnvironment environment, Properties globalProperties,
-			ConfigType type) {
+			NacosConfigProperties nacosConfigProperties) {
 		List<String> dataIds = new ArrayList<>();
 		// Loads all data-id information into the list in the list
 		if (!StringUtils.hasLength(nacosConfigProperties.getDataId())) {
@@ -126,7 +122,7 @@ public class NacosConfigLoader {
 				.resolvePlaceholders(nacosConfigProperties.getGroup());
 		final boolean isAutoRefresh = nacosConfigProperties.isAutoRefresh();
 		return new ArrayList<>(Arrays.asList(reqNacosConfig(environment, globalProperties,
-				dataIds.toArray(new String[0]), groupName, type, isAutoRefresh)));
+				dataIds.toArray(new String[0]), groupName, nacosConfigProperties.getType(), isAutoRefresh)));
 	}
 
 	private List<NacosPropertySource> reqSubNacosConfig(ConfigurableEnvironment environment,

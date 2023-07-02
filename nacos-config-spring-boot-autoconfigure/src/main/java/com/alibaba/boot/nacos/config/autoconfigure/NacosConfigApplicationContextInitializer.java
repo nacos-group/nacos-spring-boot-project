@@ -61,18 +61,16 @@ public class NacosConfigApplicationContextInitializer
 	private NacosConfigProperties nacosConfigProperties;
 
 	public NacosConfigApplicationContextInitializer(
-			NacosConfigEnvironmentProcessor configEnvironmentProcessor, NacosConfigProperties nacosConfigProperties) {
+			NacosConfigEnvironmentProcessor configEnvironmentProcessor) {
 		this.processor = configEnvironmentProcessor;
-		this.nacosConfigProperties = nacosConfigProperties;
 	}
 
 	@Override
 	public void initialize(ConfigurableApplicationContext context) {
 		singleton.setApplicationContext(context);
 		environment = context.getEnvironment();
-		NacosConfigPropertiesUtils.buildNacosConfigProperties(environment, nacosConfigProperties);
-		final NacosConfigLoader configLoader = NacosConfigLoaderFactory.getSingleton(
-				nacosConfigProperties, builder);
+		nacosConfigProperties = NacosConfigPropertiesUtils.buildNacosConfigProperties(environment);
+		final NacosConfigLoader configLoader = NacosConfigLoaderFactory.getSingleton(builder);
 		if (!enable()) {
 			logger.info("[Nacos Config Boot] : The preload configuration is not enabled");
 		}
@@ -87,7 +85,7 @@ public class NacosConfigApplicationContextInitializer
 						.addListenerIfAutoRefreshed(processor.getDeferPropertySources());
 			}
 			else {
-				configLoader.loadConfig(environment);
+				configLoader.loadConfig(environment, nacosConfigProperties);
 				configLoader.addListenerIfAutoRefreshed();
 			}
 		}
