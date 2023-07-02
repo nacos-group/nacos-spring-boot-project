@@ -103,6 +103,11 @@ public class NacosConfigEnvironmentProcessor
 				&& nacosConfigProperties.getBootstrap().isLogEnable();
 	}
 
+	boolean snapshotEnable() {
+		return nacosConfigProperties != null
+				&& nacosConfigProperties.getBootstrap().isSnapshotEnable();
+	}
+
 	LinkedList<NacosConfigLoader.DeferNacosPropertySource> getDeferPropertySources() {
 		return deferPropertySources;
 	}

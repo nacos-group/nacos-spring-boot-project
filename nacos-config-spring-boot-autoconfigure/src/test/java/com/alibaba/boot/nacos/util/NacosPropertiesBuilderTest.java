@@ -56,7 +56,7 @@ public class NacosPropertiesBuilderTest {
         String username = "nacos";
         String password = "password";
         Properties properties = NacosPropertiesBuilder.buildNacosProperties(environment, serverAddr, namespaceId, secretKey,
-                "ak", ramRoleName, configLongPollTimeout, configRetryTimeout, maxRetry, enableRemoteSyncConfig, true,
+                "ak", ramRoleName, configLongPollTimeout, configRetryTimeout, maxRetry, null,enableRemoteSyncConfig, true,
                 username, password);
         Assert.assertEquals(properties.size(), 12);
     

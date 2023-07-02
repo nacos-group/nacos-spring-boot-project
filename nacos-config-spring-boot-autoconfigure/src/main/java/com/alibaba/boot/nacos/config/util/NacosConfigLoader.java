@@ -88,6 +88,7 @@ public class NacosConfigLoader {
 				nacosConfigProperties.getConfigLongPollTimeout(),
 				nacosConfigProperties.getConfigRetryTime(),
 				nacosConfigProperties.getMaxRetry(),
+				nacosConfigProperties.getContextPath(),
 				nacosConfigProperties.isEnableRemoteSyncConfig(),
 				nacosConfigProperties.getUsername(), nacosConfigProperties.getPassword());
 	}
@@ -98,7 +99,7 @@ public class NacosConfigLoader {
 				config.getServerAddr(), config.getNamespace(), config.getEndpoint(),
 				config.getSecretKey(), config.getAccessKey(), config.getRamRoleName(),
 				config.getConfigLongPollTimeout(), config.getConfigRetryTime(),
-				config.getMaxRetry(), config.isEnableRemoteSyncConfig(),
+				config.getMaxRetry(),null, config.isEnableRemoteSyncConfig(),
 				config.getUsername(), config.getPassword());
 		NacosPropertiesBuilder.merge(sub, globalProperties);
 		return sub;
