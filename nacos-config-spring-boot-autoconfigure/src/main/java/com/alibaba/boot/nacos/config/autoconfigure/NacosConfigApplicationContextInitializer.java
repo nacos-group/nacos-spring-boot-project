@@ -16,6 +16,7 @@
  */
 package com.alibaba.boot.nacos.config.autoconfigure;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Properties;
 import java.util.function.Function;
 
@@ -60,18 +61,18 @@ public class NacosConfigApplicationContextInitializer
 	private NacosConfigProperties nacosConfigProperties;
 
 	public NacosConfigApplicationContextInitializer(
-			NacosConfigEnvironmentProcessor configEnvironmentProcessor) {
+			NacosConfigEnvironmentProcessor configEnvironmentProcessor, NacosConfigProperties nacosConfigProperties) {
 		this.processor = configEnvironmentProcessor;
+		this.nacosConfigProperties = nacosConfigProperties;
 	}
 
 	@Override
 	public void initialize(ConfigurableApplicationContext context) {
 		singleton.setApplicationContext(context);
 		environment = context.getEnvironment();
-		nacosConfigProperties = NacosConfigPropertiesUtils
-				.buildNacosConfigProperties(environment);
+		NacosConfigPropertiesUtils.buildNacosConfigProperties(environment, nacosConfigProperties);
 		final NacosConfigLoader configLoader = NacosConfigLoaderFactory.getSingleton(
-				nacosConfigProperties, environment, builder);
+				nacosConfigProperties, builder);
 		if (!enable()) {
 			logger.info("[Nacos Config Boot] : The preload configuration is not enabled");
 		}
@@ -86,7 +87,7 @@ public class NacosConfigApplicationContextInitializer
 						.addListenerIfAutoRefreshed(processor.getDeferPropertySources());
 			}
 			else {
-				configLoader.loadConfig();
+				configLoader.loadConfig(environment);
 				configLoader.addListenerIfAutoRefreshed();
 			}
 		}

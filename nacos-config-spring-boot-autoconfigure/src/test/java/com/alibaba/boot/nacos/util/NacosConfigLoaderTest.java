@@ -35,6 +35,7 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.env.ConfigurableEnvironment;
+import org.springframework.core.env.StandardEnvironment;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -96,13 +97,13 @@ public class NacosConfigLoaderTest {
             }
         };
         nacosPropertySources = new LinkedList<>();
-        nacosConfigLoader = new NacosConfigLoader(nacosConfigProperties, environment, builder);
+        nacosConfigLoader = new NacosConfigLoader(nacosConfigProperties, builder);
         nacosPropertySourcePostProcessor = new NacosPropertySourcePostProcessor();
     }
 
     @Test
     public void buildGlobalNacosProperties() {
-        Properties properties = nacosConfigLoader.buildGlobalNacosProperties();
+        Properties properties = nacosConfigLoader.buildGlobalNacosProperties(new StandardEnvironment());
         LOGGER.info("buildGlobalNacosProperties properties : {}", properties);
         Assert.assertNotNull(properties);
         Assert.assertEquals(properties.size(), 6);

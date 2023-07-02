@@ -32,12 +32,11 @@ public class NacosConfigLoaderFactory {
     private static volatile NacosConfigLoader nacosConfigLoader;
 
     public static NacosConfigLoader getSingleton(NacosConfigProperties nacosConfigProperties,
-                                                 ConfigurableEnvironment environment,
                                                  Function<Properties, ConfigService> builder) {
         if (nacosConfigLoader == null) {
             synchronized (NacosConfigLoaderFactory.class) {
                 if (nacosConfigLoader == null) {
-                    nacosConfigLoader = new NacosConfigLoader(nacosConfigProperties, environment, builder);
+                    nacosConfigLoader = new NacosConfigLoader(nacosConfigProperties, builder);
                 }
             }
         }

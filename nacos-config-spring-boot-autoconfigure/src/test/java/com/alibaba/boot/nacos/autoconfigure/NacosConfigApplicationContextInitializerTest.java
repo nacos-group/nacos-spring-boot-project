@@ -60,7 +60,7 @@ public class NacosConfigApplicationContextInitializerTest {
     
     @Before
     public void testNacosConfigApplicationContextInitializer() {
-        nacosConfigApplicationContextInitializer = new NacosConfigApplicationContextInitializer(new NacosConfigEnvironmentProcessor());
+        nacosConfigApplicationContextInitializer = new NacosConfigApplicationContextInitializer(new NacosConfigEnvironmentProcessor(), new NacosConfigProperties());
     }
     
     @Test
@@ -69,7 +69,7 @@ public class NacosConfigApplicationContextInitializerTest {
             nacosConfigProperties = NacosConfigPropertiesUtils
                     .buildNacosConfigProperties(environment);
             Assert.assertNotNull(nacosConfigProperties);
-            NacosConfigLoader singleton = NacosConfigLoaderFactory.getSingleton(nacosConfigProperties, environment,
+            NacosConfigLoader singleton = NacosConfigLoaderFactory.getSingleton(nacosConfigProperties,
                     null);
             Assert.assertNotNull(singleton);
             nacosConfigApplicationContextInitializer.initialize(context);

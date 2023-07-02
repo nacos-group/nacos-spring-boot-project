@@ -54,9 +54,6 @@ public class NacosConfigLoaderFactoryTest {
     
     private Function<Properties, ConfigService> builder;
     
-    @Autowired
-    private ConfigurableEnvironment environment;
-    
     @Before
     public void setup() {
         nacosConfigProperties = new NacosConfigProperties();
@@ -84,9 +81,9 @@ public class NacosConfigLoaderFactoryTest {
     
     @Test
     public void getSingleton() {
-        NacosConfigLoader singleton = NacosConfigLoaderFactory.getSingleton(nacosConfigProperties, environment,
+        NacosConfigLoader singleton = NacosConfigLoaderFactory.getSingleton(nacosConfigProperties,
                 builder);
-        NacosConfigLoader singleton2 = NacosConfigLoaderFactory.getSingleton(nacosConfigProperties, environment,
+        NacosConfigLoader singleton2 = NacosConfigLoaderFactory.getSingleton(nacosConfigProperties,
                 builder);
         // Verify that it is the same object
         Assert.assertEquals(singleton2, singleton);

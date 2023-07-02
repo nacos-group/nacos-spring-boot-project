@@ -56,7 +56,7 @@ public class NacosConfigEnvironmentProcessor
 			.getSingleton();
 	private final Map<String, ConfigService> serviceCache = new HashMap<>(8);
 	private final LinkedList<NacosConfigLoader.DeferNacosPropertySource> deferPropertySources = new LinkedList<>();
-	private NacosConfigProperties nacosConfigProperties;
+	private NacosConfigProperties nacosConfigProperties = NacosConfigPropertiesUtils.getSingleton();
 
 	// Because ApplicationContext has not been injected at preload time, need to manually
 	// cache the created Service to prevent duplicate creation
@@ -80,22 +80,19 @@ public class NacosConfigEnvironmentProcessor
 	@Override
 	public void postProcessEnvironment(ConfigurableEnvironment environment,
 			SpringApplication application) {
-		application.addInitializers(new NacosConfigApplicationContextInitializer(this));
-		nacosConfigProperties = NacosConfigPropertiesUtils
-				.buildNacosConfigProperties(environment);
+		application.addInitializers(new NacosConfigApplicationContextInitializer(this, nacosConfigProperties));
+		NacosConfigPropertiesUtils.buildNacosConfigProperties(environment);
 		if (enable()) {
 			System.out.println(
 					"[Nacos Config Boot] : The preload log configuration is enabled");
-			loadConfig(environment);
-			NacosConfigLoader nacosConfigLoader = NacosConfigLoaderFactory.getSingleton(nacosConfigProperties, environment, builder);
+			NacosConfigLoader nacosConfigLoader = NacosConfigLoaderFactory.getSingleton(nacosConfigProperties, builder);
+			loadConfig(nacosConfigLoader, environment);
 			LogAutoFreshProcess.build(environment, nacosConfigProperties, nacosConfigLoader, builder).process();
 		}
 	}
 
-	private void loadConfig(ConfigurableEnvironment environment) {
-		NacosConfigLoader configLoader = new NacosConfigLoader(nacosConfigProperties,
-				environment, builder);
-		configLoader.loadConfig();
+	private void loadConfig(NacosConfigLoader configLoader, ConfigurableEnvironment environment) {
+		configLoader.loadConfig(environment);
 		// set defer NacosPropertySource
 		deferPropertySources.addAll(configLoader.getNacosPropertySources());
 	}
