@@ -103,7 +103,7 @@ public class NacosConfigLoaderTest {
 
     @Test
     public void buildGlobalNacosProperties() {
-        Properties properties = nacosConfigLoader.buildGlobalNacosProperties(new StandardEnvironment());
+        Properties properties = nacosConfigLoader.buildGlobalNacosProperties(environment);
         LOGGER.info("buildGlobalNacosProperties properties : {}", properties);
         Assert.assertNotNull(properties);
         Assert.assertEquals(properties.size(), 6);
