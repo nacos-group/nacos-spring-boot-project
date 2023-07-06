@@ -71,8 +71,7 @@ public class NacosConfigApplicationContextInitializer
 		environment = context.getEnvironment();
 		nacosConfigProperties = NacosConfigPropertiesUtils
 				.buildNacosConfigProperties(environment);
-		final NacosConfigLoader configLoader = NacosConfigLoaderFactory.getSingleton(
-				nacosConfigProperties, environment, builder);
+		final NacosConfigLoader configLoader = NacosConfigLoaderFactory.getSingleton(builder);
 
 		if (!processor.snapshotEnable()){
 			SnapShotSwitch.setIsSnapShot(false);
@@ -92,7 +91,7 @@ public class NacosConfigApplicationContextInitializer
 						.addListenerIfAutoRefreshed(processor.getDeferPropertySources());
 			}
 			else {
-				configLoader.loadConfig();
+				configLoader.loadConfig(environment, nacosConfigProperties);
 				configLoader.addListenerIfAutoRefreshed();
 			}
 		}

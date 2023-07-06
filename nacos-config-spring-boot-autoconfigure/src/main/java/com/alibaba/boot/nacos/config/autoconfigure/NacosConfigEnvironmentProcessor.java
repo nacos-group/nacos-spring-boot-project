@@ -56,11 +56,12 @@ public class NacosConfigEnvironmentProcessor
 			.getSingleton();
 	private final Map<String, ConfigService> serviceCache = new HashMap<>(8);
 	private final LinkedList<NacosConfigLoader.DeferNacosPropertySource> deferPropertySources = new LinkedList<>();
+
 	private NacosConfigProperties nacosConfigProperties;
 
 	// Because ApplicationContext has not been injected at preload time, need to manually
 	// cache the created Service to prevent duplicate creation
-	private Function<Properties, ConfigService> builder = properties -> {
+	private final Function<Properties, ConfigService> builder = properties -> {
 		try {
 			final String key = NacosUtils.identify(properties);
 			if (serviceCache.containsKey(key)) {
@@ -86,16 +87,14 @@ public class NacosConfigEnvironmentProcessor
 		if (enable()) {
 			System.out.println(
 					"[Nacos Config Boot] : The preload log configuration is enabled");
-			loadConfig(environment);
-			NacosConfigLoader nacosConfigLoader = NacosConfigLoaderFactory.getSingleton(nacosConfigProperties, environment, builder);
+			NacosConfigLoader nacosConfigLoader = NacosConfigLoaderFactory.getSingleton(builder);
+			loadConfig(nacosConfigLoader, environment, nacosConfigProperties);
 			LogAutoFreshProcess.build(environment, nacosConfigProperties, nacosConfigLoader, builder).process();
 		}
 	}
 
-	private void loadConfig(ConfigurableEnvironment environment) {
-		NacosConfigLoader configLoader = new NacosConfigLoader(nacosConfigProperties,
-				environment, builder);
-		configLoader.loadConfig();
+	private void loadConfig(NacosConfigLoader configLoader, ConfigurableEnvironment environment, NacosConfigProperties nacosConfigProperties) {
+		configLoader.loadConfig(environment, nacosConfigProperties);
 		// set defer NacosPropertySource
 		deferPropertySources.addAll(configLoader.getNacosPropertySources());
 	}

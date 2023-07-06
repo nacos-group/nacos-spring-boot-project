@@ -18,6 +18,7 @@ package com.alibaba.boot.nacos.config.util;
 
 import com.alibaba.boot.nacos.config.NacosConfigConstants;
 import com.alibaba.boot.nacos.config.properties.NacosConfigProperties;
+import com.alibaba.nacos.api.config.ConfigService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,6 +26,9 @@ import org.springframework.boot.context.properties.bind.Bindable;
 import org.springframework.boot.context.properties.bind.Binder;
 import org.springframework.core.ResolvableType;
 import org.springframework.core.env.ConfigurableEnvironment;
+
+import java.util.Properties;
+import java.util.function.Function;
 
 /**
  * Springboot used to own property binding configured binding

@@ -29,9 +29,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -53,9 +51,6 @@ public class NacosConfigLoaderFactoryTest {
     private Properties globalProperties;
     
     private Function<Properties, ConfigService> builder;
-    
-    @Autowired
-    private ConfigurableEnvironment environment;
     
     @Before
     public void setup() {
@@ -84,10 +79,8 @@ public class NacosConfigLoaderFactoryTest {
     
     @Test
     public void getSingleton() {
-        NacosConfigLoader singleton = NacosConfigLoaderFactory.getSingleton(nacosConfigProperties, environment,
-                builder);
-        NacosConfigLoader singleton2 = NacosConfigLoaderFactory.getSingleton(nacosConfigProperties, environment,
-                builder);
+        NacosConfigLoader singleton = NacosConfigLoaderFactory.getSingleton(builder);
+        NacosConfigLoader singleton2 = NacosConfigLoaderFactory.getSingleton(builder);
         // Verify that it is the same object
         Assert.assertEquals(singleton2, singleton);
     }

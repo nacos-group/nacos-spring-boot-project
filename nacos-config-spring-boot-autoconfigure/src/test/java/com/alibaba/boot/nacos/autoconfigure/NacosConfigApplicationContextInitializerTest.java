@@ -69,11 +69,10 @@ public class NacosConfigApplicationContextInitializerTest {
             nacosConfigProperties = NacosConfigPropertiesUtils
                     .buildNacosConfigProperties(environment);
             Assert.assertNotNull(nacosConfigProperties);
-            NacosConfigLoader singleton = NacosConfigLoaderFactory.getSingleton(nacosConfigProperties, environment,
-                    null);
+            NacosConfigLoader singleton = NacosConfigLoaderFactory.getSingleton(null);
             Assert.assertNotNull(singleton);
             nacosConfigApplicationContextInitializer.initialize(context);
-        }catch (Exception e) {
+        } catch (Exception e) {
             Assert.assertNotNull(e);
         }
     }
