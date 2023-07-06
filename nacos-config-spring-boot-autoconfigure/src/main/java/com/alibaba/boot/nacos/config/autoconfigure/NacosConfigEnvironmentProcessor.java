@@ -82,7 +82,8 @@ public class NacosConfigEnvironmentProcessor
 	public void postProcessEnvironment(ConfigurableEnvironment environment,
 			SpringApplication application) {
 		application.addInitializers(new NacosConfigApplicationContextInitializer(this));
-		nacosConfigProperties = NacosConfigPropertiesUtils.buildNacosConfigProperties(environment);
+		nacosConfigProperties = NacosConfigPropertiesUtils
+				.buildNacosConfigProperties(environment);
 		if (enable()) {
 			System.out.println(
 					"[Nacos Config Boot] : The preload log configuration is enabled");
