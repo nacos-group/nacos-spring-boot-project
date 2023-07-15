@@ -54,6 +54,7 @@ Nacos Spring Boot Project consist of two parts: `nacos-config-spring-boot` and `
 
 For more information about Nacos Spring, see [Nacos Spring Project](https://github.com/nacos-group/nacos-spring-project).
 
+For more information about user guide,  see [User Guide](https://github.com/nacos-group/nacos-spring-boot-project/wiki/%E7%94%A8%E6%88%B7%E4%BD%BF%E7%94%A8%E6%96%87%E6%A1%A3).
 ## Relative Projects
 
 * [Alibaba Nacos](https://github.com/alibaba/nacos)
