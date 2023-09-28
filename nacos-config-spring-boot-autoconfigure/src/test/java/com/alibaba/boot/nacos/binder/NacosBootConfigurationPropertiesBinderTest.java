@@ -19,8 +19,12 @@ package com.alibaba.boot.nacos.binder;
 
 import com.alibaba.boot.nacos.config.autoconfigure.NacosConfigAutoConfiguration;
 import com.alibaba.boot.nacos.config.binder.NacosBootConfigurationPropertiesBinder;
-import com.alibaba.boot.nacos.config.logging.NacosLoggingListener;
+import com.alibaba.nacos.api.config.ConfigService;
+import com.alibaba.nacos.api.config.annotation.NacosConfigurationProperties;
+import com.alibaba.nacos.api.exception.NacosException;
+import com.alibaba.nacos.spring.context.event.config.EventPublishingConfigService;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,16 +45,64 @@ import java.lang.reflect.Method;
 @TestPropertySource(properties = { "nacos.config.server-addr=localhost" })
 @SpringBootTest(classes = { NacosConfigAutoConfiguration.class })
 public class NacosBootConfigurationPropertiesBinderTest {
-    
-    private NacosBootConfigurationPropertiesBinder binder;
-    
+
+    private Binder binder;
+
     @Autowired
     private ConfigurableApplicationContext context;
-    
+
+    @Before
+    public void setup() {
+        binder = new Binder(context);
+    }
+
     @Test
     public void findFactoryMethod(){
-        binder = new NacosBootConfigurationPropertiesBinder(context);
-        Method beanName = binder.findFactoryMethod("nacosBootConfigurationPropertiesBinder");
+        Method beanName = binder.findFactoryMethod(NacosBootConfigurationPropertiesBinder.BEAN_NAME);
         Assert.assertNull(beanName);
+    }
+
+    @Test
+    public void testDoBind() {
+        People people = new People();
+        binder.doBind(people, "people", "people", "people", "properties",
+                People.class.getAnnotation(NacosConfigurationProperties.class), "people.name=SuperZ1999\npeople.age=24",
+                new EventPublishingConfigService(null, null, context, null));
+        Assert.assertEquals(people.getName(), "SuperZ1999");
+        Assert.assertEquals(people.getAge(), 24);
+    }
+
+    static class Binder extends NacosBootConfigurationPropertiesBinder {
+
+        public Binder(ConfigurableApplicationContext applicationContext) {
+            super(applicationContext);
+        }
+
+        @Override
+        protected void doBind(Object bean, String beanName, String dataId, String groupId, String configType, NacosConfigurationProperties properties, String content, ConfigService configService) {
+            super.doBind(bean, beanName, dataId, groupId, configType, properties, content, configService);
+        }
+    }
+
+    @NacosConfigurationProperties(prefix = "people", dataId = "people", groupId = "people")
+    static class People {
+        private String name;
+        private int age;
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public int getAge() {
+            return age;
+        }
+
+        public void setAge(int age) {
+            this.age = age;
+        }
     }
 }
