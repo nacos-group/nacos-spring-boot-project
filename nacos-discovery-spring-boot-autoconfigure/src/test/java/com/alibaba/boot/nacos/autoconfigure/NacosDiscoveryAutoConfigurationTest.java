@@ -19,6 +19,7 @@ package com.alibaba.boot.nacos.autoconfigure;
 import java.util.Properties;
 
 import com.alibaba.boot.nacos.discovery.autoconfigure.NacosDiscoveryAutoConfiguration;
+import com.alibaba.boot.nacos.discovery.autoconfigure.NacosDiscoveryAutoRegister;
 import com.alibaba.boot.nacos.discovery.properties.NacosDiscoveryProperties;
 import com.alibaba.nacos.api.PropertyKeyConst;
 import com.alibaba.nacos.api.annotation.NacosInjected;
@@ -64,13 +65,13 @@ public class NacosDiscoveryAutoConfigurationTest {
 	}
 
 	@Test(expected = NoSuchBeanDefinitionException.class)
-	public void testNacosConfigGlobalBean() {
+	public void testNacosDiscoveryGlobalBean() {
 		Assert.assertNull(applicationContext
 				.getBean(NacosBeanUtils.GLOBAL_NACOS_PROPERTIES_BEAN_NAME));
 	}
 
 	@Test(expected = NoSuchBeanDefinitionException.class)
-	public void testNacosDiscoveryGlobalBean() {
+	public void testNacosConfigGlobalBean() {
 		Assert.assertNull(applicationContext
 				.getBean(NacosBeanUtils.CONFIG_GLOBAL_NACOS_PROPERTIES_BEAN_NAME));
 	}
@@ -84,4 +85,8 @@ public class NacosDiscoveryAutoConfigurationTest {
 				properties.getProperty(PropertyKeyConst.SERVER_ADDR));
 	}
 
+	@Test
+	public void testAddNacosDiscoveryAutoRegister() {
+		Assert.assertNotNull(applicationContext.getBean(NacosDiscoveryAutoRegister.class));
+	}
 }

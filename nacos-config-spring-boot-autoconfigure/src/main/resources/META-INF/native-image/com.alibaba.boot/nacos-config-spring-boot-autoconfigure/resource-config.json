@@ -1,0 +1,9 @@
+{
+  "resources": {
+    "includes": [
+      {
+        "pattern": "\\QMETA-INF/services/com.alibaba.nacos.spring.util.ConfigParse\\E"
+      }
+    ]
+  }
+}
