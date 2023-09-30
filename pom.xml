@@ -35,6 +35,7 @@
         <module>nacos-discovery-spring-boot-starter</module>
         <module>nacos-discovery-spring-boot-actuator</module>
         <module>nacos-spring-boot-samples</module>
+        <module>nacos-spring-boot-aot</module>
     </modules>
 
     <organization>

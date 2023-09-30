@@ -16,6 +16,7 @@
  */
 package com.alibaba.boot.nacos.config.autoconfigure;
 
+import com.alibaba.boot.nacos.aot.context.EnableNacosConfigAotProcessor;
 import com.alibaba.boot.nacos.config.NacosConfigConstants;
 import com.alibaba.boot.nacos.config.properties.NacosConfigProperties;
 import com.alibaba.nacos.spring.context.annotation.config.EnableNacosConfig;
@@ -38,7 +39,7 @@ import static com.alibaba.nacos.spring.util.NacosBeanUtils.CONFIG_GLOBAL_NACOS_P
 @ConditionalOnMissingBean(name = CONFIG_GLOBAL_NACOS_PROPERTIES_BEAN_NAME)
 @EnableConfigurationProperties(value = NacosConfigProperties.class)
 @ConditionalOnClass(name = "org.springframework.boot.context.properties.bind.Binder")
-@Import(value = { NacosConfigBootBeanDefinitionRegistrar.class })
+@Import(value = { NacosConfigBootBeanDefinitionRegistrar.class, EnableNacosConfigAotProcessor.class })
 @EnableNacosConfig
 public class NacosConfigAutoConfiguration {
 

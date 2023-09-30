@@ -36,6 +36,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <spring-boot.version>2.6.3</spring-boot.version>
+        <spring6.framework.version>6.0.8</spring6.framework.version>
         <nacos-spring-context.version>2.1.0</nacos-spring-context.version>
         <!-- Build args -->
         <argline>-server -Xms256m -Xmx512m -XX:PermSize=64m -XX:MaxPermSize=128m -Dfile.encoding=UTF-8
@@ -85,10 +86,16 @@
                 <artifactId>nacos-client</artifactId>
                 <version>${nacos.version}</version>
             </dependency>
-            
+
             <dependency>
                 <groupId>com.alibaba.boot</groupId>
                 <artifactId>nacos-spring-boot-base</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.alibaba.boot</groupId>
+                <artifactId>nacos-spring-boot-aot</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
