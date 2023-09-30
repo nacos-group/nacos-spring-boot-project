@@ -85,6 +85,12 @@
                 <artifactId>nacos-client</artifactId>
                 <version>${nacos.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>com.alibaba.nacos</groupId>
+                <artifactId>nacos-spring-context-aot</artifactId>
+                <version>${nacos-spring-context.version}</version>
+            </dependency>
             
             <dependency>
                 <groupId>com.alibaba.boot</groupId>
