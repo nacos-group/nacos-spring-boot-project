@@ -1,2 +1,0 @@
-com.alibaba.boot.nacos.discovery.actuate.autoconfigure.NacosDiscoveryEndpointsAutoConfiguration
-com.alibaba.boot.nacos.discovery.actuate.autoconfigure.NacosDiscoveryHealthIndicatorAutoConfiguration

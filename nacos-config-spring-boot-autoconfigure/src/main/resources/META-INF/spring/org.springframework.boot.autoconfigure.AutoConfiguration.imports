@@ -1,4 +1,0 @@
-com.alibaba.boot.nacos.config.autoconfigure.NacosConfigAutoConfiguration
-com.alibaba.boot.nacos.config.autoconfigure.NacosConfigEnvironmentProcessor
-com.alibaba.boot.nacos.config.support.MultiProfilesYamlConfigParseSupport
-com.alibaba.boot.nacos.config.logging.NacosLoggingListener

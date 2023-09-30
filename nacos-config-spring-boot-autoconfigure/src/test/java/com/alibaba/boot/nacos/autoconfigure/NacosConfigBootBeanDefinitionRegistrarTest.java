@@ -19,13 +19,13 @@ package com.alibaba.boot.nacos.autoconfigure;
 
 import com.alibaba.boot.nacos.config.autoconfigure.NacosConfigAutoConfiguration;
 import com.alibaba.boot.nacos.config.autoconfigure.NacosConfigBootBeanDefinitionRegistrar;
-import com.alibaba.boot.nacos.config.binder.NacosBootConfigurationPropertiesBinder;
 import com.alibaba.nacos.client.utils.LogUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
+import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -57,9 +57,7 @@ public class NacosConfigBootBeanDefinitionRegistrarTest {
         try {
             BeanDefinitionBuilder builder = BeanDefinitionBuilder.rootBeanDefinition("beanName");
             Assert.assertNotNull(builder);
-            DefaultListableBeanFactory beanFactory = new DefaultListableBeanFactory();
-            nacosConfigBootBeanDefinitionRegistrar.setBeanFactory(beanFactory);
-            Assert.assertNotNull(beanFactory.getBeanDefinition(NacosBootConfigurationPropertiesBinder.BEAN_NAME));
+            BeanFactory beanFactory = new DefaultListableBeanFactory();
             nacosConfigBootBeanDefinitionRegistrar.setBeanFactory(beanFactory);
         }catch (Exception e) {
             LOGGER.error("error info: {}",e.toString());

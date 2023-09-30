@@ -21,6 +21,7 @@ import com.alibaba.boot.nacos.config.logging.NacosLoggingListener;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ResolvableType;
 
 import java.lang.reflect.Type;
@@ -32,7 +33,8 @@ import java.lang.reflect.Type;
  * @Date: 2022/8/12 15:08
  */
 public class NacosLoggingListenerTest {
-    private NacosLoggingListener nacosLoggingListener;
+    @Autowired
+    NacosLoggingListener nacosLoggingListener;
     
     @Before
     public void setup() {

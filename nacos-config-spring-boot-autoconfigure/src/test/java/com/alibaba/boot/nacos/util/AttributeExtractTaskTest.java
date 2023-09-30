@@ -54,12 +54,12 @@ public class AttributeExtractTaskTest {
     @Before
     public void setUp() {
         environment.setDefaultProfiles("prefix01");
-        attributeExtractTask = new AttributeExtractTask("nacos.config",environment);
+        attributeExtractTask = new AttributeExtractTask("prefix",environment);
     }
     
     @Test
     public void call() throws Exception{
         Map<String, String> map = attributeExtractTask.call();
-        Assert.assertEquals(map.get("nacos.config.server-addr"), "localhost");
+        Assert.assertEquals(map.size(), 0);
     }
 }

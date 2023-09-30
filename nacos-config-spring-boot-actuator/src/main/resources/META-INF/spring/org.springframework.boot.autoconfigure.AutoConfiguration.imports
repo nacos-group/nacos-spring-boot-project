@@ -1,2 +1,0 @@
-com.alibaba.boot.nacos.actuate.autoconfigure.NacosConfigEndpointAutoConfiguration
-com.alibaba.boot.nacos.actuate.autoconfigure.NacosConfigHealthIndicatorAutoConfiguration
