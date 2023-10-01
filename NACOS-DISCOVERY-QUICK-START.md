@@ -18,10 +18,10 @@ Suppose your Nacos Server is startup, you would add [`nacos-discovery-spring-boo
     </dependencies>
 ```
 
-Note: Version [0.2.x.RELEASE](https://mvnrepository.com/artifact/com.alibaba.boot/nacos-discovery-spring-boot-starter) is compatible with the Spring Boot 2.x. Version [0.1.x.RELEASE](https://mvnrepository.com/artifact/com.alibaba.boot/nacos-discovery-spring-boot-starter) is compatible with the Spring Boot 1.x. 
+Note: Version [0.2.x.RELEASE](https://mvnrepository.com/artifact/com.alibaba.boot/nacos-discovery-spring-boot-starter) is compatible with the Spring Boot 2.x and the Spring Boot 3.x. Version [0.1.x.RELEASE](https://mvnrepository.com/artifact/com.alibaba.boot/nacos-discovery-spring-boot-starter) is compatible with the Spring Boot 1.x. 
 
 After that, you could define some configurations in `application.properties`:
- 
+
 ```properties
 nacos.discovery.server-addr=localhost:8848
 ```
@@ -93,7 +93,7 @@ Then Configure your endpoint security strategy.
 management.security.enabled=false
 ```
 
-* Spring Boot2.x
+* Spring Boot2.x or Spring Boot3.x
 
 ```properties
 management.endpoints.web.exposure.include=*
@@ -102,7 +102,7 @@ management.endpoints.web.exposure.include=*
 To view the endpoint information, visit the following URLS:
 
 * Spring Boot1.x: URL is http://127.0.0.1:10012/nacos-discovery.
-* Spring Boot2.x: URL is http://127.0.0.1:10012/actuator/nacos-discovery.
+* Spring Boot2.x or Spring Boot3.x: URL is http://127.0.0.1:10012/actuator/nacos-discovery.
 
 ## Health Checks
 

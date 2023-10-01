@@ -18,11 +18,15 @@ Nacos Spring Boot Project consist of two parts: `nacos-config-spring-boot` and `
 
 `nacos-discovery-spring-boot` module is using for Service Discovery, Service Health Check and Dynamic DNS Service.
 
+Additionally, Nacos Spring Boot Project already supports native-image.
+
 ## Samples
 
 - [Nacos Config Sample](https://github.com/nacos-group/nacos-spring-boot-project/tree/master/nacos-spring-boot-samples/nacos-config-sample)
 
 - [Nacos Discovery Sample](https://github.com/nacos-group/nacos-spring-boot-project/tree/master/nacos-spring-boot-samples/nacos-discovery-sample)
+
+- [Nacos AOT Sample](https://github.com/nacos-group/nacos-spring-boot-project/tree/master/nacos-spring-boot-samples/nacos-aot-sample)
 
 ## Dependencies & Compatibility
 
@@ -33,7 +37,6 @@ Nacos Spring Boot Project consist of two parts: `nacos-config-spring-boot` and `
 | Java           | 1.8+         |
 | Spring Boot | 2.0.3.RELEASE         |
 | Nacos-Spring-Context | 1.1.0   |
-
 
 **Version: 0.1.x / 1.x.x ( branch: 1.x )**
 
@@ -50,6 +53,8 @@ Nacos Spring Boot Project consist of two parts: `nacos-config-spring-boot` and `
 - [Nacos Config Quick Start](https://github.com/nacos-group/nacos-spring-boot-project/blob/master/NACOS-CONFIG-QUICK-START.md)
 
 - [Nacos Discovery Quick Start](https://github.com/nacos-group/nacos-spring-boot-project/blob/master/NACOS-DISCOVERY-QUICK-START.md)
+
+- [Nacos AOT Quick Start](https://github.com/nacos-group/nacos-spring-boot-project/blob/master/NACOS-AOT-QUICK-START.md)
 
 
 For more information about Nacos Spring, see [Nacos Spring Project](https://github.com/nacos-group/nacos-spring-project).
