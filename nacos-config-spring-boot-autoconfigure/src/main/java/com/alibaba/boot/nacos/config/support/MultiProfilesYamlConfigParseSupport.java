@@ -19,7 +19,6 @@ package com.alibaba.boot.nacos.config.support;
 import com.alibaba.nacos.spring.core.env.AbstractNacosPropertySourceBuilder;
 import com.alibaba.nacos.spring.core.env.NacosPropertySource;
 import com.alibaba.nacos.spring.util.parse.DefaultYamlConfigParse;
-import jdk.nashorn.internal.objects.annotations.Setter;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.env.EnvironmentPostProcessor;

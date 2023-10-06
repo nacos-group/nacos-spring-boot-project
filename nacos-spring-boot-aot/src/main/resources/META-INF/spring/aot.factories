@@ -1,0 +1,2 @@
+org.springframework.beans.factory.aot.BeanRegistrationAotProcessor=\
+com.alibaba.boot.nacos.aot.hint.NacosAnnotationBeanRegistrationAotProcessor

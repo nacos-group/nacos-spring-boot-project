@@ -19,6 +19,7 @@ package com.alibaba.boot.nacos.autoconfigure;
 import java.util.Properties;
 
 import com.alibaba.boot.nacos.config.autoconfigure.NacosConfigAutoConfiguration;
+import com.alibaba.boot.nacos.config.binder.NacosBootConfigurationPropertiesBinder;
 import com.alibaba.boot.nacos.config.properties.NacosConfigProperties;
 import com.alibaba.nacos.api.PropertyKeyConst;
 import com.alibaba.nacos.api.annotation.NacosInjected;
@@ -84,4 +85,8 @@ public class NacosConfigAutoConfigurationTest {
 				properties.getProperty(PropertyKeyConst.SERVER_ADDR));
 	}
 
+	@Test
+	public void testNacosConfigBootBeanDefinitionRegistrar() {
+		Assert.assertNotNull(applicationContext.getBean(NacosBootConfigurationPropertiesBinder.BEAN_NAME));
+	}
 }

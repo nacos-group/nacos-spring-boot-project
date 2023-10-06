@@ -53,8 +53,7 @@
             <artifactId>nacos-client</artifactId>
             <version>${nacos.version}</version>
         </dependency>
-        
-        
+
         <dependency>
             <groupId>com.alibaba.boot</groupId>
             <artifactId>nacos-config-spring-boot-autoconfigure</artifactId>
@@ -63,6 +62,11 @@
         <dependency>
             <groupId>com.alibaba.boot</groupId>
             <artifactId>nacos-spring-boot-base</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.alibaba.boot</groupId>
+            <artifactId>nacos-spring-boot-aot</artifactId>
         </dependency>
 
     </dependencies>

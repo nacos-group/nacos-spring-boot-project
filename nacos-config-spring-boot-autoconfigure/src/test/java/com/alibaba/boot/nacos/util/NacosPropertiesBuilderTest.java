@@ -44,8 +44,8 @@ public class NacosPropertiesBuilderTest {
     private Environment environment;
     
     @Test
-    public void buildNacosProperties() {
-        String serverAddr = "localhost";
+    public void testBuildNacosProperties() {
+        String serverAddr = "${nacos.config.server-addr}";
         String namespaceId = "namespaceId";
         String secretKey = "secretKey";
         String ramRoleName = "ramRoleName";
@@ -59,6 +59,20 @@ public class NacosPropertiesBuilderTest {
                 "ak", ramRoleName, configLongPollTimeout, configRetryTimeout, maxRetry, null,enableRemoteSyncConfig, true,
                 username, password);
         Assert.assertEquals(properties.size(), 12);
-    
+        Assert.assertEquals(properties.get("serverAddr"), "localhost");
+    }
+
+    @Test
+    public void testMerge() {
+        Properties sourceProperties = new Properties();
+        sourceProperties.put("name", "SuperZ1999");
+        sourceProperties.put("age", 24);
+
+        Properties targetProperties = new Properties();
+        targetProperties.put("age", 99);
+
+        NacosPropertiesBuilder.merge(targetProperties, sourceProperties);
+        Assert.assertEquals(targetProperties.get("name"), "SuperZ1999");
+        Assert.assertEquals(targetProperties.get("age"), 99);
     }
 }

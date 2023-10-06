@@ -1,0 +1,56 @@
+[
+  {
+    "name": "org.springframework.core.env.ConfigurableEnvironment",
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true,
+    "allDeclaredConstructors": true,
+    "allPublicMethods": true,
+    "allPublicFields": true,
+    "allPublicConstructors": true
+  },
+  {
+    "name": "java.util.Properties",
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true,
+    "allDeclaredConstructors": true,
+    "allPublicMethods": true,
+    "allPublicFields": true,
+    "allPublicConstructors": true
+  },
+  {
+    "name": "org.springframework.core.type.AnnotationMetadata",
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true,
+    "allDeclaredConstructors": true,
+    "allPublicMethods": true,
+    "allPublicFields": true,
+    "allPublicConstructors": true
+  },
+  {
+    "name": "com.alibaba.nacos.api.config.annotation.NacosConfigListener",
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true,
+    "allDeclaredConstructors": true,
+    "allPublicMethods": true,
+    "allPublicFields": true,
+    "allPublicConstructors": true
+  },
+  {
+    "name": "com.alibaba.nacos.api.config.annotation.NacosConfigurationProperties",
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true,
+    "allDeclaredConstructors": true,
+    "allPublicMethods": true,
+    "allPublicFields": true,
+    "allPublicConstructors": true
+  },
+  {
+    "name": "org.w3c.dom.Element",
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true,
+    "allDeclaredConstructors": true,
+    "allPublicMethods": true,
+    "allPublicFields": true,
+    "allPublicConstructors": true
+  }
+]
