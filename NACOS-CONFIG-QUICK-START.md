@@ -18,10 +18,10 @@ Suppose your Nacos Server is startup, you would add [`nacos-config-spring-boot-s
     </dependencies>
 ```
 
-Note: Version [0.2.x.RELEASE](https://mvnrepository.com/artifact/com.alibaba.boot/nacos-config-spring-boot-starter) is compatible with the Spring Boot 2.x. Version [0.1.x.RELEASE](https://mvnrepository.com/artifact/com.alibaba.boot/nacos-config-spring-boot-starter) is compatible with the Spring Boot 1.x.
+Note: Version [0.2.x.RELEASE](https://mvnrepository.com/artifact/com.alibaba.boot/nacos-config-spring-boot-starter) is compatible with the Spring Boot 2.x and the Spring Boot 3.x. Version [0.1.x.RELEASE](https://mvnrepository.com/artifact/com.alibaba.boot/nacos-config-spring-boot-starter) is compatible with the Spring Boot 1.x.
 
 After that, you could define some configurations in `application.properties`:
- 
+
 ```properties
 nacos.config.server-addr=localhost:8848
 ```
@@ -98,7 +98,7 @@ Then Configure your endpoint security strategy.
 management.security.enabled=false
 ```
 
-* Spring Boot2.x
+* Spring Boot2.x or Spring Boot3.x
 
 ```properties
 management.endpoints.web.exposure.include=*
@@ -107,7 +107,7 @@ management.endpoints.web.exposure.include=*
 To view the endpoint information, visit the following URLS:
 
 * Spring Boot1.x: URL is http://127.0.0.1:10011/nacos-config.
-* Spring Boot2.x: URL is http://127.0.0.1:10011/actuator/nacos-config.
+* Spring Boot2.x or Spring Boot3.x: URL is http://127.0.0.1:10011/actuator/nacos-config.
 
 ## Health Checks
 
