@@ -1,0 +1,15 @@
+{
+  "resources": {
+    "includes": [
+      {
+        "pattern": "\\QMETA-INF/spring.handlers\\E"
+      },
+      {
+        "pattern": "\\QMETA-INF/spring.schemas\\E"
+      },
+      {
+        "pattern": "\\QMETA-INF/schemas/nacos.xsd\\E"
+      }
+    ]
+  }
+}

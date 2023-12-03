@@ -1,0 +1,9 @@
+[
+  {
+    "name": "com.alibaba.boot.nacos.aot.context.NacosPropertySourcePostProcessorForAot",
+    "allDeclaredClasses": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true,
+    "allDeclaredConstructors": true
+  }
+]
