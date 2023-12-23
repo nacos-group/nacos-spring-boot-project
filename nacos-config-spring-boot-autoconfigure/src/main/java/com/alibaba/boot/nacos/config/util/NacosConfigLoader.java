@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Properties;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import com.alibaba.boot.nacos.config.properties.NacosConfigProperties;
 import com.alibaba.nacos.api.config.ConfigService;
@@ -42,6 +43,7 @@ import static com.alibaba.nacos.spring.util.NacosUtils.buildDefaultPropertySourc
 
 /**
  * @author <a href="mailto:liaochunyhm@live.com">liaochuntao</a>
+ * @author <a href="mailto:guofuyinan@gmail.com">guofuyinan</a>
  * @since 0.2.3
  */
 public class NacosConfigLoader {
@@ -113,7 +115,9 @@ public class NacosConfigLoader {
 			final String ids = environment
 					.resolvePlaceholders(nacosConfigProperties.getDataIds());
 			if(StringUtils.hasText(ids)){
-				dataIds.addAll(Arrays.asList(ids.split(",")));
+				dataIds.addAll(Arrays.stream(ids.split(","))
+						.filter(StringUtils::hasText)
+						.collect(Collectors.toList()));
 			}
 		}
 		else {
