@@ -21,7 +21,7 @@ import com.alibaba.nacos.api.config.annotation.NacosConfigurationProperties;
 /**
  * @author <a href="mailto:fangjian0423@gmail.com">Jim</a>
  */
-@NacosConfigurationProperties(dataId = ConfigApplication.DATA_ID)
+@NacosConfigurationProperties(dataId = ConfigApplication.DATA_ID, autoRefreshed = true)
 public class Foo {
 
 	private String dept;
