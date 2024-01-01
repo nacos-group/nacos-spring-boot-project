@@ -48,7 +48,7 @@ public class NacosConfigPropertiesUtils {
 		ResolvableType type = ResolvableType.forClass(NacosConfigProperties.class);
 		Bindable<?> target = Bindable.of(type).withExistingValue(nacosConfigProperties);
 		binder.bind(NacosConfigConstants.PREFIX, target);
-		logger.info("nacosConfigProperties : {}", nacosConfigProperties);
+		logger.debug("nacosConfigProperties : {}", nacosConfigProperties);
 		return nacosConfigProperties;
 	}
 
