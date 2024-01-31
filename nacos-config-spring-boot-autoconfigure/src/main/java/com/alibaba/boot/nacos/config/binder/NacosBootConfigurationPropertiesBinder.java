@@ -56,7 +56,7 @@ public class NacosBootConfigurationPropertiesBinder
 		synchronized (this) {
 			String name = "nacos-bootstrap-" + beanName;
 			NacosPropertySource propertySource = new NacosPropertySource(dataId, groupId, name, content, configType);
-			environment.getPropertySources().addLast(propertySource);
+			environment.getPropertySources().addFirst(propertySource);
 			ObjectUtils.cleanMapOrCollectionField(bean);
 			Binder binder = Binder.get(environment);
 			ResolvableType type = getBeanType(bean, beanName);
