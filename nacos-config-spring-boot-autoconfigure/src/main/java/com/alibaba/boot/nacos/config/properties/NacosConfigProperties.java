@@ -365,6 +365,8 @@ public class NacosConfigProperties {
 
 		private String password;
 
+		private String encode;
+
 		public String getUsername() {
 			return username;
 		}
@@ -501,6 +503,14 @@ public class NacosConfigProperties {
 			this.enableRemoteSyncConfig = enableRemoteSyncConfig;
 		}
 
+		public String getEncode() {
+			return encode;
+		}
+
+		public void setEncode(String encode) {
+			this.encode = encode;
+		}
+
 		@Override
 		public String toString() {
 			final StringBuffer sb = new StringBuffer("Config{");
@@ -514,6 +524,7 @@ public class NacosConfigProperties {
 			sb.append(", dataIds='").append(dataIds).append('\'');
 			sb.append(", group='").append(group).append('\'');
 			sb.append(", type=").append(type);
+			sb.append(", encode='").append(encode).append('\'');
 			sb.append(", maxRetry='").append(maxRetry).append('\'');
 			sb.append(", configLongPollTimeout='").append(configLongPollTimeout)
 					.append('\'');

@@ -83,6 +83,7 @@ public class NacosConfigLoaderTest {
         nacosConfigProperties.setGroup("group01");
         nacosConfigProperties.setAutoRefresh(true);
         nacosConfigProperties.setEndpoint("localhost");
+        nacosConfigProperties.setEncode("utf8");
         globalProperties = new Properties();
         globalProperties.setProperty("maxRetry","3");
         globalProperties.setProperty("content","key=01");
@@ -104,7 +105,7 @@ public class NacosConfigLoaderTest {
         Properties properties = nacosConfigLoader.buildGlobalNacosProperties(environment, nacosConfigProperties);
         LOGGER.info("buildGlobalNacosProperties properties : {}", properties);
         Assert.assertNotNull(properties);
-        Assert.assertEquals(properties.size(), 6);
+        Assert.assertEquals(properties.size(), 7);
     }
     
     @Test
