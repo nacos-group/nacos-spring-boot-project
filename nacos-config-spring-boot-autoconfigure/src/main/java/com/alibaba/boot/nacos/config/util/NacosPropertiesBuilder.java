@@ -16,6 +16,8 @@
  */
 package com.alibaba.boot.nacos.config.util;
 
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.Properties;
 
@@ -31,11 +33,20 @@ import org.springframework.util.CollectionUtils;
  */
 public class NacosPropertiesBuilder {
 
+	public static String unifiedCodingName(String encode) {
+		Charset charset = StandardCharsets.UTF_8;
+		if(encode == null){
+			return charset.name();
+		}
+		charset = Charset.forName(encode);
+		return charset.name();
+	}
+
 	public static Properties buildNacosProperties(Environment environment,
 			String serverAddr, String namespaceId, String endpoint, String secretKey,
 			String accessKey, String ramRoleName, String configLongPollTimeout,
 			String configRetryTimeout, String maxRetry,String contextPath, boolean enableRemoteSyncConfig,
-			String username, String password) {
+			String username, String password, String encode) {
 		Properties properties = new Properties();
 		processPropertiesData(properties,environment,serverAddr,PropertyKeyConst.SERVER_ADDR);
 		processPropertiesData(properties,environment,namespaceId,PropertyKeyConst.NAMESPACE);
@@ -49,12 +60,13 @@ public class NacosPropertiesBuilder {
 		processPropertiesData(properties,environment,maxRetry,PropertyKeyConst.MAX_RETRY);
 		processPropertiesData(properties,environment,username,PropertyKeyConst.USERNAME);
 		processPropertiesData(properties,environment,password,PropertyKeyConst.PASSWORD);
-		
+		processPropertiesData(properties,environment,unifiedCodingName(encode),PropertyKeyConst.ENCODE);
+
 		properties.put(PropertyKeyConst.ENABLE_REMOTE_SYNC_CONFIG,
 				String.valueOf(enableRemoteSyncConfig));
 		return properties;
 	}
-	
+
 	private static void processPropertiesData(Properties properties,Environment environment,String keyword,String key) {
 		if (StringUtils.isNotBlank(keyword)) {
 			properties.put(key ,environment.resolvePlaceholders(keyword));

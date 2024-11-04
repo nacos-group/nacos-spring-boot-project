@@ -55,10 +55,11 @@ public class NacosPropertiesBuilderTest {
         String enableRemoteSyncConfig = "enableRemoteSyncConfig";
         String username = "nacos";
         String password = "password";
+        String encode = "utf8";
         Properties properties = NacosPropertiesBuilder.buildNacosProperties(environment, serverAddr, namespaceId, secretKey,
                 "ak", ramRoleName, configLongPollTimeout, configRetryTimeout, maxRetry, null,enableRemoteSyncConfig, true,
-                username, password);
-        Assert.assertEquals(properties.size(), 12);
+                username, password, encode);
+        Assert.assertEquals(properties.size(), 13);
         Assert.assertEquals(properties.get("serverAddr"), "localhost");
     }
 
