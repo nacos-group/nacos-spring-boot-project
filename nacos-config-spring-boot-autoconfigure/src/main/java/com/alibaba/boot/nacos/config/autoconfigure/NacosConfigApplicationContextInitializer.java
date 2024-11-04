@@ -95,13 +95,6 @@ public class NacosConfigApplicationContextInitializer
 				configLoader.addListenerIfAutoRefreshed();
 			}
 		}
-
-		final ConfigurableListableBeanFactory factory = context.getBeanFactory();
-		if (!factory
-				.containsSingleton(NacosBeanUtils.GLOBAL_NACOS_PROPERTIES_BEAN_NAME)) {
-			factory.registerSingleton(NacosBeanUtils.GLOBAL_NACOS_PROPERTIES_BEAN_NAME,
-					configLoader.getGlobalProperties());
-		}
 	}
 
 	private boolean enable() {
